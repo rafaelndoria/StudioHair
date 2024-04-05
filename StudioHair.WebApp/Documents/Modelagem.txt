@@ -1,0 +1,120 @@
+Usuario (usuário para entrar no sistema)
+•	Id
+•	Nome
+•	Email (utilizado para serviços como envio de e-mail automatizados)
+•	(poderá realizar login tanto com email ou nome)
+•	Papel (role, o papel do usuário para autorização, ex: admin, gerente etc..)
+•	Senha
+
+Pessoa
+•	Id
+•	Nome
+•	DataDeNascimento
+•	Rua
+•	Cep
+•	Cidade
+•	Bairro
+•	Número
+•	Cpf (unico)
+
+Cliente
+•	Id
+•	Email
+•	TelefoneCelular
+•	Whattsap
+•	Instagram
+•	Facebook
+•	FrequenciaSalaoPorMes 
+•	DataCadastro
+•	Observacao 
+•	Status (Ativo, Bloqueado) ou Ativo
+•	PessoaId
+
+
+
+Fornecedor
+•	No momento não vai definir fornecedores
+
+Produto
+•	Id
+•	Nome
+•	Marca		
+•	CodigoBarras
+•	ValorPraticado
+•	ProdutoParaVenda
+•	ControlaEstoque
+Relacionamento de 1 para muitos (um produto pode ter várias unidades)
+ProdutoUnidade
+•	Unidade (Kg, Litro, Caixa, Ml, Unidade e etc)
+•	Quantidade
+•	ProdutoId
+
+Venda
+•	Id
+•	DataDaVenda
+•	ClienteId
+•	FormaDePagamento (pix, cartão crédito, débito, dinheiro)
+•	Total = total de todos os produtos
+•	ValorDesconto
+
+ProdutosVenda
+•	Id
+•	ProdutoId
+•	Valor = vai trazer automáticado definido o preco do produto no seu cadastro
+•	VendaId
+
+
+Serviço
+•	Id
+•	Nome
+•	DuracaoEmMinutos
+•	ValorDosProdutos
+•	ValorServico
+ProdutosServico
+•	Id
+•	ProdutoId
+•	ServicoId
+•	QuantidadeUtilizada
+•	ValorProdutoCalculado
+
+Agendamento
+•	Id
+•	Nome
+•	Dia
+•	HoraInicial (obrigatória)
+•	HoraFinal (não será obrigatória, será definida automaticamente com o tempo dos serviços)
+•	ValorProfissional = valor da mao de obra da prossifional 
+•	ValorAgendamento (preenchido automaticamente com base nos valores do serviço + o valor cobrado pelo trabalho da profissional – descontos, também poderá atualizar o valor do agendamento depois que criado se necessário)
+•	ValorDesconto
+•	ClienteId
+•	Status (confirmado, pago, semConfirmar, cancelado)
+
+AgendamentoServicos
+•	Id
+•	AgendamentoId
+•	ServicoId
+
+
+HistoricoCliente
+•	Id
+•	Dia
+•	NomeAgendamento
+•	ValorAgendamento
+•	StatusAgendamento (finalizado, cancelado)
+
+HistoricoComprasCliente
+•	Id
+•	Dia
+•	CompraId
+
+
+Regras de Negócio
+•	Apenas clientes que não estão bloqueados poderão realizar agendamento
+•	Agendamentos e cancelamentos serão notificados via email para cliente (email no seu cadastro) e para o usuário do sistema (email cadastrado no usuário)
+•	Vários cancelamentos seguidos poderão suspender o cliente por tempo determinado, ou exigir confirmação de pagamento parcial já no agendamento
+•	Um agendamento por serviço terá a hora final com base no tempo do cadastro do cliente
+•	Não poderá agendar dois clientes em um mesmo horário
+•	Consultas de vendas por períodos
+•	Consultas de agendamentos por períodos 
+•	Disponibilizar histórico completo do cliente, seus agendamentos, cancelamento, valores, compras etc.
+
