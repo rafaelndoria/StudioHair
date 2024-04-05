@@ -49,7 +49,7 @@ ProdutoUnidade
 •	Quantidade
 •	ProdutoId
 
-Venda (Rafael)
+Venda (Rafael) Ok
 •	Id
 •	DataDaVenda
 •	ClienteId
@@ -89,7 +89,7 @@ Agendamento (Marcos)
 •	ClienteId
 •	Status (confirmado, pago, semConfirmar, cancelado)
 
-AgendamentoServicos (Rafael)
+AgendamentoServicos (Rafael) Ok
 •	Id
 •	AgendamentoId
 •	ServicoId
