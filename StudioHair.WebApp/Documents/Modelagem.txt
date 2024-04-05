@@ -1,4 +1,4 @@
-Usuario (usuário para entrar no sistema)
+Usuario (usuário para entrar no sistema) OK
 •	Id
 •	Nome
 •	Email (utilizado para serviços como envio de e-mail automatizados)
@@ -6,7 +6,7 @@ Usuario (usuário para entrar no sistema)
 •	Papel (role, o papel do usuário para autorização, ex: admin, gerente etc..)
 •	Senha
 
-Pessoa
+Pessoa(Andre)
 •	Id
 •	Nome
 •	DataDeNascimento
@@ -17,7 +17,7 @@ Pessoa
 •	Número
 •	Cpf (unico)
 
-Cliente
+Cliente(Tiago)
 •	Id
 •	Email
 •	TelefoneCelular
@@ -35,12 +35,12 @@ Cliente
 Fornecedor
 •	No momento não vai definir fornecedores
 
-Produto
+Produto(Marcos)
 •	Id
 •	Nome
 •	Marca		
 •	CodigoBarras
-•	ValorPraticado
+•	ValorPraticado decimal, float, double
 •	ProdutoParaVenda
 •	ControlaEstoque
 Relacionamento de 1 para muitos (um produto pode ter várias unidades)
@@ -49,7 +49,7 @@ ProdutoUnidade
 •	Quantidade
 •	ProdutoId
 
-Venda
+Venda(Andre)
 •	Id
 •	DataDaVenda
 •	ClienteId
@@ -57,27 +57,28 @@ Venda
 •	Total = total de todos os produtos
 •	ValorDesconto
 
-ProdutosVenda
+ProdutosVenda(Tiago)
 •	Id
 •	ProdutoId
 •	Valor = vai trazer automáticado definido o preco do produto no seu cadastro
 •	VendaId
 
 
-Serviço
+Serviço(Marcos)
 •	Id
 •	Nome
 •	DuracaoEmMinutos
 •	ValorDosProdutos
 •	ValorServico
-ProdutosServico
+
+ProdutosServico(Rafael) Ok
 •	Id
 •	ProdutoId
 •	ServicoId
 •	QuantidadeUtilizada
 •	ValorProdutoCalculado
 
-Agendamento
+Agendamento(Andre)
 •	Id
 •	Nome
 •	Dia
@@ -89,20 +90,20 @@ Agendamento
 •	ClienteId
 •	Status (confirmado, pago, semConfirmar, cancelado)
 
-AgendamentoServicos
+AgendamentoServicos(Tiago)
 •	Id
 •	AgendamentoId
 •	ServicoId
 
 
-HistoricoCliente
+HistoricoCliente(Marcos)
 •	Id
 •	Dia
 •	NomeAgendamento
 •	ValorAgendamento
 •	StatusAgendamento (finalizado, cancelado)
 
-HistoricoComprasCliente
+HistoricoComprasCliente(Rafael) Ok
 •	Id
 •	Dia
 •	CompraId
