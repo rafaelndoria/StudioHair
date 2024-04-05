@@ -8,27 +8,27 @@ Usuario (usuário para entrar no sistema) OK
 
 Pessoa (Andre)
 •	Id
-•	Nome
-•	DataDeNascimento
-•	Rua
-•	Cep
-•	Cidade
-•	Bairro
-•	Número
-•	Cpf (unico)
+•	Nome	string
+•	DataDeNascimento datetime
+•	Rua		string
+•	Cep		string
+•	Cidade	string	
+•	Bairro	string
+•	Número	string
+•	Cpf (unico)	string
 
 Cliente (Tiago)
 •	Id
-•	Email
-•	TelefoneCelular
-•	Whattsap
-•	Instagram
-•	Facebook
-•	FrequenciaSalaoPorMes 
-•	DataCadastro
-•	Observacao 
-•	Status (Ativo, Bloqueado) ou Ativo
-•	PessoaId
+•	Email	string
+•	TelefoneCelular	string
+•	Whattsap string
+•	Instagram	string
+•	Facebook	string
+•	FrequenciaSalaoPorMes int
+•	DataCadastro	datetime
+•	Observacao		string
+•	Status (Ativo, Bloqueado) ou Ativo enumerador
+•	PessoaId	int
 
 
 
@@ -37,17 +37,18 @@ Fornecedor
 
 Produto (Marcos)
 •	Id
-•	Nome
-•	Marca		
-•	CodigoBarras
-•	ValorPraticado
-•	ProdutoParaVenda
-•	ControlaEstoque
+•	Nome	string
+•	Marca		string
+•	CodigoBarras	string
+•	ValorPraticado	decimal
+•	ProdutoParaVenda	bool(true, false)
+•	ControlaEstoque		bool
 Relacionamento de 1 para muitos (um produto pode ter várias unidades)
-ProdutoUnidade
-•	Unidade (Kg, Litro, Caixa, Ml, Unidade e etc)
-•	Quantidade
-•	ProdutoId
+
+ProdutoUnidade (Andre)
+•	Unidade (Kg, Litro, Caixa, Ml, Unidade e etc) Enumerador
+•	Quantidade	int
+•	ProdutoId	int
 
 Venda (Rafael) Ok
 •	Id
@@ -59,53 +60,55 @@ Venda (Rafael) Ok
 
 ProdutosVenda (Andre)
 •	Id
-•	ProdutoId
-•	Valor = vai trazer automáticado definido o preco do produto no seu cadastro
-•	VendaId
+•	ProdutoId	int
+•	Valor = vai trazer automáticado definido o preco do produto no seu cadastro	decimal
+•	VendaId	int
 
 
 Serviço (Tiago)
 •	Id
-•	Nome
-•	DuracaoEmMinutos
-•	ValorDosProdutos
-•	ValorServico
-ProdutosServico
+•	Nome string
+•	DuracaoEmMinutos	int
+•	ValorDosProdutos	int
+•	ValorServico		decimal
+
+
+ProdutosServico (Rafael) Ok
 •	Id
-•	ProdutoId
-•	ServicoId
-•	QuantidadeUtilizada
-•	ValorProdutoCalculado
+•	ProdutoId int
+•	ServicoId int
+•	QuantidadeUtilizada int
+•	ValorProdutoCalculado decimal
 
 Agendamento (Marcos)
 •	Id
-•	Nome
-•	Dia
-•	HoraInicial (obrigatória)
-•	HoraFinal (não será obrigatória, será definida automaticamente com o tempo dos serviços)
-•	ValorProfissional = valor da mao de obra da prossifional 
-•	ValorAgendamento (preenchido automaticamente com base nos valores do serviço + o valor cobrado pelo trabalho da profissional – descontos, também poderá atualizar o valor do agendamento depois que criado se necessário)
-•	ValorDesconto
-•	ClienteId
-•	Status (confirmado, pago, semConfirmar, cancelado)
+•	Nome	string
+•	Dia		dateTime
+•	HoraInicial (obrigatória)	string 
+•	HoraFinal (não será obrigatória, será definida automaticamente com o tempo dos serviços) string
+•	ValorProfissional = valor da mao de obra da prossifional  decimal
+•	ValorAgendamento (preenchido automaticamente com base nos valores do serviço + o valor cobrado pelo trabalho da profissional – descontos, também poderá atualizar o valor do agendamento depois que criado se necessário) decimal
+•	ValorDesconto decimal
+•	ClienteId int
+•	Status (confirmado, pago, semConfirmar, cancelado) enumerador
 
 AgendamentoServicos (Rafael) Ok
 •	Id
-•	AgendamentoId
-•	ServicoId
+•	AgendamentoId int
+•	ServicoId int
 
 
 HistoricoCliente (Andre)
 •	Id
-•	Dia
-•	NomeAgendamento
-•	ValorAgendamento
-•	StatusAgendamento (finalizado, cancelado)
+•	Dia datetime
+•	NomeAgendamento string
+•	ValorAgendamento decimal
+•	StatusAgendamento (finalizado, cancelado) enumerador
 
 HistoricoComprasCliente (Tiago)
 •	Id
-•	Dia
-•	CompraId
+•	Dia	datetime
+•	CompraId	int
 
 
 Regras de Negócio
