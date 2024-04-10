@@ -17,7 +17,7 @@ Pessoa (Andre)
 •	Número	string
 •	Cpf (unico)	string
 
-Cliente (Tiago)
+Cliente (Tiago) Ok
 •	Id
 •	Email	string
 •	TelefoneCelular	string
@@ -65,7 +65,7 @@ ProdutosVenda (Andre)
 •	VendaId	int
 
 
-Serviço (Tiago)
+Serviço (Tiago) Ok
 •	Id
 •	Nome string
 •	DuracaoEmMinutos	int
@@ -105,7 +105,7 @@ HistoricoCliente (Andre)
 •	ValorAgendamento decimal
 •	StatusAgendamento (finalizado, cancelado) enumerador
 
-HistoricoComprasCliente (Tiago)
+HistoricoComprasCliente (Tiago) Ok
 •	Id
 •	Dia	datetime
 •	CompraId	int
