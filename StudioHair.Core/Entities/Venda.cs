@@ -4,19 +4,44 @@ namespace StudioHair.Core.Entities
 {
     public class Venda : Entidade
     {
-        public Venda(DateTime dataDaVenda, int clientId, ETipoPagamento tipoPagamento, decimal total, decimal valorDesconto)
+        public Venda(ETipoPagamento tipoPagamento, int clienteId)
         {
-            DataDaVenda = dataDaVenda;
-            ClientId = clientId;
+            ClienteId = clienteId;
             TipoPagamento = tipoPagamento;
-            Total = total;
-            ValorDesconto = valorDesconto;
+
+            DataDaVenda = DateTime.Now;
+            ValorDesconto = 0;
+            Total = 0;
         }
 
         public DateTime DataDaVenda { get; private set; }
-        public int ClientId { get; private set; }
         public ETipoPagamento TipoPagamento { get; private set; }
-        public decimal Total { get; private set; }
-        public decimal ValorDesconto { get; private set; }
+        public decimal? ValorDesconto { get; private set; }
+        public decimal? Total { get; private set; }
+        public int ClienteId { get; private set; }
+
+        public void AdicionarValor(decimal valor)
+        {
+            Total += valor;
+        }
+
+        public void AplicarDesconto(decimal valor)
+        {
+            if (Total < 0)
+            {
+                throw new InvalidOperationException("Não é possível aplicar desconto sem valor de venda.");
+            }
+            else
+            {
+                if (Total - valor < 0)
+                {
+                    throw new InvalidOperationException("O valor do desconto é maior que o total da venda.");
+                }
+                else
+                {
+                    Total -= valor;
+                }
+            }
+        }
     }
 }
