@@ -30,6 +30,13 @@ namespace StudioHair.Infrascruture.Configuration
 
             builder.HasIndex(x => x.Nome)
                 .IsUnique();
+
+            builder.HasData(
+                new Usuario(1,
+                            "admin", 
+                            "admin@gmail.com", 
+                            Core.Enums.EPapelUsuario.Administrador, 
+                            "b8b8eb83374c0bf3b1c3224159f6119dbfff1b7ed6dfecdd80d4e8a895790a34"));
         }
     }
 }
