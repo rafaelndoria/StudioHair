@@ -35,7 +35,7 @@ Cliente (Tiago) Ok
 Fornecedor
 •	No momento não vai definir fornecedores
 
-Produto (Marcos)
+Produto (Marcos) OK
 •	Id
 •	Nome	string
 •	Marca		string
@@ -80,7 +80,7 @@ ProdutosServico (Rafael) Ok
 •	QuantidadeUtilizada int
 •	ValorProdutoCalculado decimal
 
-Agendamento (Marcos)
+Agendamento (Marcos) Ok
 •	Id
 •	Nome	string
 •	Dia		dateTime
