@@ -23,5 +23,6 @@
         public string Número { get; private set; }
         public string Cpf { get; private set; }
 
+        public Cliente? Cliente { get; set; }
     }
 }

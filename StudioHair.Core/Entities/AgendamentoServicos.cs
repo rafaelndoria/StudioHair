@@ -10,5 +10,6 @@
 
         public int AgendamentoId { get; private set; }
         public int ServicoId { get; private set; }
+        public Servicos? Servico { get; set; }
     }
 }

@@ -12,5 +12,7 @@
         public int ProdutoId { get; private set; }
         public decimal Valor { get; private set; }
         public int VendaId { get; private set; }
+
+        public ProdutosVenda? ProdutoVenda { get; set; }
     }
 }

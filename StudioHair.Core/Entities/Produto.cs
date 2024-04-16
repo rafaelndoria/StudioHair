@@ -16,6 +16,8 @@ namespace StudioHair.Core.Entities
             ValorPraticado = valorPraticado;
             ProdutoParaVenda = produtoParaVenda;
             ControlaEstoque = controlaEstoque;
+
+            ProdutoUnidades = new List<ProdutoUnidade>();
         }
 
         public string Nome { get; private set; }
@@ -24,5 +26,8 @@ namespace StudioHair.Core.Entities
         public decimal ValorPraticado { get; private set; }
         public bool ProdutoParaVenda { get; private set; }
         public bool ControlaEstoque { get; private set; }
+
+        public List<ProdutoUnidade> ProdutoUnidades { get; set; }
+        public List<ProdutosVenda> ProdutosVendas { get; set; }
     }
 }

@@ -17,6 +17,9 @@ namespace StudioHair.Core.Entities
 
             Ativo = true;
             DataCadastro = DateTime.Now;
+
+            Vendas = new List<Venda>();
+            Agendamentos = new List<Agendamento>();
         }
 
         public string Email { get; private set; }
@@ -29,6 +32,10 @@ namespace StudioHair.Core.Entities
         public EStatus Status { get; private set; }
         public bool Ativo { get; private set; }
         public int PessoaId { get; private set; }
+
+        public Pessoa? Pessoa { get; set; }
+        public List<Venda>? Vendas { get; set; }
+        public List<Agendamento> Agendamentos { get; set; }
 
         public void Update(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao)
         {

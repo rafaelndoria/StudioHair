@@ -20,6 +20,8 @@ namespace StudioHair.Core.Entities
             ValorAgendamento = valorAgendamento;
             ValorDesconto = valorDesconto;
             ClienteId = clienteId;
+
+            AgendamentoServicos = new List<AgendamentoServicos>();
         }
 
         public string Nome { get; private set; }
@@ -30,7 +32,9 @@ namespace StudioHair.Core.Entities
         public decimal ValorAgendamento { get; private set; }
         public decimal ValorDesconto { get; private set; }
         public int ClienteId { get; private set; }
+        public Cliente? Cliente { get; set; }
         public EAgendamento Status { get; private set; }
 
+        public List<AgendamentoServicos> AgendamentoServicos { get; set; }
     }
 }

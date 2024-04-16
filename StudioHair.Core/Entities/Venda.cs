@@ -12,6 +12,8 @@ namespace StudioHair.Core.Entities
             DataDaVenda = DateTime.Now;
             ValorDesconto = 0;
             Total = 0;
+
+            ProdutosVendas = new List<ProdutosVenda>();
         }
 
         public DateTime DataDaVenda { get; private set; }
@@ -19,6 +21,8 @@ namespace StudioHair.Core.Entities
         public decimal? ValorDesconto { get; private set; }
         public decimal? Total { get; private set; }
         public int ClienteId { get; private set; }
+
+        public List<ProdutosVenda> ProdutosVendas { get; set; }
 
         public void AdicionarValor(decimal valor)
         {

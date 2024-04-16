@@ -10,6 +10,8 @@
 
             ValorDosProdutos = 0;
             ValorTotal = 0;
+
+            ProdutosServicos = new List<ProdutosServico>();
         }
 
         public string Nome { get; private set; }
@@ -17,6 +19,8 @@
         public decimal ValorServico { get; private set; }
         public decimal? ValorDosProdutos { get; private set; }
         public decimal? ValorTotal { get; private set; }
+
+        public List<ProdutosServico>? ProdutosServicos { get; set; }
 
         public void AdicionarValorProduto(decimal valorProduto)
         {
