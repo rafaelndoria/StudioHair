@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudioHair.Core.Entities
+﻿namespace StudioHair.Core.Entities
 {
     public class Produto : Entidade 
     {
@@ -18,6 +12,8 @@ namespace StudioHair.Core.Entities
             ControlaEstoque = controlaEstoque;
 
             ProdutoUnidades = new List<ProdutoUnidade>();
+            ProdutosVendas = new List<ProdutosVenda>();
+            ProdutosServicos = new List<ProdutosServico>();
         }
 
         public string Nome { get; private set; }
@@ -29,5 +25,13 @@ namespace StudioHair.Core.Entities
 
         public List<ProdutoUnidade> ProdutoUnidades { get; set; }
         public List<ProdutosVenda> ProdutosVendas { get; set; }
+        public List<ProdutosServico> ProdutosServicos { get; set; }
+
+        public void Atualizar(decimal valorPraticado, bool produtoParaVenda, bool controlaEstoque)
+        {
+            ValorPraticado = valorPraticado;
+            ProdutoParaVenda = produtoParaVenda;
+            ControlaEstoque = controlaEstoque;
+        }
     }
 }

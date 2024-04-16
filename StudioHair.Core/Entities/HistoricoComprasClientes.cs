@@ -2,13 +2,15 @@
 {
     public class HistoricoComprasClientes : Entidade
     {
-        public HistoricoComprasClientes(DateTime dia, int compraId)
+        public HistoricoComprasClientes(DateTime dia, decimal valor, int clienteId)
         {
             Dia = dia;
-            CompraId = compraId;
+            ClienteId = clienteId;
+            Valor = valor;
         }
 
         public DateTime Dia { get; private set; }
-        public int CompraId { get; private set; }
+        public int ClienteId { get; private set; }
+        public decimal Valor { get; set; }
     }
 }

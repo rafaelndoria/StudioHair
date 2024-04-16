@@ -16,5 +16,11 @@ namespace StudioHair.Core.Entities
         public string ProdutoId { get; private set; }
 
         public Produto? Produto { get; set; }
+
+        public void Atualizar(EUnidade unidade, string quantidade)
+        {
+            Unidade = unidade;
+            Quantidade = quantidade;
+        }
     }
 }

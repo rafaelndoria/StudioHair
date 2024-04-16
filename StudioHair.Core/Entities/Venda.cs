@@ -22,6 +22,7 @@ namespace StudioHair.Core.Entities
         public decimal? Total { get; private set; }
         public int ClienteId { get; private set; }
 
+        public Cliente? Cliente { get; set; }
         public List<ProdutosVenda> ProdutosVendas { get; set; }
 
         public void AdicionarValor(decimal valor)

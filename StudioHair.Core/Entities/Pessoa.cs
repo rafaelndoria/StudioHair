@@ -24,5 +24,14 @@
         public string Cpf { get; private set; }
 
         public Cliente? Cliente { get; set; }
+
+        public void Atualizar(string rua, string cep, string cidade, string bairro, string número)
+        {
+            Rua = rua;
+            Cep = cep;
+            Cidade = cidade;
+            Bairro = bairro;
+            Número = número;
+        }
     }
 }

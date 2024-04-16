@@ -13,8 +13,9 @@
         public int QuantidadeUtilizada { get; private set; }
         public decimal ValorProduto { get; private set; }
         public int ProdutoId { get; private set; }
-        public Produto? Produto { get; set; }
         public int ServicoId { get; private set; }
+        
+        public Produto? Produto { get; set; }
         public Servicos? Servicos { get; set; }
     }
 }

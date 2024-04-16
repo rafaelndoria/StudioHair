@@ -1,10 +1,8 @@
-﻿using StudioHair.Core.Enums;
-
-namespace StudioHair.Core.Entities
+﻿namespace StudioHair.Core.Entities
 {
     public class Cliente : Entidade
     {
-        public Cliente(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao, int pessoaId, EStatus status)
+        public Cliente(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao, int pessoaId)
         {
             Email = email;
             TelefoneCelular = telefoneCelular;
@@ -13,13 +11,14 @@ namespace StudioHair.Core.Entities
             FrequenciaSalaoPorMes = frequenciaSalaoPorMes;
             Observacao = observacao;
             PessoaId = pessoaId;
-            Status = status;
 
             Ativo = true;
             DataCadastro = DateTime.Now;
 
             Vendas = new List<Venda>();
             Agendamentos = new List<Agendamento>();
+            HistoricoClientes = new List<HistoricoCliente>();
+            HistoricoComprasClientes = new List<HistoricoComprasClientes>();
         }
 
         public string Email { get; private set; }
@@ -29,13 +28,14 @@ namespace StudioHair.Core.Entities
         public int FrequenciaSalaoPorMes { get; private set; }
         public DateTime DataCadastro { get; private set; }
         public string Observacao { get; private set; }
-        public EStatus Status { get; private set; }
         public bool Ativo { get; private set; }
         public int PessoaId { get; private set; }
 
         public Pessoa? Pessoa { get; set; }
         public List<Venda>? Vendas { get; set; }
         public List<Agendamento> Agendamentos { get; set; }
+        public List<HistoricoCliente> HistoricoClientes { get; set; }
+        public List<HistoricoComprasClientes> HistoricoComprasClientes { get; set; }
 
         public void Update(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao)
         {
