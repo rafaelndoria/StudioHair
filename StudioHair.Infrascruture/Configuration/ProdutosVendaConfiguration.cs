@@ -10,13 +10,13 @@ namespace StudioHair.Infrascruture.Configuration
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.ProdutoId)
+            builder.Property(x => x.ProdutoId);
                 .IsRequired()
 
-            builder.Property(x => x.Valor)
+            builder.Property(x => x.Valor);
                 .IsRequired()
 
-            builder.Property(x => x.VendaId)
+            builder.Property(x => x.VendaId);
                 .IsRequired()
         }
     }
