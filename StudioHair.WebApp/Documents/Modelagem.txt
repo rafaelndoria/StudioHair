@@ -6,7 +6,7 @@ Usuario (usuário para entrar no sistema) OK
 •	Papel (role, o papel do usuário para autorização, ex: admin, gerente etc..)
 •	Senha
 
-Pessoa (Andre)k
+Pessoa (Andre) ok ok
 •	Id
 •	Nome	string
 •	DataDeNascimento datetime
@@ -45,7 +45,7 @@ Produto (Marcos) OK
 •	ControlaEstoque		bool
 Relacionamento de 1 para muitos (um produto pode ter várias unidades)
 
-ProdutoUnidade (Andre) ok
+ProdutoUnidade (Andre) ok ok
 •	Unidade (Kg, Litro, Caixa, Ml, Unidade e etc) Enumerador
 •	Quantidade	int
 •	ProdutoId	int
@@ -58,7 +58,7 @@ Venda (Rafael) Ok
 •	Total = total de todos os produtos
 •	ValorDesconto
 
-ProdutosVenda (Andre) ok
+ProdutosVenda (Andre) ok ok
 •	Id
 •	ProdutoId	int
 •	Valor = vai trazer automáticado definido o preco do produto no seu cadastro	decimal
@@ -98,7 +98,7 @@ AgendamentoServicos (Rafael) Ok
 •	ServicoId int
 
 
-HistoricoCliente (Andre) ok
+HistoricoCliente (Andre) ok ok
 •	Id
 •	Dia datetime
 •	NomeAgendamento string
