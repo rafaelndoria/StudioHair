@@ -8,14 +8,19 @@ namespace StudioHair.Infrascruture.Configuration
     {
         public void Configure(EntityTypeBuilder<ProdutoUnidade> builder)
         {
-            builder.Property(x => x.Unidade);
-                .IsRequired()
+            builder.Property(x => x.Unidade)
+                .IsRequired();
 
-            builder.Property(x => x.Quantidade);
-                .IsRequired()
+            builder.Property(x => x.Quantidade)
+                .IsRequired();
 
-            builder.Property(x => x.ProdutoId);
-                .IsRequired()
+            builder.Property(x => x.ProdutoId)
+                .IsRequired();
+
+            builder.HasOne(x => x.Produto)
+                .WithMany(x => x.ProdutoUnidades)
+                .HasForeignKey(x => x.ProdutoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -4,7 +4,7 @@ using StudioHair.Core.Entities;
 
 namespace StudioHair.Infrascruture.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<Usuario>
+    public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
     {
         public void Configure(EntityTypeBuilder<Usuario> builder)
         {

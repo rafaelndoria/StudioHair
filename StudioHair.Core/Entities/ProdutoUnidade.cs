@@ -4,7 +4,7 @@ namespace StudioHair.Core.Entities
 {
     public class ProdutoUnidade : Entidade
     {
-        public ProdutoUnidade(EUnidade unidade, string quantidade, string produtoId)
+        public ProdutoUnidade(EUnidade unidade, string quantidade, int produtoId)
         {
             Unidade = unidade;
             Quantidade = quantidade;
@@ -13,7 +13,7 @@ namespace StudioHair.Core.Entities
 
         public EUnidade Unidade { get; private set; }
         public string Quantidade { get; private set; }
-        public string ProdutoId { get; private set; }
+        public int ProdutoId { get; private set; }
 
         public Produto? Produto { get; set; }
 

@@ -11,6 +11,7 @@
 
         public DateTime Dia { get; private set; }
         public int ClienteId { get; private set; }
+        public Cliente? Cliente { get; set; }
         public decimal Valor { get; set; }
     }
 }

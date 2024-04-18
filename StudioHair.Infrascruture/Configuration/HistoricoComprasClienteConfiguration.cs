@@ -18,6 +18,11 @@ namespace StudioHair.Infrascruture.Configuration
 
             builder.Property(x => x.Valor)
                 .IsRequired();
+
+            builder.HasOne(x => x.Cliente)
+                .WithMany(x => x.HistoricoComprasClientes)
+                .HasForeignKey(x => x.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

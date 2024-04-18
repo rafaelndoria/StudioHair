@@ -11,30 +11,30 @@ namespace StudioHair.Infrascruture.Configuration
         {
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Nome);
+            builder.Property(x => x.Nome)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(x => x.DataDeNascimento);
-                .IsRequired()
+            builder.Property(x => x.DataDeNascimento)
+                .IsRequired();
 
-            builder.Property(x => x.Rua);
-                .IsRequired()
+            builder.Property(x => x.Rua)
+                .IsRequired();
 
-            builder.Property(x => x.Cep);
-                .IsRequired()
+            builder.Property(x => x.Cep)
+                .IsRequired();
 
-            builder.Property(x => x.Cidade);
-                .IsRequired()
+            builder.Property(x => x.Cidade)
+                .IsRequired();
 
-            builder.Property(x => x.Bairro);
-                .IsRequired()
+            builder.Property(x => x.Bairro)
+                .IsRequired();
 
-            builder.Property(x => x.Número);
-                .IsRequired()
+            builder.Property(x => x.Número)
+                .IsRequired();
 
-            builder.Property(x => x.Cpf)
-                .IsRequired()
+            builder.HasIndex(x => x.Cpf)
+                .IsUnique();
 
         }
     }

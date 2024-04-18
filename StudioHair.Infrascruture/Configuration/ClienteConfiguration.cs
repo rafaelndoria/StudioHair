@@ -35,6 +35,10 @@ namespace StudioHair.Infrascruture.Configuration
             builder.Property(x => x.PessoaId)
                 .IsRequired();
 
-()        }
+            builder.HasOne(x => x.Pessoa)
+                .WithOne(x => x.Cliente)
+                .HasForeignKey<Cliente>(x => x.PessoaId);
+
+        }
     }
 }

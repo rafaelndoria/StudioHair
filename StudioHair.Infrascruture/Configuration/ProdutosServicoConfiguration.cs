@@ -20,6 +20,16 @@ namespace StudioHair.Infrascruture.Configuration
 
             builder.Property(x => x.ValorProduto)
                 .IsRequired();
+
+            builder.HasOne(x => x.Produto)
+                .WithMany(x => x.ProdutosServicos)
+                .HasForeignKey(x => x.ProdutoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(x => x.Servico)
+                .WithMany(x => x.ProdutosServicos)
+                .HasForeignKey(x => x.ServicoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
