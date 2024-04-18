@@ -1,8 +1,8 @@
 ﻿namespace StudioHair.Core.Entities
 {
-    public class Servicos : Entidade
+    public class Servico : Entidade
     {
-        public Servicos(string nome, int duracaoEmMinutos, decimal valorServico)
+        public Servico(string nome, int duracaoEmMinutos, decimal valorServico)
         {
             Nome = nome;
             DuracaoEmMinutos = duracaoEmMinutos;

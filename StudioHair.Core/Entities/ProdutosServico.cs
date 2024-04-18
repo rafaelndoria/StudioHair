@@ -16,6 +16,6 @@
         public int ServicoId { get; private set; }
         
         public Produto? Produto { get; set; }
-        public Servicos? Servicos { get; set; }
+        public Servico? Servicos { get; set; }
     }
 }

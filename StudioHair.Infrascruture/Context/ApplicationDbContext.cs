@@ -18,7 +18,7 @@ namespace StudioHair.Infrascruture.Context
         public DbSet<ProdutosServico> ProdutosServicos { get; set; }
         public DbSet<ProdutosVenda> ProdutosVendas { get; set; }
         public DbSet<ProdutoUnidade> ProdutoUnidades { get; set; }
-        public DbSet<Servicos> Servicos { get; set; }
+        public DbSet<Servico> Servicos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Venda> Vendas { get; set; }
 
