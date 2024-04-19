@@ -1,0 +1,33 @@
+﻿@model UsuarioLoginInputModel
+@{
+    Layout = "_LayoutLogin";
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3 class="text-center">Acesse Studio Hair</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Login" asp-controller="Usuario" method="post">
+                        <div class="form-group">
+                            <label asp-for="Nome">Usuário</label>
+                            <input asp-for="Nome" class="form-control" />
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Senha">Senha</label>
+                            <input asp-for="Senha" type="password" class="form-control" />
+                            <span asp-validation-for="Senha" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

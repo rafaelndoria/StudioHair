@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.Core", "StudioHair.Core\StudioHair.Core.csproj", "{CBC29B1F-6AA5-40A7-85D3-7A1A0B22A3CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.Core", "StudioHair.Core\StudioHair.Core.csproj", "{CBC29B1F-6AA5-40A7-85D3-7A1A0B22A3CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.Infrascruture", "StudioHair.Infrascruture\StudioHair.Infrascruture.csproj", "{98DEA074-9E78-4BCD-9790-95370F64F1A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.Infrascruture", "StudioHair.Infrascruture\StudioHair.Infrascruture.csproj", "{98DEA074-9E78-4BCD-9790-95370F64F1A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.Infrascruture.IoC", "StudioHair.Infrascruture.IoC\StudioHair.Infrascruture.IoC.csproj", "{733C6F9A-7636-43B5-BE15-3B962E44D8D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.Infrascruture.IoC", "StudioHair.Infrascruture.IoC\StudioHair.Infrascruture.IoC.csproj", "{733C6F9A-7636-43B5-BE15-3B962E44D8D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.Application", "StudioHair.Application\StudioHair.Application.csproj", "{BE6BE88A-F436-4BA4-B2DC-3E9BD1AAE387}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.Application", "StudioHair.Application\StudioHair.Application.csproj", "{BE6BE88A-F436-4BA4-B2DC-3E9BD1AAE387}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.WebApp", "StudioHair.WebApp\StudioHair.WebApp.csproj", "{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.WebApp", "StudioHair.WebApp\StudioHair.WebApp.csproj", "{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

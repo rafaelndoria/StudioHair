@@ -28,6 +28,8 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -41,6 +43,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -48,6 +51,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Usuario}/{action=Login}/{id?}");
 
 app.Run();
