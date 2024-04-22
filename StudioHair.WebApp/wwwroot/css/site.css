@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+a {
+    text-decoration: none;
+    color: white;
+}
+
 html {
   font-size: 14px;
 }
@@ -45,15 +50,17 @@ body {
 .titulo-sistema {
     display: flex;
     justify-content: center;
-    background-color: #d3d3d3;
+    background-color: #ffb6c1;
     padding: 10px;
     font-size: 30px;
     font-weight: bold;
     font-style: unset;
     color: black;
+    text-decoration: none;
 }
-
-
+.titulo-sistema:hover {
+    color: black;
+}
 
 
 /* Login*/
@@ -61,7 +68,7 @@ body {
     height: calc(100vh - 50px);
     background-color: red;
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     align-content: center;
 }
 .tela-login {

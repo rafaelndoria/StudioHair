@@ -35,12 +35,11 @@ namespace StudioHair.Core.Entities
         public bool Ativo { get; private set; }
         public DateTime DataDeCadastro { get; private set; }
 
-        public void AtualizarUsuario(string nome, string email, EPapelUsuario papel, string senha)
+        public void AtualizarUsuario(string nome, string email, EPapelUsuario papel)
         {
             Nome = nome;
             Email = email;
             Papel = papel;
-            Senha = senha;
         }
 
         public void InativarUsuario()
@@ -51,6 +50,11 @@ namespace StudioHair.Core.Entities
         public void AtivarUsuario()
         {
             Ativo = true;
+        }
+
+        public void RedefinirSenha(string senha)
+        {
+            Senha = senha;
         }
     }
 }

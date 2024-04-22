@@ -1,0 +1,66 @@
+﻿@model CadastroUsuarioInputModel
+@{
+    ViewData["Title"] = "Criar Usuário";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="formCadastro" asp-controller="Usuario" asp-action="Criar" method="post">
+                        <div class="form-group mb-2">
+                            <label asp-for="Nome">Nome</label>
+                            <input id="Nome" asp-for="Nome" type="text" class="form-control">
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Email">Email</label>
+                            <input id="Email" asp-for="Email" type="email" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label asp-for="Senha">Senha</label>
+                            <input id="Senha" asp-for="Senha" type="password" class="form-control">
+                            <span asp-validation-for="Senha" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label asp-for="Papel">Nível de Usuário</label>
+                            <select id="Papel" asp-for="Papel" class="form-control">
+                                @{
+                                    var papelEnumValores = Enum.GetValues(typeof(StudioHair.Core.Enums.EPapelUsuario));
+                                    foreach (var papel in papelEnumValores)
+                                    {
+                                        <option value="@papel">@papel</option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="Papel" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

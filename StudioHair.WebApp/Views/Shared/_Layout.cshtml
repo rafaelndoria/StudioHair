@@ -13,7 +13,7 @@
 <body>
     <header>
         <div class="titulo-sistema">
-            Studio Hair - @ViewData["Title"]
+            <a asp-controller="Home" asp-action="Index">Studio Hair - @ViewData["Title"]</a>
         </div>
         <nav id="nav" class="navbar navbar-expand-lg">
             <ul class="navbar-nav mr-auto">
@@ -22,8 +22,8 @@
                         Usuário
                     </a>
                     <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a class="dropdown-item" href="#">Criar</a></li>
-                        <li><a class="dropdown-item" href="#">Consulta</a></li>
+                        <li><a asp-controller="Usuario" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                        <li><a asp-controller="Usuario" asp-action="List" class="dropdown-item">Consulta</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -79,32 +79,11 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-horizontal">
                         <li><a class="dropdown-item" href="#">Visualizar</a></li>
-                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                        <li><a asp-controller="Usuario" asp-action="Logout" class="dropdown-item">Sair</a></li>
                     </ul>
                 </li>
             </ul>
         </nav>
-
-
-        @*<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">StudioHair.WebApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>*@
     </header>
 
     <div class="container">
@@ -113,11 +92,7 @@
         </main>
     </div>
 
-    @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - StudioHair.WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
+    <script src="https://kit.fontawesome.com/6c33e49b8c.js" crossorigin="anonymous"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿setTimeout(function () {
+    var mensagemSucesso = document.getElementById('mensagem-sucesso');
+    if (mensagemSucesso) {
+        mensagemSucesso.style.display = 'none';
+    }
 
-// Write your JavaScript code.
+    var mensagemErro = document.getElementById('mensagem-erro');
+    if (mensagemErro) {
+        mensagemErro.style.display = 'none';
+    }
+}, 5000);
