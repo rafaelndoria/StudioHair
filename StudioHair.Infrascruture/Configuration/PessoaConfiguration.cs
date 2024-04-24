@@ -30,7 +30,7 @@ namespace StudioHair.Infrascruture.Configuration
             builder.Property(x => x.Bairro)
                 .IsRequired();
 
-            builder.Property(x => x.Número)
+            builder.Property(x => x.Numero)
                 .IsRequired();
 
             builder.HasIndex(x => x.Cpf)

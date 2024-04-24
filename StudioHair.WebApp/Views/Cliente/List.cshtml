@@ -1,0 +1,52 @@
+﻿@model IEnumerable<ClientesViewModel>
+@{
+    ViewData["Title"] = "Listagem de Clientes";
+}
+
+<div class="container mt-5">
+    <button type="button" class="btn btn-success"><a asp-controller="Cliente" asp-action="Criar">Criar</a></button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telefone Celular</th>
+                <th scope="col">WhatsApp</th>
+                <th scope="col">Status</th>
+                <th scope="col">Configuração</th>
+            </tr>
+        </thead>
+        @foreach (var cliente in Model)
+        {
+            <tbody>
+                <tr>
+                    <td>@cliente.Codigo</td>
+                    <td>@cliente.Nome</td>
+                    <td>@cliente.Email</td>
+                    <td>@cliente.TelefoneCelular</td>
+                    <td>@cliente.Whatsapp</td>
+                    <td>@(cliente.Ativo ? "Ativo" : "Inativo")</td>
+                    <td>
+                        <a href="/Cliente/Config/@cliente.Codigo" class="btn btn-success"><i class="fa-solid fa-gear"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
+                <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
+            </li>
+        </ul>
+    </nav>
+
+</div>

@@ -31,10 +31,8 @@
                         Cliente
                     </a>
                     <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a class="dropdown-item" href="#">Criar</a></li>
-                        <li><a class="dropdown-item" href="#">Consultar</a></li>
-                        <li><a class="dropdown-item" href="#">Vendas</a></li>
-                        <li><a class="dropdown-item" href="#">Agendamentos</a></li>
+                        <li><a asp-controller="Cliente" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                        <li><a asp-controller="Cliente" asp-action="List" class="dropdown-item">Consultar</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -75,6 +73,49 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Relatório
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                Vendas
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Opção 1</a></li>
+                                <li><a class="dropdown-item" href="#">Opção 2</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                Agendamentos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                <li><a class="dropdown-item" href="#">Opção B</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                Clientes
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                <li><a class="dropdown-item" href="#">Opção B</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                Produtos
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                <li><a class="dropdown-item" href="#">Opção B</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Perfil
                     </a>
                     <ul class="dropdown-menu dropdown-menu-horizontal">
@@ -97,5 +138,21 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(document).ready(function () {
+            $('.dropdown-submenu a.dropdown-toggle').on("click", function (e) {
+                $('.dropdown-submenu').not($(this).parent()).find('.dropdown-menu').hide();
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+            $(document).on('click', function (e) {
+                if (!$(e.target).closest('.dropdown-submenu').length) {
+                    $('.dropdown-submenu').removeClass('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

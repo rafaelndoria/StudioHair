@@ -23,7 +23,8 @@
                             <input asp-for="Senha" type="password" class="form-control" />
                             <span asp-validation-for="Senha" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+                        <button type="submit" id="btn-login" class="btn btn-success btn-block">Entrar</button>
+                        <button id="btn-validando" class="btn btn-primary btn-block d-none">Validando ...</button>
                         <div asp-validation-summary="All" class="text-danger"></div>
                     </form>
                 </div>
@@ -31,3 +32,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    var btnLogin = document.querySelector("#btn-login");
+    var btnValidando = document.querySelector("#btn-validando");
+
+    function TrocarBotoes() {
+        btnLogin.classList.add("d-none");
+        btnValidando.classList.remove("d-none");
+    }
+
+    btnLogin.addEventListener("click", TrocarBotoes);
+</script>

@@ -1,0 +1,73 @@
+﻿@model CadastroClienteInputModel
+@{
+    ViewData["Title"] = "Criar Cliente";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-controller="Cliente" asp-action="CriarCliente" method="post">
+                        <div class="form-group">
+                            <input asp-for="PessoaId" type="hidden" class="form-control" value="@Model.PessoaId">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label">Email</label>
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Digite o email">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="TelefoneCelular" class="form-label">Telefone</label>
+                            <input asp-for="TelefoneCelular" type="text" class="form-control" placeholder="Digite o telefone">
+                            <span asp-validation-for="TelefoneCelular" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Whatsapp" class="form-label">WhatsApp</label>
+                            <input asp-for="Whatsapp" type="text" class="form-control" placeholder="Digite o WhatsApp">
+                            <span asp-validation-for="Whatsapp" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Facebook" class="form-label">Facebook</label>
+                            <input asp-for="Facebook" type="text" class="form-control" placeholder="Digite o Facebook">
+                            <span asp-validation-for="Facebook" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Observacao" class="form-label">Observação</label>
+                            <textarea asp-for="Observacao" class="form-control" rows="3" placeholder="Digite observação do cliente"></textarea>
+                            <span asp-validation-for="Observacao" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-success mt-3">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

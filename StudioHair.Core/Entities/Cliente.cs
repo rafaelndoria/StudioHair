@@ -27,7 +27,7 @@
         public string Facebook { get; private set; }
         public int FrequenciaSalaoPorMes { get; private set; }
         public DateTime DataCadastro { get; private set; }
-        public string Observacao { get; private set; }
+        public string? Observacao { get; private set; }
         public bool Ativo { get; private set; }
         public int PessoaId { get; private set; }
 
@@ -37,7 +37,7 @@
         public List<HistoricoCliente> HistoricoClientes { get; set; }
         public List<HistoricoComprasClientes> HistoricoComprasClientes { get; set; }
 
-        public void Update(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao)
+        public void Atualizar(string email, string telefoneCelular, string whatsapp, string facebook, int frequenciaSalaoPorMes, string observacao)
         {
             Email = email;
             TelefoneCelular = telefoneCelular;
@@ -47,12 +47,12 @@
             Observacao = observacao;
         }
 
-        public void AtivarPessoa()
+        public void Ativar()
         {
             Ativo = true;
         }
 
-        public void InativarPessoa()
+        public void Inativar()
         {
             Ativo = false;
         }

@@ -1,0 +1,86 @@
+﻿@model CadastroPessoaInputModel
+@{
+    ViewData["Title"] = "Criar Cliente";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="formCadastro" asp-controller="Cliente" asp-action="Criar" method="post">
+                        <div class="form-group">
+                            <label asp-for="Nome" class="form-label">Nome</label>
+                            <input asp-for="Nome" type="text" class="form-control" placeholder="Digite o nome">
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="DataNascimento" class="form-label">Data de Nascimento</label>
+                            <input asp-for="DataNascimento" type="date" class="form-control" placeholder="DD/MM/AAAA">
+                            <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Cep" class="form-label">CEP</label>
+                            <input asp-for="Cep" type="text" class="form-control" placeholder="Digite o CEP">
+                            <span asp-validation-for="Cep" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Cidade" class="form-label">Cidade</label>
+                            <input asp-for="Cidade" type="text" class="form-control" placeholder="Digite a cidade">
+                            <span asp-validation-for="Cidade" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Rua" class="form-label">Rua</label>
+                            <input asp-for="Rua" type="text" class="form-control" placeholder="Digite a Rua">
+                            <span asp-validation-for="Rua" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Bairro" class="form-label">Bairro</label>
+                            <input asp-for="Bairro" type="text" class="form-control" placeholder="Digite o bairro">
+                            <span asp-validation-for="Bairro" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Numero" for="numero" class="form-label">Número</label>
+                            <input asp-for="Numero" type="text" class="form-control" placeholder="Digite o número">
+                            <span asp-validation-for="Numero" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Cpf" class="form-label">CPF</label>
+                            <input asp-for="Cpf" type="text" class="form-control" placeholder="Digite o CPF">
+                            <span asp-validation-for="Cpf" class="text-danger"></span>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Próximo</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

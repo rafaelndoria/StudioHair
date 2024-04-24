@@ -1,0 +1,90 @@
+﻿@model UpdateClienteInputModel
+@{
+    ViewData["Title"] = "Atualizar Cliente";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+<form asp-action="Atualizar" asp-controller="Cliente" method="post">
+    <div class="container mt-5">
+        <div>
+            <input type="hidden" id="codigo" value="@Model.Id">
+            <div class="form-group">
+                <label asp-for="@Model.PessoaRua">Rua</label>
+                <input asp-for="@Model.PessoaRua" type="text" class="form-control" id="rua" value="@Model.PessoaRua">
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PessoaCep">CEP</label>
+                <input asp-for="PessoaCep" type="text" class="form-control" id="cep" value="@Model.PessoaCep">
+                <span asp-validation-for="PessoaCep" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PessoaCidade">Cidade</label>
+                <input asp-for="PessoaCidade" type=" text" class="form-control" id="cidade" value="@Model.PessoaCidade">
+                <span asp-validation-for="PessoaCidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PessoaBairro">Bairro</label>
+                <input asp-for="PessoaBairro" type="text" class="form-control" id="bairro" value="@Model.PessoaBairro">
+                <span asp-validation-for="PessoaBairro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PessoaNumero">Número</label>
+                <input asp-for="PessoaNumero" type="text" class="form-control" id="numero" value="@Model.PessoaNumero">
+                <span asp-validation-for="PessoaNumero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteEmail">Email</label>
+                <input asp-for="ClienteEmail" type="email" class="form-control" id="email" value="@Model.ClienteEmail">
+                <span asp-validation-for="ClienteEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteTelefoneCelular">Telefone</label>
+                <input asp-for="ClienteTelefoneCelular" type="text" class="form-control" id="telefone" value="@Model.ClienteTelefoneCelular">
+                <span asp-validation-for="ClienteTelefoneCelular" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteWhatsapp">WhatsApp</label>
+                <input asp-for="ClienteWhatsapp" type="text" class="form-control" id="whatsapp" value="@Model.ClienteWhatsapp">
+                <span asp-validation-for="ClienteWhatsapp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteFacebook">Facebook</label>
+                <input asp-for="ClienteFacebook" type="text" class="form-control" id="facebook" value="@Model.ClienteFacebook">
+                <span asp-validation-for="ClienteFacebook" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClienteObservacao">Observação</label>
+                <input asp-for="ClienteObservacao" type="text" class="form-control" id="observacao" value="@Model.ClienteObservacao">
+                <span asp-validation-for="ClienteObservacao" class="text-danger"></span>
+            </div>
+            <a asp-controller="Cliente" asp-action="Config" asp-route-id="@Model.Id" type="button" class="btn btn-danger mt-2" id="atualizarBtn">Voltar</a>
+            <button type="submit" class="btn btn-primary mt-2" id="atualizarFormBtn">Atualizar</button>
+        </div>
+    </div>
+</form>
+
