@@ -5,7 +5,8 @@
         Kg = 1,
         Litro = 2,
         Caixa = 3,
-        Ml = 4,
-        Unidade = 5
+        ML = 4,
+        Unidade = 5,
+        Gramas = 6
     }
 }

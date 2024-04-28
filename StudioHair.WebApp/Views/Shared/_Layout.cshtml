@@ -40,8 +40,8 @@
                         Produto
                     </a>
                     <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a class="dropdown-item" href="#">Criar</a></li>
-                        <li><a class="dropdown-item" href="#">Consultar</a></li>
+                        <li><a asp-controller="Produto" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                        <li><a asp-controller="Produto" asp-action="List" class="dropdown-item">Consultar</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -112,15 +112,6 @@
                                 <li><a class="dropdown-item" href="#">Opção B</a></li>
                             </ul>
                         </li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Perfil
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a class="dropdown-item" href="#">Visualizar</a></li>
-                        <li><a asp-controller="Usuario" asp-action="Logout" class="dropdown-item">Sair</a></li>
                     </ul>
                 </li>
             </ul>

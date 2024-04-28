@@ -1,0 +1,108 @@
+﻿@model AtualizarProdutoInputModel
+@{
+    ViewData["Title"] = "Atualizar Produto";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-controller="Produto" asp-action="Atualizar" method="post">
+                        <div class="form-group">
+                            <input asp-for="ProdutoId" type="hidden" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nome" class="form-label">Nome</label>
+                            <input asp-for="Nome" type="text" class="form-control" placeholder="Digite o nome" value="@Model.Nome">
+                            <span asp-validation-for="Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Marca" class="form-label">Marca</label>
+                            <input asp-for="Marca" type="text" class="form-control" placeholder="Digite a marca" value="@Model.Marca">
+                            <span asp-validation-for="Marca" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CodigoBarras" class="form-label">Código de Barras</label>
+                            <input asp-for="CodigoBarras" type="text" class="form-control" placeholder="Digite o código de barras" value="@Model.CodigoBarras">
+                            <span asp-validation-for="CodigoBarras" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="ValorVendas" class="form-label">Valor de Vendas</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input asp-for="ValorVendas" type="text" class="form-control" placeholder="Digite o valor de vendas" value="@Model.ValorVendas">
+                                <span asp-validation-for="ValorVendas" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProdutoParaVenda" class="form-check-label">Produto para Venda</label>
+                            <input asp-for="ProdutoParaVenda" type="checkbox" class="form-check-input" checked="@Model.ProdutoParaVenda">
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ControlaEstoque" class="form-check-label">Controla Estoque</label>
+                            <input asp-for="ControlaEstoque" type="checkbox" class="form-check-input" checked="@Model.ControlaEstoque">
+                        </div>
+                        <div class="form-group">
+                            <a asp-controller="Produto" asp-action="Config" asp-route-id="@Model.ProdutoId" class="btn btn-danger">Voltar</a>
+                            <button type="submit" class="btn btn-success">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var valorVendasInput = document.querySelector("input[name='ValorVendas']");
+
+        valorVendasInput.addEventListener("input", function () {
+            var value = this.value.replace(/\D/g, "");
+            value = value.replace(/(\d)(\d{2})$/, "$1.$2");
+            this.value = value;
+        });
+
+        var btnUnidade = document.getElementById("btnUnidade");
+        var btnSalvar = document.querySelector("button[type='submit'][class='btn btn-success']");
+        var inputRedirecionarUnidade = document.getElementById("inputRedUnidade");
+
+        function AdicionarValorUnidade() {
+            inputRedirecionarUnidade.value = "true";
+        }
+
+        function AtualizarRedirecionarUnidade() {
+            inputRedirecionarUnidade.value = "false";
+        }
+
+        btnUnidade.addEventListener("click", AdicionarValorUnidade);
+        btnSalvar.addEventListener("click", AtualizarRedirecionarUnidade);
+    });
+</script>
+

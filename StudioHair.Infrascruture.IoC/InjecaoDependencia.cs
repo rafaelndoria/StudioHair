@@ -17,6 +17,7 @@ namespace StudioHair.Infrascruture.IoC
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IProdutoService, ProdutoService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
@@ -25,6 +26,7 @@ namespace StudioHair.Infrascruture.IoC
             // Repositories
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
             return services;
         }
