@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ServicosViewModel>
+@{
+    ViewData["Title"] = "Consulta de Serviços";
+}
+
+<div class="container mt-5">
+    <button type="button" class="btn btn-success"><a asp-controller="Servico" asp-action="Criar">Criar</a></button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Duração em Minutos</th>
+                <th scope="col">Valor do Serviço</th>
+                <th scope="col">Configuração</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var servico in Model)
+            {
+                <tr>
+                    <td>@servico.Nome</td>
+                    <td>@servico.DuracaoEmMinutos</td>
+                    <td>R$ @servico.ValorSevico</td>
+                    <td>
+                        <a href="/Servico/Config/@servico.Id" class="btn btn-success"><i class="fa-solid fa-gear"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+    <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
+    <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
+    </li>
+    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
+    <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
+    <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
+    <li class="page-item">
+    <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
+    </li>
+    </ul>
+    </nav>*@
+</div>

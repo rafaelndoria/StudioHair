@@ -9,7 +9,7 @@
             ValorServico = valorServico;
 
             ValorDosProdutos = 0;
-            ValorTotal = 0;
+            ValorTotal = ValorServico;
 
             ProdutosServicos = new List<ProdutosServico>();
             AgendamentoServicos = new List<AgendamentoServicos>();
@@ -33,6 +33,13 @@
         private void AtualizarValorTotal()
         {
             ValorTotal = (ValorDosProdutos + ValorServico);
+        }
+
+        public void Atualizar(string nome, int duracaoEmMinutos, decimal valorServico)
+        {
+            Nome = nome;
+            DuracaoEmMinutos = duracaoEmMinutos;
+            ValorServico = valorServico;
         }
     }
 }
