@@ -30,6 +30,15 @@ namespace StudioHair.Core.Entities
             Total += valor;
         }
 
+        public void Update(ETipoPagamento tipoPagamento, int clienteId, decimal valorDesconto)
+        {
+            DataDaVenda = DateTime.Now;
+            TipoPagamento = tipoPagamento;
+            ClienteId = clienteId;
+            ValorDesconto = valorDesconto;  
+        }
+
+
         public void AplicarDesconto(decimal valor)
         {
             if (Total < 0)

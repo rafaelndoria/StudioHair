@@ -1,0 +1,41 @@
+﻿@model IEnumerable<VendasViewModel>
+@{
+    ViewData["Title"] = "Lista de Vendas";
+    decimal valorTotal = 0;
+    foreach (var venda in Model)
+    {
+        valorTotal += venda.ValorTotal;
+    }
+}
+
+<div class="container mt-5">
+    <button type="button" class="btn btn-danger"><a asp-controller="Venda" asp-action="List">Voltar</a></button>
+    <button type="button" class="btn btn-success"><a asp-controller="Venda" asp-action="Criar">Criar</a></button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Nome do Cliente</th>
+                <th scope="col">Tipo de Pagamento</th>
+                <th scope="col">Data da Venda</th>
+                <th scope="col">Valor Total = R$ @valorTotal</th>
+                <th scope="col">Configuração</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var venda in Model)
+            {
+                <tr>
+                    <td>@venda.Id</td>
+                    <td>@venda.NomeCliente</td>
+                    <td>@venda.FormaDePagamento</td>
+                    <td>@venda.DataVenda.ToShortDateString()</td>
+                    <td>R$ @venda.ValorTotal</td>
+                    <td>
+                        <a href="/Venda/Config/@venda.Id" class="btn btn-success"><i class="fa-solid fa-gear"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

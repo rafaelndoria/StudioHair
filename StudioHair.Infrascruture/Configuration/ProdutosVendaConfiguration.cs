@@ -13,7 +13,13 @@ namespace StudioHair.Infrascruture.Configuration
             builder.Property(x => x.ProdutoId)
                 .IsRequired();
 
-            builder.Property(x => x.Valor)
+            builder.Property(x => x.ValorUnitario)
+                .IsRequired();
+
+            builder.Property(x => x.Quantidade)
+                .IsRequired();
+
+            builder.Property(x => x.ValorTotal)
                 .IsRequired();
 
             builder.Property(x => x.VendaId)

@@ -2,14 +2,23 @@
 {
     public class ProdutosVenda : Entidade
     {
-        public ProdutosVenda( decimal valor, int vendaId, int produtoId)
+        public ProdutosVenda()
         {
-            Valor = valor;
+            
+        }
+        public ProdutosVenda(decimal valor, int quantidade, int vendaId, int produtoId)
+        {
+            ValorUnitario = valor;
+            Quantidade = quantidade;
             ProdutoId = produtoId;
             VendaId = vendaId;
+
+            ValorTotal = ValorUnitario * Quantidade;
         }
 
-        public decimal Valor { get; private set; }
+        public decimal ValorUnitario { get; private set; }
+        public int Quantidade { get; private set; }
+        public decimal ValorTotal { get; private set; }
         public int ProdutoId { get; private set; }
         public int VendaId { get; private set; }
 

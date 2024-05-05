@@ -1,0 +1,237 @@
+﻿@using StudioHair.Core.Enums;
+@using System.Globalization;
+@model CadastroVendaInputModel
+@{
+    ViewData["Title"] = "Criar Venda";
+
+    decimal valorProdutos = 0;
+    foreach (var produto in Model.ProdutosVenda)
+    {
+        valorProdutos += produto.ValorTotal;
+    }
+    var valorTotal = Model.ValorTotal;
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-controller="Venda" asp-action="Criar" method="post">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-3 mb-3">
+                    <!-- Linha 1 -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <input type="text" asp-for="VendaId" class="form-control" id="idVenda" value="@Model.VendaId" hidden>
+                            <input type="text" asp-for="AdicionarProdutoVenda" id="adicionarProdutoVenda" class="form-control" value="@Model.AdicionarProdutoVenda" hidden>
+                            <label for="codigoCliente" value="@Model.ClienteId" class="form-label">Código</label>
+                            <input type="text" pattern="[0-9]*" class="form-control" id="codigoCliente" placeholder="Código Cliente">
+                        </div>
+                        <div class="col-md-9">
+                            <label asp-for="ClienteId" class="form-label">Cliente</label>
+                            <select asp-for="ClienteId" class="form-select" id="cliente">
+                                <option selected>Selecione um cliente</option>
+                                @foreach (var cliente in Model.Clientes)
+                                {
+                                    <option value="@cliente.Id">[@cliente.Id]@cliente.Nome</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Linha 2 e 3 agrupadas com borda -->
+                    <div class="border p-3 mb-3">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="codigoProduto" value="@Model.ProdutoId" class="form-label">Código</label>
+                                <input type="text" pattern="[0-9]*" class="form-control" id="codigoProduto" placeholder="Código Produto">
+                            </div>
+                            <div class="col-md-9">
+                                <label asp-for="ProdutoId" class="form-label">Produto</label>
+                                <select asp-for="ProdutoId" class="form-select" id="produto">
+                                    <option data-valor="0" value="0" selected>Selecione um produto</option>
+                                    @foreach (var produto in Model.Produtos)
+                                    {
+                                        <option value="@produto.Id" data-valor="@produto.Valor">[@produto.Id]@produto.Nome</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label asp-for="ValorUnitario" class="form-label">Valor Unitário</label>
+                                <input asp-for="ValorUnitario" type="text" class="form-control" id="valorUnitario" placeholder="R$0,00" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label asp-for="Quantidade" class="form-label">Quantidade</label>
+                                <input asp-for="Quantidade" type="text" pattern="[0-9]*" class="form-control" id="quantidade" placeholder="Quantidade" value="1">
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="ValorTotalProduto" class="form-label">Total</label>
+                                <input asp-for="ValorTotalProduto" type="text" class="form-control" id="valorTotal" placeholder="R$0,00" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary mt-3" id="btnAdicionarProduto"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Linha 4 -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="TipoPagamento" class="form-label">Pagamento</label>
+                            <select asp-for="TipoPagamento" class="form-select" id="produto">
+                                @foreach (var tipoPagamento in Enum.GetValues(typeof(ETipoPagamento)))
+                                {
+                                    <option value="@tipoPagamento">@tipoPagamento</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="ValorDesconto" class="form-label">Valor Desconto</label>
+                            <input asp-for="ValorDesconto" type="text" class="form-control" id="valorDesconto" value="@Model.ValorDesconto" placeholder="R$0,00">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="valorProdutos" class="form-label">Valor Produtos</label>
+                            <input type="text" class="form-control" id="valorProdutos" placeholder="R$0,00" readonly value="@valorProdutos">
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="ValorTotal" class="form-label">Total Venda</label>
+                            <input asp-for="ValorTotal" type="text" class="form-control" id="valorTotalVenda" placeholder="R$0,00" value="@valorTotal" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3 mt-3">
+                        <button type="submit" id="salvar" class="btn btn-success">Salvar</button>
+                    </div>
+                    <div class="border p-3">
+                        <h5 class="mb-3">Lista de Produtos</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Quantidade</th>
+                                    <th>Valor Unitário</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var produto in Model.ProdutosVenda)
+                                {
+                                    <tr>
+                                        <td>@produto.Nome</td>
+                                        <td>@produto.Quantidade</td>
+                                        <td>@produto.ValorUnitario.ToString("C")</td>
+                                        <td>@produto.ValorTotal.ToString("C")</td> 
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#codigoCliente').on('input', function () {
+            var codigoCliente = $(this).val();
+            $('#cliente').val(codigoCliente);
+        });
+
+        $('#codigoProduto').on('input', function () {
+            var codigoProduto = $(this).val();
+            $('#produto').val(codigoProduto);
+            atualizarValorUnitario();
+        });
+
+        $('#produto').on('change', function () {
+            atualizarValorUnitario();
+            atualizarCodigoProduto();
+            atualizarValorTotal();
+            $('#codigoProduto').trigger('input');
+        });
+
+        $('#quantidade').on('input', function () {
+            atualizarValorTotal();
+        });
+
+        $('#cliente').on('change', function () {
+            var codigoClienteSelecionado = $(this).val();
+            $('#codigoCliente').val(codigoClienteSelecionado);
+        });
+
+        function atualizarValorUnitario() {
+            var valor = $('#produto option:selected').data('valor');
+            $('#valorUnitario').val('R$' + valor);
+        }
+
+        function atualizarCodigoProduto() {
+            var codigoProdutoSelecionado = $('#produto').val();
+            $('#codigoProduto').val(codigoProdutoSelecionado);
+        }
+
+        function atualizarValorTotal() {
+            var valor = $('#produto option:selected').data('valor');
+            var quantidade = $('#quantidade').val();
+            if (/^\d+$/.test(quantidade)) {
+                var total = valor * parseInt(quantidade);
+                $('#valorTotal').val('R$' + total.toFixed(2));
+            } else {
+                $('#valorTotal').val('');
+            }
+        }
+
+        $('#valorDesconto').on('input', function () {
+            var valorTotal = parseFloat($('#valorTotal').val().replace('R$', '').replace(',', '.'));
+            var valorDesconto = parseFloat($(this).val().replace(',', '.'));
+            if (!isNaN(valorDesconto)) {
+                var total = valorTotal - valorDesconto;
+                if (total < 0) {
+                    $('#valorTotalVenda').val('R$0,00');
+                    alert('O valor total com o desconto é negativo!');
+                } else {
+                    $('#valorTotalVenda').val('R$' + total.toFixed(2).replace('.', ','));
+                }
+            }
+        });
+
+        $('#salvar').on('click', function () {
+            console.log(1)
+            $('#adicionarProdutoVenda').val(1);
+        });
+
+        $('#btnAdicionarProduto').on('click', function () {
+            console.log(2)
+            $('#adicionarProdutoVenda').val(2);
+        });
+    });
+</script>

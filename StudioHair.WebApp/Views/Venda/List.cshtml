@@ -1,0 +1,60 @@
+﻿@model FiltroListVendasInputModel
+@{
+    ViewData["Title"] = "Filtrar vendas";
+}
+<form asp-controller="Venda" asp-action="List" method="post">
+    <div class="form-row align-items-center">
+        <div class="col-auto my-1">
+            <label asp-for="Periodo">Período:</label>
+            <select asp-for="Periodo" class="form-control" id="periodo">
+                <option value="dia">Dia Atual</option>
+                <option value="todos">Todos</option>
+                <option value="intervalo">Intervalo</option>
+            </select>
+        </div>
+        <div class="col-auto my-1">
+            <label asp-for="Inicial">Data Inicial:</label>
+            <input asp-for="Inicial" type="date" class="form-control" id="dataInicial" placeholder="Inicial" disabled>
+        </div>
+        <div class="col-auto my-1">
+            <label asp-for="Final">Data Final:</label>
+            <input asp-for="Final" type="date" class="form-control" id="dataFinal" placeholder="Final" disabled>
+        </div>
+    </div>
+
+    <div class="form-row align-items-center mt-1">
+        <div class="col-auto my-1">
+            <label asp-for="ClienteId">Cliente:</label>
+            <select asp-for="ClienteId" class="form-control" id="cliente">
+                <option value="0">Todos</option>
+                @foreach (var cliente in Model.Clientes)
+                {
+                    <option value="@cliente.Id">@cliente.Nome</option>
+
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row align-items-center mt-3">
+        <div class="col-auto my-1">
+            <button type="submit" class="btn btn-primary">Pesquisar</button>
+        </div>
+    </div>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#periodo').change(function () {
+            var selectedOption = $(this).children("option:selected").val();
+            if (selectedOption === "intervalo") {
+                $('#dataInicial').prop('disabled', false);
+                $('#dataFinal').prop('disabled', false);
+            } else {
+                $('#dataInicial').prop('disabled', true);
+                $('#dataFinal').prop('disabled', true);
+            }
+        });
+    });
+</script>
