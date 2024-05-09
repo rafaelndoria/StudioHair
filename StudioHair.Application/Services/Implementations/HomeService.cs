@@ -2,6 +2,7 @@
 using StudioHair.Application.ViewModels;
 using StudioHair.Core.Interfaces;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -59,9 +60,15 @@ namespace StudioHair.Application.Services.Implementations
                 valorTotal += (decimal)venda.Total;
                 quantidade++;
             }
-            mediaTotal = valorTotal / quantidade;
-
-            mediaTotal = Math.Round(mediaTotal, 2);
+            if (quantidade == 0)
+            {
+                mediaTotal = 0;
+            }
+            else
+            {
+                mediaTotal = valorTotal / quantidade;
+                mediaTotal = Math.Round(mediaTotal, 2);
+            }
 
             var resumoVendasViewModel = new ResumoVendasViewModel(totalMes, totalDia, mediaTotal, vendasHoje, ultimaVenda);
 
