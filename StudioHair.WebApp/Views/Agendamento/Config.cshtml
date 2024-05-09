@@ -1,0 +1,126 @@
+﻿@model DetalhesAgendamentoViewModel
+@{
+    ViewData["Title"] = "Detalhes do Agendamento";
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<div class="container mt-5">
+    <h2>Detalhes do Agendamento</h2>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Nome</label>
+                <input type="text" class="form-control" value="@Model.NomeAgendamento" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Código</label>
+                <input type="text" class="form-control" id="id" value="@Model.Codigo" disabled>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Nome do Cliente</label>
+                <input type="text" class="form-control" id="nomeCliente" value="@Model.NomeCliente" disabled>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Número</label>
+                <input type="text" class="form-control" id="dataVenda" value="@Model.Numero" disabled>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Whatsapp</label>
+                <input type="text" class="form-control" id="dataVenda" value="@Model.Whatsapp" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Dia</label>
+                <input type="text" class="form-control" value="@Model.Dia.ToString("dd/MM/yyyy")" disabled>
+            </div>
+        </div> 
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Inicio</label>
+                <input type="text" class="form-control" value="@Model.HoraInicial" disabled>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Final</label>
+                <input type="text" class="form-control" value="@Model.HoraFinal" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Valor Profissional</label>
+                <input type="text" class="form-control" value="R$ @Model.ValorProfissional" disabled>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Valor Agendamento</label>
+                <input type="text" class="form-control" value="R$ @Model.ValorAgendamento" disabled>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h4>Serviços do Agendamento</h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Duração</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var produto in Model.ServicosAgendamento)
+                    {
+                        <tr>
+                            <td>@produto.Nome</td>
+                            <td>@produto.DuracaoMinutos</td>
+                            <td>@produto.Valor.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

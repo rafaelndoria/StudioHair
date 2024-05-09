@@ -13,6 +13,20 @@ namespace StudioHair.Core.Entities
             ValorProfissional = valorProfissional;
             ClienteId = clienteId;
 
+            Status = EAgendamento.Confirmado;
+            AgendamentoServicos = new List<AgendamentoServicos>();
+        }
+
+        public Agendamento(string nome, DateTime dia, string horaInicial, string horaFinal, decimal valorProfissional, int clienteId, EAgendamento status)
+        {
+            Nome = nome;
+            Dia = dia;
+            HoraInicial = horaInicial;
+            HoraFinal = horaFinal;
+            ValorProfissional = valorProfissional;
+            ClienteId = clienteId;
+
+            Status = status;
             AgendamentoServicos = new List<AgendamentoServicos>();
         }
 
@@ -31,7 +45,7 @@ namespace StudioHair.Core.Entities
 
         public void AdicionarValorAgendamento(decimal valor)
         {
-            ValorAgendamento = (ValorAgendamento - ValorDesconto) + valor;
+            ValorAgendamento = valor + ValorProfissional;
         }
 
         public void AdicionarValorDesconto(decimal valor)
@@ -56,12 +70,15 @@ namespace StudioHair.Core.Entities
             ValorProfissional = valor;
         }
 
-        public void Atualizar(string nome, DateTime dia, string horaInicial, string horaFinal)
+        public void Atualizar(string nome, DateTime dia, string horaInicial, string horaFinal, decimal valorProfissional, int clienteId)
         {
+            Status = EAgendamento.Confirmado;
             Nome = nome;
             Dia = dia;
             HoraInicial = horaInicial;
             HoraFinal = horaFinal;
+            ValorProfissional = valorProfissional;
+            ClienteId = clienteId;
         }
     }
 }

@@ -1,0 +1,250 @@
+﻿@model CadastroAgendamentoInputModel
+@{
+    ViewData["Title"] = "Criar Agendamento";
+    decimal valorTotalServicos = 0;
+    int duracaoTotalServicos = 0;
+    foreach (var servicos in Model.ServicosAgendamentos)
+    {
+        valorTotalServicos += servicos.Valor;
+        duracaoTotalServicos += servicos.DuracaoMinutos;
+    }
+}
+
+@if (TempData["Sucesso"] != null)
+{
+    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
+        @TempData["Sucesso"]
+    </div>
+}
+@if (TempData["Erro"] != null)
+{
+    <div id="mensagem-erro" class="alert alert-danger" role="alert">
+        @TempData["Erro"]
+    </div>
+}
+@if (ViewData.ModelState.ErrorCount > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        Ocorreram erros ao processar o formulário:
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-controller="Agendamento" asp-action="Criar" method="post">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="border p-3 mb-3">
+                    <input asp-for="AdicionarServico" id="adicionarProdutoVenda" class="form-control" hidden>
+                    <input asp-for="AgendamentoId" value="@Model.AgendamentoId" hidden>
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label asp-for="Nome" class="form-label">Nome Agendamento</label>
+                            <input asp-for="Nome" type="text" class="form-control" id="nomeCliente" placeholder="Nome do Agendamento">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="codigoCliente" class="form-label">Código</label>
+                            <input type="text" class="form-control" id="codigoCliente" placeholder="Código">
+                        </div>
+                        <div class="col-md-9">
+                            <label asp-for="ClienteId" class="form-label">Cliente</label>
+                            <select asp-for="ClienteId" class="form-select" id="cliente">
+                                <option value="0" selected>Selecione um cliente</option>
+                                @foreach (var cliente in Model.Clientes)
+                                {
+                                    <option value="@cliente.Id">[@cliente.Id]@cliente.Nome</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="border p-3 mb-3">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="codigoServico" class="form-label">Código</label>
+                                <input type="text" class="form-control" id="codigoServico" placeholder="Código">
+                            </div>
+                            <div class="col-md-9">
+                                <label asp-for="ServicoId" class="form-label">Serviço</label>
+                                <select asp-for="ServicoId" class="form-select" id="servico">
+                                    <option value="0" data-duracao="0" data-valor="0" selected>Selecione um serviço</option>
+                                    @foreach (var servico in Model.Servicos)
+                                    {
+                                        <option value="@servico.Id" data-duracao="@servico.Duracao" data-valor="@servico.Valor">[@servico.Id]@servico.Nome</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="duracaoServico" class="form-label">Duração (minutos)</label>
+                                <input type="text" class="form-control" id="duracaoServico" placeholder="Duração do Serviço" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="valorServico" class="form-label">Valor do Serviço</label>
+                                <input type="text" class="form-control" id="valorServico" placeholder="R$0,00" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <button type="submit" id="btnAdicionarServico" class="btn btn-primary d-block"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="Dia" class="form-label">Dia</label>
+                            <input asp-for="Dia" type="date" class="form-control" id="dataAgendamento" placeholder="Data do Agendamento">
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="HoraInicial" for="horarioInicio" class="form-label">Horário Inicial</label>
+                            <input asp-for="HoraInicial" type="time" class="form-control" id="horarioInicio" placeholder="Horário Inicial">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="duracaoTotal" class="form-label">Duração Total</label>
+                            <input type="text" class="form-control" id="duracaoTotal" placeholder="Duração Total" value="@duracaoTotalServicos min" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="HoraFinal" class="form-label">Horário Final</label>
+                            <input asp-for="HoraFinal" type="time" class="form-control" id="horarioInicio" placeholder="Horário Final">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label asp-for="ValorProfissional" class="form-label">Valor Profissional</label>
+                            <input asp-for="ValorProfissional" type="text" class="form-control" id="valorProfissional" placeholder="R$0,00">
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="ValorServicos" class="form-label">Valor Serviços</label>
+                            <input asp-for="ValorServicos" type="text" class="form-control" id="valorServicos" placeholder="R$0,00" value="@valorTotalServicos" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="ValorDesconto" class="form-label">Valor Desconto</label>
+                            <input asp-for="ValorDesconto" type="text" class="form-control" id="valorDesconto" placeholder="R$0,00">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="valorTotal" class="form-label">Valor Total</label>
+                            <input type="text" class="form-control" id="valorTotal" placeholder="R$0,00" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <button type="submit" id="btnSalvar" class="btn btn-success">Agendar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="border p-3">
+                <h5 class="mb-3">Lista de Serviços Agendados</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Serviço</th>
+                            <th>Duração (min)</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var servico in Model.ServicosAgendamentos)
+                        {
+                            <tr>
+                                <td>@servico.Nome</td>
+                                <td>@servico.DuracaoMinutos</td>
+                                <td>@servico.Valor</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#cliente').on('change', function () {
+            var codigoCliente = $(this).val();
+            $('#codigoCliente').val(codigoCliente);
+        });
+
+        $('#servico').on('change', function () {
+            var codigoServico = $(this).val();
+            $('#codigoServico').val(codigoServico);
+            atualizarValorServico();
+            atualizarDuracaoEmMinutosServico();
+        });
+
+        function atualizarValorServico() {
+            var valor = parseFloat($('#servico option:selected').data('valor'));
+            $('#valorServico').val('R$' + valor.toFixed(2));
+        }
+
+        function atualizarDuracaoEmMinutosServico() {
+            var duracao = parseInt($('#servico option:selected').data('duracao'));
+            $('#duracaoServico').val(duracao);
+        }
+
+        function calcularValorTotal() {
+            var valorServicos = parseFloat($('#valorServicos').val().replace('R$', '').replace(',', '.'));
+            var valorDesconto = parseFloat($('#valorDesconto').val().replace('R$', '').replace(',', '.'));
+            var valorProfissional = parseFloat($('#valorProfissional').val().replace('R$', '').replace(',', '.'));
+
+            if (isNaN(valorServicos)) valorServicos = 0;
+            if (isNaN(valorDesconto)) valorDesconto = 0;
+            if (isNaN(valorProfissional)) valorProfissional = 0;
+
+            var valorTotal = valorServicos + valorProfissional - valorDesconto;
+            $('#valorTotal').val('R$' + valorTotal.toFixed(2));
+        }
+
+        $('#codigoCliente').on('input', function () {
+            var codigoCliente = $(this).val();
+            $('#cliente option').each(function () {
+                if ($(this).val() == codigoCliente) {
+                    $('#cliente').val(codigoCliente);
+                }
+            });
+        });
+
+        $('#valorProfissional').on('input', function () {
+            calcularValorTotal();
+        });
+
+        $('#valorDesconto').on('input', function () {
+            calcularValorTotal();
+        });
+
+        $('#codigoServico').on('input', function () {
+            var codigoServico = $(this).val();
+            $('#servico option').each(function () {
+                if ($(this).val() == codigoServico) {
+                    $('#servico').val(codigoServico);
+                    atualizarValorServico();
+                    atualizarDuracaoEmMinutosServico();
+                }
+            });
+        });
+
+        $('#btnSalvar').on('click', function () {
+            console.log(1)
+            $('#adicionarProdutoVenda').val(1);
+        });
+
+        $('#btnAdicionarServico').on('click', function () {
+            console.log(2)
+            $('#adicionarProdutoVenda').val(2);
+        });
+    });
+</script>

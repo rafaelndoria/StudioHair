@@ -20,6 +20,7 @@ namespace StudioHair.Infrascruture.IoC
             services.AddScoped<IProdutoService, ProdutoService>();
             services.AddScoped<IServicoService, ServicoService>();
             services.AddScoped<IVendaService, VendaService>();
+            services.AddScoped<IAgendamentoService, AgendamentoService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
@@ -31,6 +32,7 @@ namespace StudioHair.Infrascruture.IoC
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
             services.AddScoped<IServicoRepository, ServicoRepository>();
             services.AddScoped<IVendaRepository, VendaRepository>();
+            services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 
             return services;
         }

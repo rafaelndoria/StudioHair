@@ -6,5 +6,6 @@
         Pago = 2,
         SemConfirmar = 3,
         Cancelado = 4,
+        Pendente = 5
     }
 }
