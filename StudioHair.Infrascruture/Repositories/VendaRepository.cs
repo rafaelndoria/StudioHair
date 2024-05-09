@@ -79,5 +79,10 @@ namespace StudioHair.Infrascruture.Repositories
         {
             return await _context.Vendas.Include(x => x.ProdutosVendas).ThenInclude(x => x.Produto).Include(x => x.Cliente).ThenInclude(x => x.Pessoa).FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<List<Venda>> GetVendasAsync()
+        {
+            return await _context.Vendas.ToListAsync();
+        }
     }
 }

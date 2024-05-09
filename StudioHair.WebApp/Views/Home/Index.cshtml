@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ResumoHomeViewModel
+@{
     ViewData["Title"] = "Sistema de Gerenciamento";
 }
 
@@ -34,11 +35,11 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Vendas</h5>
-                    <p class="card-text">Vendas Hoje: 10</p>
-                    <p class="card-text">Total Vendas: R$ 150</p>
-                    <p class="card-text">Total Vendas Mensal: R$ 150</p>
-                    <p class="card-text">Ultima Venda: 10/10/2024</p>
-                    <p class="card-text">Cliente com mais vendas: Rafael</p>
+                    <p class="card-text">Vendas Hoje: @Model.ResumoVendas.VendasHoje</p>
+                    <p class="card-text">Total Vendas Hoje: R$ @Model.ResumoVendas.TotalDiario</p>
+                    <p class="card-text">Total Vendas Mensal: R$ @Model.ResumoVendas.TotalMensal</p>
+                    <p class="card-text">Ticket Médio Mensal: R$ @Model.ResumoVendas.TicketMedio</p>
+                    <p class="card-text">Ultima Venda: @Model.ResumoVendas.UltimaVenda</p>
                 </div>
             </div>
         </div>
@@ -46,11 +47,11 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Agendamentos</h5>
-                    <p class="card-text">Agendamentos Hoje: 5</p>
-                    <p class="card-text">Total Agendamentos: 50</p>
-                    <p class="card-text">Proximo Agendamento: 50</p>
-                    <p class="card-text">Total Agendamentos: R$ 150</p>
-                    <p class="card-text">Total Agendamentos Mensal: R$ 150</p>
+                    <p class="card-text">Agendamentos Hoje: @Model.ResumoAgendamentos.QuantidadeAgendamentoDiario</p>
+                    <p class="card-text">Proximos Agendamentos: @Model.ResumoAgendamentos.QuantidadeProximosAgend</p>
+                    <p class="card-text">Proximo Agendamento: @Model.ResumoAgendamentos.ProximoAgendamento</p>
+                    <p class="card-text">Total Agendamentos Diario: R$ @Model.ResumoAgendamentos.TotalAgendamentoDiario</p>
+                    <p class="card-text">Total Agendamentos Mensal: R$ @Model.ResumoAgendamentos.TotalAgendamentoMensal</p>
                 </div>
             </div>
         </div>
@@ -60,11 +61,11 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Produtos</h5>
-                    <p class="card-text">Produtos Cadastrador: 1</p>
-                    <p class="card-text">Produtos para venda: 1</p>
-                    <p class="card-text">Produtos controle estoque: 1</p>
-                    <p class="card-text">Produtos com mais vendas: 1</p>
-                    <p class="card-text">Ultimo produto vendido: 1</p>
+                    <p class="card-text">Produtos Cadastrados: @Model.ResumoProdutos.ProdutosCriados</p>
+                    <p class="card-text">Produtos para venda: @Model.ResumoProdutos.ParaVenda</p>
+                    <p class="card-text">Produtos controle estoque: @Model.ResumoProdutos.ControlaEstoque</p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
                 </div>
             </div>
         </div>
@@ -72,13 +73,20 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Serviços</h5>
-                    <p class="card-text">Serviços criados: 1</p>
-                    <p class="card-text">Serviços feitos no dia: Valor do Serviço</p>
-                    <p class="card-text">Serviços feitos no mês: Valor do Serviço</p>
-                    <p class="card-text">Serviço mais realizado: Valor do Serviço</p>
-                    <p class="card-text">Serviço menos realizado: a</p>
+                    <p class="card-text">Serviços criados: @Model.ResumoServicos.ServicosCriados</p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
+                    <p class="card-text"><span class="text-white">Teste</span></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Atualizar a página a cada 10 minutos
+    setInterval(function () {
+        location.reload();
+    }, 600000); // 600000 milissegundos = 10 minutos
+</script>

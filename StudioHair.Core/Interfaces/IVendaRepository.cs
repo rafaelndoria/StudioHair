@@ -12,5 +12,6 @@ namespace StudioHair.Core.Interfaces
         Task DeletarProdutoVenda(ProdutosVenda produtoVenda);
         Task DeletarVenda(Venda venda);
         Task<List<Venda>> FiltrarVendasAsync(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<List<Venda>> GetVendasAsync();
     }
 }
