@@ -39,7 +39,7 @@
                     <p class="card-text">Total Vendas Hoje: R$ @Model.ResumoVendas.TotalDiario</p>
                     <p class="card-text">Total Vendas Mensal: R$ @Model.ResumoVendas.TotalMensal</p>
                     <p class="card-text">Ticket Médio Mensal: R$ @Model.ResumoVendas.TicketMedio</p>
-                    <p class="card-text">Ultima Venda: @Model.ResumoVendas.UltimaVenda</p>
+                    <p class="card-text">@Model.ResumoVendas.HaVendas ? Ultima Venda: @Model.ResumoVendas.UltimaVenda : "Não há vendas criadas"</p>
                 </div>
             </div>
         </div>

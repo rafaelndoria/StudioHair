@@ -37,6 +37,7 @@ namespace StudioHair.Application.Services.Implementations
             DateTime ultimaVenda = DateTime.Now;
             int vendasHoje = 0;
             decimal mediaTotal = 0;
+            bool haVendas = true;
 
             var primeiroRegistro = true;
             var quantidade = 0;
@@ -60,8 +61,10 @@ namespace StudioHair.Application.Services.Implementations
                 valorTotal += (decimal)venda.Total;
                 quantidade++;
             }
+
             if (quantidade == 0)
             {
+                haVendas = false;
                 mediaTotal = 0;
             }
             else
@@ -70,7 +73,7 @@ namespace StudioHair.Application.Services.Implementations
                 mediaTotal = Math.Round(mediaTotal, 2);
             }
 
-            var resumoVendasViewModel = new ResumoVendasViewModel(totalMes, totalDia, mediaTotal, vendasHoje, ultimaVenda);
+            var resumoVendasViewModel = new ResumoVendasViewModel(totalMes, totalDia, mediaTotal, vendasHoje, ultimaVenda, haVendas);
 
             return resumoVendasViewModel;
         }
