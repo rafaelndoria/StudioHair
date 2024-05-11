@@ -70,9 +70,7 @@ namespace StudioHair.WebApp.Controllers
         {
             try
             {
-                var clientesViewModel = await _clienteService.GetClientes(page, pageSize);
-                ViewData["PageNumber"] = page;
-                ViewData["PageSize"] = pageSize;
+                var clientesViewModel = await _clienteService.GetClientes(1, 9999999);
                 return View(clientesViewModel);
             }
             catch

@@ -35,7 +35,7 @@
         }
     </table>
 
-    <nav aria-label="Page navigation example">
+    @*<nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
                 <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
@@ -47,6 +47,6 @@
                 <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
             </li>
         </ul>
-    </nav>
+    </nav>*@
 
 </div>

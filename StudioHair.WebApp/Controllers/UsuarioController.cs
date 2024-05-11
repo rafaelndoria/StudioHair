@@ -70,13 +70,7 @@ namespace StudioHair.WebApp.Controllers
 
         public async Task<IActionResult> List(int page = 1, int pageSize = 5)
         {
-            var usuariosViewModel = await _usuarioService.GetUsuarios(page, pageSize);
-            var proximaPagina = await _usuarioService.VerificarProximaPagina(page, pageSize);
-            // reformular paginação
-            // informar dois números padrões 1, número da página anterior, número da proxima página, número da proxima página, .., número da ultima página
-            ViewData["PageNumber"] = page;
-            ViewData["PageSize"] = pageSize;
-            ViewData["HasNextPage"] = proximaPagina;
+            var usuariosViewModel = await _usuarioService.GetUsuarios(1, 99999999);
             return View(usuariosViewModel);
         }
 
