@@ -8,16 +8,16 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Código</th>
-                <th scope="col">Nome do Cliente</th>
-                <th scope="col">Data da Venda</th>
-                <th scope="col">Hora Inicial</th>
-                <th scope="col">Hora Final</th>
-                <th scope="col">Valor</th>
+                <th scope="col">Código <input type="text" class="form-control" id="filtroCodigo" placeholder="Filtrar"></th>
+                <th scope="col">Nome do Cliente <input type="text" class="form-control" id="filtroNomeCliente" placeholder="Filtrar"></th>
+                <th scope="col">Data da Venda <input type="text" class="form-control" id="filtroDataVenda" placeholder="Filtrar"></th>
+                <th scope="col">Hora Inicial <input type="text" class="form-control" id="filtroHoraInicial" placeholder="Filtrar"></th>
+                <th scope="col">Hora Final <input type="text" class="form-control" id="filtroHoraFinal" placeholder="Filtrar"></th>
+                <th scope="col">Valor <input type="text" class="form-control" id="filtroValor" placeholder="Filtrar"></th>
                 <th scope="col">Configuração</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tabelaAgendamentos">
             @foreach (var agendamento in Model)
             {
                 <tr>
@@ -35,3 +35,43 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filtros = document.querySelectorAll('input[type="text"]');
+        filtros.forEach(filtro => {
+            filtro.addEventListener("input", filtrarTabela);
+        });
+    });
+
+    function filtrarTabela() {
+        const filtroCodigo = document.getElementById('filtroCodigo').value.toUpperCase();
+        const filtroNomeCliente = document.getElementById('filtroNomeCliente').value.toUpperCase();
+        const filtroDataVenda = document.getElementById('filtroDataVenda').value.toUpperCase();
+        const filtroHoraInicial = document.getElementById('filtroHoraInicial').value.toUpperCase();
+        const filtroHoraFinal = document.getElementById('filtroHoraFinal').value.toUpperCase();
+        const filtroValor = document.getElementById('filtroValor').value.toUpperCase();
+
+        const linhas = document.querySelectorAll('#tabelaAgendamentos tr');
+
+        linhas.forEach(linha => {
+            const colCodigo = linha.cells[0].textContent.toUpperCase();
+            const colNomeCliente = linha.cells[1].textContent.toUpperCase();
+            const colDataVenda = linha.cells[2].textContent.toUpperCase();
+            const colHoraInicial = linha.cells[3].textContent.toUpperCase();
+            const colHoraFinal = linha.cells[4].textContent.toUpperCase();
+            const colValor = linha.cells[5].textContent.toUpperCase();
+
+            if (colCodigo.includes(filtroCodigo) &&
+                colNomeCliente.includes(filtroNomeCliente) &&
+                colDataVenda.includes(filtroDataVenda) &&
+                colHoraInicial.includes(filtroHoraInicial) &&
+                colHoraFinal.includes(filtroHoraFinal) &&
+                colValor.includes(filtroValor)) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    }
+</script>

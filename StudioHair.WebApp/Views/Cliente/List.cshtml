@@ -8,18 +8,18 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Código</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Email</th>
-                <th scope="col">Telefone Celular</th>
-                <th scope="col">WhatsApp</th>
-                <th scope="col">Status</th>
+                <th scope="col">Código <input type="text" class="form-control" id="filtroCodigo" placeholder="Filtrar"></th>
+                <th scope="col">Nome <input type="text" class="form-control" id="filtroNome" placeholder="Filtrar"></th>
+                <th scope="col">Email <input type="text" class="form-control" id="filtroEmail" placeholder="Filtrar"></th>
+                <th scope="col">Telefone Celular <input type="text" class="form-control" id="filtroTelefone" placeholder="Filtrar"></th>
+                <th scope="col">WhatsApp <input type="text" class="form-control" id="filtroWhatsApp" placeholder="Filtrar"></th>
+                <th scope="col">Status <input type="text" class="form-control" id="filtroStatus" placeholder="Filtrar"></th>
                 <th scope="col">Configuração</th>
             </tr>
         </thead>
-        @foreach (var cliente in Model)
-        {
-            <tbody>
+        <tbody id="tabelaClientes">
+            @foreach (var cliente in Model)
+            {
                 <tr>
                     <td>@cliente.Codigo</td>
                     <td>@cliente.Nome</td>
@@ -31,22 +31,47 @@
                         <a href="/Cliente/Config/@cliente.Codigo" class="btn btn-success"><i class="fa-solid fa-gear"></i></a>
                     </td>
                 </tr>
-            </tbody>
-        }
+            }
+        </tbody>
     </table>
-
-    @*<nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
-                <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
-            </li>
-        </ul>
-    </nav>*@
-
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filtros = document.querySelectorAll('input[type="text"]');
+        filtros.forEach(filtro => {
+            filtro.addEventListener("input", filtrarTabela);
+        });
+    });
+
+    function filtrarTabela() {
+        const filtroCodigo = document.getElementById('filtroCodigo').value.toUpperCase();
+        const filtroNome = document.getElementById('filtroNome').value.toUpperCase();
+        const filtroEmail = document.getElementById('filtroEmail').value.toUpperCase();
+        const filtroTelefone = document.getElementById('filtroTelefone').value.toUpperCase();
+        const filtroWhatsApp = document.getElementById('filtroWhatsApp').value.toUpperCase();
+        const filtroStatus = document.getElementById('filtroStatus').value.toUpperCase();
+
+        const linhas = document.querySelectorAll('#tabelaClientes tr');
+
+        linhas.forEach(linha => {
+            const colCodigo = linha.cells[0].textContent.toUpperCase();
+            const colNome = linha.cells[1].textContent.toUpperCase();
+            const colEmail = linha.cells[2].textContent.toUpperCase();
+            const colTelefone = linha.cells[3].textContent.toUpperCase();
+            const colWhatsApp = linha.cells[4].textContent.toUpperCase();
+            const colStatus = linha.cells[5].textContent.toUpperCase();
+
+            if (colCodigo.includes(filtroCodigo) &&
+                colNome.includes(filtroNome) &&
+                colEmail.includes(filtroEmail) &&
+                colTelefone.includes(filtroTelefone) &&
+                colWhatsApp.includes(filtroWhatsApp) &&
+                colStatus.includes(filtroStatus)) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    }
+</script>

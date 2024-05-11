@@ -8,13 +8,13 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Nome</th>
-                <th scope="col">Duração em Minutos</th>
-                <th scope="col">Valor do Serviço</th>
+                <th scope="col">Nome <input type="text" class="form-control" id="filtroNome" placeholder="Filtrar"></th>
+                <th scope="col">Duração em Minutos <input type="text" class="form-control" id="filtroDuracao" placeholder="Filtrar"></th>
+                <th scope="col">Valor do Serviço <input type="text" class="form-control" id="filtroValor" placeholder="Filtrar"></th>
                 <th scope="col">Configuração</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tabelaServicos">
             @foreach (var servico in Model)
             {
                 <tr>
@@ -28,17 +28,35 @@
             }
         </tbody>
     </table>
-    @*<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-    <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
-    <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-    <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-    <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
-    <li class="page-item">
-    <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
-    </li>
-    </ul>
-    </nav>*@
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filtros = document.querySelectorAll('input[type="text"]');
+        filtros.forEach(filtro => {
+            filtro.addEventListener("input", filtrarTabela);
+        });
+    });
+
+    function filtrarTabela() {
+        const filtroNome = document.getElementById('filtroNome').value.toUpperCase();
+        const filtroDuracao = document.getElementById('filtroDuracao').value.toUpperCase();
+        const filtroValor = document.getElementById('filtroValor').value.toUpperCase();
+
+        const linhas = document.querySelectorAll('#tabelaServicos tr');
+
+        linhas.forEach(linha => {
+            const colNome = linha.cells[0].textContent.toUpperCase();
+            const colDuracao = linha.cells[1].textContent.toUpperCase();
+            const colValor = linha.cells[2].textContent.toUpperCase();
+
+            if (colNome.includes(filtroNome) &&
+                colDuracao.includes(filtroDuracao) &&
+                colValor.includes(filtroValor)) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    }
+</script>

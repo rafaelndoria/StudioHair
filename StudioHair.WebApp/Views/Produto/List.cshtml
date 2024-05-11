@@ -8,14 +8,14 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th scope="col">Código</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Marca</th>
-                <th scope="col">Valor de Vendas</th>
+                <th scope="col">Código <input type="text" class="form-control" id="filtroCodigo" placeholder="Filtrar"></th>
+                <th scope="col">Nome <input type="text" class="form-control" id="filtroNome" placeholder="Filtrar"></th>
+                <th scope="col">Marca <input type="text" class="form-control" id="filtroMarca" placeholder="Filtrar"></th>
+                <th scope="col">Valor de Vendas <input type="text" class="form-control" id="filtroValorVendas" placeholder="Filtrar"></th>
                 <th scope="col">Configuração</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tabelaProdutos">
             @foreach (var produto in Model)
             {
                 <tr>
@@ -30,17 +30,38 @@
             }
         </tbody>
     </table>
-    @*<nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item@((int)ViewData["PageNumber"] == 1 ? " disabled" : "")">
-                <a class="page-link" href="?page=@((int)ViewData["PageNumber"] - 1)" tabindex="-1" aria-disabled="@((int)ViewData["PageNumber"] == 1 ? "true" : "false")">Anterior</a>
-            </li>
-            <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="?page=2">2</a></li>
-            <li class="page-item"><a class="page-link" href="?page=3">3</a></li>
-            <li class="page-item">
-                <a class="page-link" href="?page=@(Convert.ToInt32(ViewData["PageNumber"]) + 1)">Próximo</a>
-            </li>
-        </ul>
-    </nav>*@
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filtros = document.querySelectorAll('input[type="text"]');
+        filtros.forEach(filtro => {
+            filtro.addEventListener("input", filtrarTabela);
+        });
+    });
+
+    function filtrarTabela() {
+        const filtroCodigo = document.getElementById('filtroCodigo').value.toUpperCase();
+        const filtroNome = document.getElementById('filtroNome').value.toUpperCase();
+        const filtroMarca = document.getElementById('filtroMarca').value.toUpperCase();
+        const filtroValorVendas = document.getElementById('filtroValorVendas').value.toUpperCase();
+
+        const linhas = document.querySelectorAll('#tabelaProdutos tr');
+
+        linhas.forEach(linha => {
+            const colCodigo = linha.cells[0].textContent.toUpperCase();
+            const colNome = linha.cells[1].textContent.toUpperCase();
+            const colMarca = linha.cells[2].textContent.toUpperCase();
+            const colValorVendas = linha.cells[3].textContent.toUpperCase();
+
+            if (colCodigo.includes(filtroCodigo) &&
+                colNome.includes(filtroNome) &&
+                colMarca.includes(filtroMarca) &&
+                colValorVendas.includes(filtroValorVendas)) {
+                linha.style.display = "";
+            } else {
+                linha.style.display = "none";
+            }
+        });
+    }
+</script>
