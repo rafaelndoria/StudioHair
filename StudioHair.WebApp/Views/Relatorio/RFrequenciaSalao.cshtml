@@ -1,0 +1,52 @@
+﻿@model RelatorioFrequenciaSalaoViewModel
+@{
+    Layout = "_LayoutRelatorio";
+
+    ViewData["NomeRelatorio"] = "Frequência no Salão";
+    ViewData["DtaHora"] = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    ViewData["Filtros"] = Model.Filtros;
+    ViewData["Usuario"] = Model.Usuario;
+}
+
+@if (Model.FrequenciasSalao.Count() == 0 || Model.FrequenciasSalao == null)
+{
+    <h3>
+        Não há nada para emitir
+    </h3>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Frequencia no Salão</th>
+                <th scope="col">Ticket Médio</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int contador = 0;
+                decimal valorTotal = 0;
+            }
+            @foreach (var dado in Model.FrequenciasSalao)
+            {
+                contador++;
+                <tr>
+                    <th scope="row">@contador</th>
+                    <td>@dado.NomeCliente</td>
+                    <td>@dado.FrequenciaNoPeriodo.ToString("0.0")</td>
+                    <td>@String.Format("{0:0.00}", @dado.AgendamentoMedio)</td>
+                    <td>R$ @dado.Total</td>
+                </tr>
+                valorTotal += dado.Total;
+            }
+            <tr>
+                <td colspan="4" class="text-right"></td>
+                <td>R$ @valorTotal</td>
+            </tr>
+        </tbody>
+    </table>
+}

@@ -22,12 +22,12 @@ namespace StudioHair.WebApp.Controllers
 
         public async Task<IActionResult> VendasPorPeriodo()
         {
-            var filtroRelatorio = await PrepararFiltroVendas();
+            var filtroRelatorio = await PrepararFiltroVendasAgendamentosRelatorio();
             return View(filtroRelatorio);
         }
 
         [HttpPost]
-        public async Task<IActionResult> VendasPorPeriodo(FiltroRelatorioVendasInputModel inputModel)
+        public async Task<IActionResult> VendasPorPeriodo(FiltroRelatorioVAInputModel inputModel)
         {
             try
             {
@@ -43,12 +43,12 @@ namespace StudioHair.WebApp.Controllers
 
         public async Task<IActionResult> TicketMedio()
         {
-            var filtroRelatorio = await PrepararFiltroVendas();
+            var filtroRelatorio = await PrepararFiltroVendasAgendamentosRelatorio();
             return View(filtroRelatorio);
         }
 
         [HttpPost]
-        public async Task<IActionResult> TicketMedio(FiltroRelatorioVendasInputModel inputModel)
+        public async Task<IActionResult> TicketMedio(FiltroRelatorioVAInputModel inputModel)
         {
             try
             {
@@ -62,15 +62,58 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
+        #endregion
 
+        #region Agendamentos
+
+        public async Task<IActionResult> AgendamentoPorPeriodo()
+        {
+            var filtro = await PrepararFiltroVendasAgendamentosRelatorio();
+            return View(filtro);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AgendamentoPorPeriodo(FiltroRelatorioVAInputModel inputModel)
+        {
+            try
+            {
+                var dadosRelatorio = await _relatorioService.RelatorioPeriodoAgendamentos(inputModel);
+                return View("RAgendamentoPorPeriodo", dadosRelatorio);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao emitir o relatório: " + ex.Message;
+                return RedirectToAction("AgendamentoPorPeriodo");
+            }
+        }
+
+        public async Task<IActionResult> FrequenciaSalao()
+        {
+            var filtro = await PrepararFiltroVendasAgendamentosRelatorio();
+            return View(filtro);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> FrequenciaSalao(FiltroRelatorioVAInputModel inputModel)
+        {
+            try
+            {
+                var dados = await _relatorioService.RelatorioFrequenciaSalao(inputModel);
+                return View("RFrequenciaSalao", dados);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao emitir o relatório: " + ex.Message;
+                return RedirectToAction("FrequenciaSalao");
+            }
+        }
 
         #endregion
 
-
-        private async Task<FiltroRelatorioVendasInputModel> PrepararFiltroVendas()
+        private async Task<FiltroRelatorioVAInputModel> PrepararFiltroVendasAgendamentosRelatorio()
         {
             var clientes = await _clienteService.GetClientes(1, 999999);
-            var filtroRelatorio = new FiltroRelatorioVendasInputModel() { Clientes = clientes };
+            var filtroRelatorio = new FiltroRelatorioVAInputModel() { Clientes = clientes };
             return filtroRelatorio;
         }
     }

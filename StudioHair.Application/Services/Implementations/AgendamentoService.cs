@@ -112,6 +112,85 @@ namespace StudioHair.Application.Services.Implementations
             return inputModel;
         }
 
+        public async Task<IEnumerable<RFrequenciaSalaoViewModel>> RFrequenciaSalao(FiltroRelatorioVAInputModel inputModel)
+        {
+            var agendamentos = await _agendamentoRepository.FiltrarAgendamentosRelatorio(inputModel.ClienteId,
+                                                                                          inputModel.Periodo,
+                                                                                          inputModel.Inicial,
+                                                                                          inputModel.Final);
+            var dataPrimeiroRegistro = agendamentos.First().Dia;
+            var dataUltimoRegistro = agendamentos.Last().Dia;
+            TimeSpan diferenca = dataUltimoRegistro.Subtract(dataPrimeiroRegistro);
+            int quantidadeDias = diferenca.Days;
+
+            var list = new List<RFrequenciaSalaoViewModel>();
+            // varios clientes
+            if (inputModel.ClienteId == 0)
+            {
+                var clientesProcessados = new HashSet<int>();
+
+                foreach (var agendamento in agendamentos)
+                {
+                    var id = agendamento.ClienteId;
+
+                    if (clientesProcessados.Contains(id))
+                    {
+                        continue;
+                    }
+
+                    var agendamentosCliente = agendamentos.Where(x => x.ClienteId == id).ToList();
+
+                    decimal valorTotal = agendamentosCliente.Sum(x => (decimal)x.ValorAgendamento);
+                    var quantidade = agendamentosCliente.Count();
+                    var frenciaMediaPeriodo = quantidadeDias / quantidade;
+                    var nomeCliente = agendamentosCliente.First().Cliente.Pessoa.Nome;
+                    decimal mediaTotal = valorTotal / quantidade;
+
+                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, frenciaMediaPeriodo, mediaTotal, valorTotal);
+                    list.Add(viewModel);
+
+                    clientesProcessados.Add(id);
+                }
+            }
+            // apenas um cliente
+            else
+            {
+                var quantidade = agendamentos.Count();
+                if (quantidade != 0)
+                {
+                    decimal valorTotal = agendamentos.Sum(x => (decimal)x.ValorAgendamento);
+                    var frenciaMediaPeriodo = quantidadeDias / quantidade;
+                    var nomeCliente = agendamentos.First().Cliente.Pessoa.Nome;
+                    decimal mediaTotal = valorTotal / quantidade;
+
+                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, frenciaMediaPeriodo, mediaTotal, valorTotal);
+                    list.Add(viewModel);
+                }
+
+            }
+
+            return list;
+        }
+
+        public async Task<IEnumerable<RPeriodoAgendamentosViewModel>> RPeriodoAgendamentos(FiltroRelatorioVAInputModel inputModel)
+        {
+            var agendamentos = await _agendamentoRepository.FiltrarAgendamentosRelatorio(inputModel.ClienteId,
+                                                                                         inputModel.Periodo,
+                                                                                         inputModel.Inicial,
+                                                                                         inputModel.Final);
+            var list = agendamentos.Select(x =>
+                                                new RPeriodoAgendamentosViewModel(x.Cliente.Pessoa.Nome,
+                                                                                  x.Cliente.TelefoneCelular,
+                                                                                  x.Cliente.Whatsapp,
+                                                                                  x.Dia,
+                                                                                  x.HoraInicial,
+                                                                                  x.HoraFinal,
+                                                                                  (decimal)x.ValorAgendamento));
+
+
+            return list;
+        }
+
         public async Task SalvarAgendamento(CadastroAgendamentoInputModel inputModel)
         {
             var agendamento = await _agendamentoRepository.GetAgendamentoPorId(inputModel.AgendamentoId);

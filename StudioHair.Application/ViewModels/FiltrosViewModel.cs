@@ -1,8 +1,8 @@
 ﻿namespace StudioHair.Application.ViewModels
 {
-    public class FiltrosVendaViewModel
+    public class FiltrosViewModel
     {
-        public FiltrosVendaViewModel(string filtros)
+        public FiltrosViewModel(string filtros)
         {
             Filtros = filtros;
         }

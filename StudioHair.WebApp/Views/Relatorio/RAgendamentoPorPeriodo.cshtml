@@ -1,0 +1,58 @@
+﻿@model RelatorioPeriodoAgendamentosViewModel
+@{
+    Layout = "_LayoutRelatorio";
+
+    ViewData["NomeRelatorio"] = "Agendamento por Período";
+    ViewData["DtaHora"] = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    ViewData["Filtros"] = Model.Filtros;
+    ViewData["Usuario"] = Model.Usuario;
+}
+
+@if (Model.AgendamentosPorPeriodo.Count() == 0 || Model.AgendamentosPorPeriodo == null)
+{
+    <h3>
+        Não há nada para emitir
+    </h3>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Telefone</th>
+                <th scope="col">Whatsapp</th>
+                <th scope="col">Dia</th>
+                <th scope="col">Hora Inicial</th>
+                <th scope="col">Hora Final</th>
+                <th scope="col">Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int contador = 0;
+                decimal valorTotal = 0;
+            }
+            @foreach (var dado in Model.AgendamentosPorPeriodo)
+            {
+                contador++;
+                <tr>
+                    <th scope="row">@contador</th>
+                    <td>@dado.NomeCliente</td>
+                    <td>@dado.TelefoneCelular</td>
+                    <td>@dado.Whatsapp</td>
+                    <td>@dado.Dia.ToString("dd/MM/yyyy")</td>
+                    <td>@dado.HoraInicial</td>
+                    <td>@dado.HoraFinal</td>
+                    <td>R$ @String.Format("{0:0.00}", @dado.Total)</td>
+                </tr>
+                valorTotal += dado.Total;
+            }
+            <tr>
+                <td colspan="7" class="text-right"></td>
+                <td>R$ @valorTotal</td>
+            </tr>
+        </tbody>
+    </table>
+}

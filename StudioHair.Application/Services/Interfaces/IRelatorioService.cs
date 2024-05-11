@@ -5,8 +5,10 @@ namespace StudioHair.Application.Services.Interfaces
 {
     public interface IRelatorioService
     {
-        Task<RelatorioPeriodoVendasViewModel> RelatorioPeriodoVendas(FiltroRelatorioVendasInputModel inputModel);
-        Task<RelatorioTicketMedioViewModel> RelatorioTicketMedio(FiltroRelatorioVendasInputModel inputModel);
-        Task<FiltrosVendaViewModel> GetFiltrosVenda(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<RelatorioPeriodoVendasViewModel> RelatorioPeriodoVendas(FiltroRelatorioVAInputModel inputModel);
+        Task<RelatorioTicketMedioViewModel> RelatorioTicketMedio(FiltroRelatorioVAInputModel inputModel);
+        Task<RelatorioPeriodoAgendamentosViewModel> RelatorioPeriodoAgendamentos(FiltroRelatorioVAInputModel inputModel);
+        Task<FiltrosViewModel> GetFiltros(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<RelatorioFrequenciaSalaoViewModel> RelatorioFrequenciaSalao(FiltroRelatorioVAInputModel inputModel);
     }
 }

@@ -3,7 +3,7 @@ using StudioHair.Core.Entities;
 
 namespace StudioHair.Application.InputModels
 {
-    public class FiltroRelatorioVendasInputModel
+    public class FiltroRelatorioVAInputModel
     {
         public string Periodo { get; set; }
         public DateTime Inicial { get; set; } = DateTime.Now;
