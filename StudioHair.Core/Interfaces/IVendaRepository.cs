@@ -1,4 +1,5 @@
 ﻿using StudioHair.Core.Entities;
+using System.Linq.Expressions;
 
 namespace StudioHair.Core.Interfaces
 {
@@ -13,5 +14,6 @@ namespace StudioHair.Core.Interfaces
         Task DeletarVenda(Venda venda);
         Task<List<Venda>> FiltrarVendasAsync(int clienteId, string periodo, DateTime inicial, DateTime final);
         Task<List<Venda>> GetVendasAsync();
+        Task<List<Venda>> GetVendasRelatorioAsync(int clienteId, string periodo, DateTime inicial, DateTime final);
     }
 }

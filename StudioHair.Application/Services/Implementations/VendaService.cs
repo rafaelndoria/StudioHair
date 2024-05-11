@@ -5,6 +5,7 @@ using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
 using System.Globalization;
+using System.Linq.Expressions;
 
 namespace StudioHair.Application.Services.Implementations
 {
@@ -109,6 +110,76 @@ namespace StudioHair.Application.Services.Implementations
                 Produtos = produtosViewModel
             };
             return cadastroVendaInputModel;
+        }
+
+        public async Task<IEnumerable<RTicketMedioViewModel>> RTicketMedio(int clienteId, string periodo, DateTime inicial, DateTime final)
+        {
+            var vendas = await _vendaRepository.FiltrarVendasAsync(clienteId, periodo, inicial, final);
+
+            List<RTicketMedioViewModel> list = new List<RTicketMedioViewModel>();
+            decimal valorTotal = 0;
+            decimal ticketMedio = 0;
+            var quantidadeVendas = 0;
+            var nomeCliente = "";
+
+            if (clienteId == 0)
+            {
+                var clientesProcessados = new HashSet<int>(); 
+
+                foreach (var venda in vendas)
+                {
+                    var id = venda.ClienteId;
+
+                    if (clientesProcessados.Contains(id))
+                    {
+                        continue;
+                    }
+
+                    var vendasDoCliente = vendas.Where(v => v.ClienteId == id).ToList();
+                    quantidadeVendas = vendasDoCliente.Count;
+                    nomeCliente = vendasDoCliente.First().Cliente.Pessoa.Nome;
+                    valorTotal = vendasDoCliente.Sum(v => (decimal)v.Total);
+                    ticketMedio = valorTotal / quantidadeVendas;
+
+                    var ticketMedioViewModel = new RTicketMedioViewModel(nomeCliente, quantidadeVendas, valorTotal, ticketMedio);
+                    list.Add(ticketMedioViewModel);
+
+                    clientesProcessados.Add(id);
+                }
+            }
+            else
+            {
+                foreach (var venda in vendas)
+                {
+                    nomeCliente = venda.Cliente.Pessoa.Nome;
+                    valorTotal += (decimal)venda.Total;
+                    quantidadeVendas++;
+                }
+
+                if (quantidadeVendas > 0)
+                {
+                    ticketMedio = valorTotal / quantidadeVendas;
+                }
+
+                var ticketMedioViewModel = new RTicketMedioViewModel(nomeCliente, quantidadeVendas, valorTotal, ticketMedio);
+                list.Add(ticketMedioViewModel);
+            }
+
+            return list;
+        }
+
+        public async Task<IEnumerable<RVendasPorPeriodoViewModel>> RVendasPorPeriodo(int clienteId, string periodo, DateTime inicial, DateTime final)
+        {
+            var vendas = await _vendaRepository.FiltrarVendasAsync(clienteId, periodo, inicial, final);
+
+            List<RVendasPorPeriodoViewModel> viewModel = new List<RVendasPorPeriodoViewModel>();
+            foreach (var venda in vendas)
+            {
+                var rVendasPorPeriodoViewModel = new RVendasPorPeriodoViewModel(venda.DataDaVenda, venda.Cliente.Pessoa.Nome, Enum.GetName(typeof(ETipoPagamento), venda.TipoPagamento), (decimal)venda.Total);
+                viewModel.Add(rVendasPorPeriodoViewModel);
+            }
+
+            return viewModel;
         }
 
         public async Task SalvarVenda(CadastroVendaInputModel inputModel)

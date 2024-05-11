@@ -22,6 +22,7 @@ namespace StudioHair.Infrascruture.IoC
             services.AddScoped<IVendaService, VendaService>();
             services.AddScoped<IAgendamentoService, AgendamentoService>();
             services.AddScoped<IHomeService, HomeService>();
+            services.AddScoped<IRelatorioService, RelatorioService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),

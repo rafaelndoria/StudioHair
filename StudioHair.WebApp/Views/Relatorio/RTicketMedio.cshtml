@@ -1,0 +1,52 @@
+﻿@model RelatorioTicketMedioViewModel
+@{
+    Layout = "_LayoutRelatorio";
+
+    ViewData["NomeRelatorio"] = "Ticket Médio";
+    ViewData["DtaHora"] = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    ViewData["Filtros"] = Model.Filtros;
+    ViewData["Usuario"] = Model.Usuario;
+}
+
+@if (Model.TicketMedio.Count() == 0 || Model.TicketMedio == null)
+{
+    <h3>
+        Não há nada para emitir
+    </h3>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Compras no Periodo</th>
+                <th scope="col">Ticket Médio</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int contador = 0;
+                decimal valorTotal = 0;
+            }
+            @foreach (var dado in Model.TicketMedio)
+            {
+                contador++;
+                <tr>
+                    <th scope="row">@contador</th>
+                    <td>@dado.NomeCliente</td>
+                    <td>@dado.ComprasNoPeriodo</td>
+                    <td>@String.Format("{0:0.00}", @dado.TicketMedio)</td>
+                    <td>R$ @dado.TotalCompras</td>
+                </tr>
+                valorTotal += dado.TotalCompras;
+            }
+            <tr>
+                <td colspan="4" class="text-right"></td>
+                <td>R$ @valorTotal</td>
+            </tr>
+        </tbody>
+    </table>
+}

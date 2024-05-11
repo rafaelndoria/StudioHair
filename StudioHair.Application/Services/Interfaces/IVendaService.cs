@@ -1,5 +1,6 @@
 ﻿using StudioHair.Application.InputModels;
 using StudioHair.Application.ViewModels;
+using StudioHair.Core.Entities;
 
 namespace StudioHair.Application.Services.Interfaces
 {
@@ -13,5 +14,7 @@ namespace StudioHair.Application.Services.Interfaces
         Task DeletarVenda(int id);
         Task<IEnumerable<VendasViewModel>> FiltrarVendas(FiltroListVendasInputModel inputModel);
         Task<DetalhesVendaViewModel> GetDetalhesVenda(int id);
+        Task<IEnumerable<RVendasPorPeriodoViewModel>> RVendasPorPeriodo(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<IEnumerable<RTicketMedioViewModel>> RTicketMedio(int clienteId, string periodo, DateTime inicial, DateTime final);
     }
 }

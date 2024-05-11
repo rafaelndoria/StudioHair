@@ -1,150 +1,69 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Relatório - Nome Do Relatório</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .relatorio {
-      border: 1px solid #ccc;
-      padding: 20px;
-      margin: 20px;
-      min-height: calc(100vh - 40px);
-      overflow-y: auto;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório - @ViewData["NomeRelatorio"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .relatorio {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px;
+            min-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .titulo-relatorio {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="relatorio">
-      <div class="row mb-3">
-        <div class="col">
-          <h2>Nome do Relatório</h2>
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <strong>Filtros Utilizados:</strong>
-        </div>
-      </div>
+    <div class="container">
+        <div class="relatorio">
+            <div class="row mb-3">
+                <div class="col">
+                    <h2 class="titulo-relatorio">@ViewData["NomeRelatorio"]</h2>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <strong>Filtros Utilizados: @ViewData["Filtros"]</strong>
+                </div>
+            </div>
 
-      <div class="row mb-3">
-        <div class="col">
-          <h3>Dados Listados</h3>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Valor</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-              <tr>
-                <th scope="row">1</th>
-                <td>Exemplo 1</td>
-                <td>R$ 100,00</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Exemplo 2</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Exemplo 3</td>
-                <td>R$ 300,00</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+            <div class="row mb-3">
+                <div class="col">
+                    @RenderBody()
+                    @*<table class="table table-bordered">
+                    <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Valor</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>Exemplo 1</td>
+                    <td>R$ 100,00</td>
+                    </tr>
+                    </tbody>
+                    </table>*@
+                </div>
+            </div>
 
-      <div class="row mt-auto">
-        <div class="col">
-          <p><strong>Emitido por:</strong> Usuário X</p>
-          <p><strong>Data e Hora:</strong></p>
+            <div class="row mt-auto">
+                <div class="col">
+                    <p><strong>Emitido por:</strong> @ViewData["Usuario"]</p>
+                    <p><strong>Data e Hora:</strong> @ViewData["DtaHora"]</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 using StudioHair.Core.Entities;
 using StudioHair.Core.Interfaces;
 using StudioHair.Infrascruture.Context;
+using System.Linq.Expressions;
 
 namespace StudioHair.Infrascruture.Repositories
 {
@@ -83,6 +84,27 @@ namespace StudioHair.Infrascruture.Repositories
         public async Task<List<Venda>> GetVendasAsync()
         {
             return await _context.Vendas.ToListAsync();
+        }
+
+        public Task<List<Venda>> GetVendasRelatorioAsync(int clienteId, string periodo, DateTime inicial, DateTime final)
+        {
+            IQueryable<Venda> query = _context.Vendas.Include(x => x.Cliente).ThenInclude(x => x.Pessoa);
+
+            if (clienteId != 0)
+            {
+                query = query.Where(v => v.ClienteId == clienteId);
+            }
+
+            if (periodo.ToLower() == "dia")
+            {
+                query = query.Where(v => v.DataDaVenda.Date == DateTime.Today.Date);
+            }
+            else if (periodo.ToLower() == "intervalo")
+            {
+                query = query.Where(v => v.DataDaVenda >= inicial && v.DataDaVenda <= final);
+            }
+
+            return query.ToListAsync();
         }
     }
 }

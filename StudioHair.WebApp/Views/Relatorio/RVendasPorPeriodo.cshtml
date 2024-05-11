@@ -1,0 +1,52 @@
+﻿@model RelatorioPeriodoVendasViewModel
+@{
+    Layout = "_LayoutRelatorio";
+
+    ViewData["NomeRelatorio"] = "Vendas por Período";
+    ViewData["DtaHora"] = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+    ViewData["Filtros"] = Model.Filtros;
+    ViewData["Usuario"] = Model.Usuario;
+}
+
+@if (Model.VendasPorPeriodo.Count() == 0 || Model.VendasPorPeriodo == null)
+{
+    <h3>
+        Não há nada para emitir
+    </h3>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Data da Venda</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Tipo de Pagamento</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int contador = 0;
+                decimal valorTotal = 0;
+            }
+            @foreach (var venda in Model.VendasPorPeriodo)
+            {
+                contador++;
+                <tr>
+                    <th scope="row">@contador</th>
+                    <td>@venda.DataVenda</td>
+                    <td>@venda.Cliente</td>
+                    <td>@venda.TipoPagamento</td>
+                    <td>R$ @venda.Total</td>
+                </tr>
+                valorTotal += venda.Total;
+            }
+            <tr>
+                <td colspan="4" class="text-right"></td>
+                <td>R$ @valorTotal</td>
+            </tr>
+        </tbody>
+    </table>
+}
