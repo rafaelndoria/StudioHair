@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize]
     public class ProdutoController : Controller
     {
         private readonly IProdutoService _produtoService;

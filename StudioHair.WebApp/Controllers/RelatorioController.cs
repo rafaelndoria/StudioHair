@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize(Roles = "Administrador, Gerente")]
     public class RelatorioController : Controller   
     {
         private IClienteService _clienteService;

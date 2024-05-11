@@ -17,109 +17,122 @@
         </div>
         <nav id="nav" class="navbar navbar-expand-lg">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Usuário
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Usuario" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Usuario" asp-action="List" class="dropdown-item">Consulta</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Cliente
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Cliente" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Cliente" asp-action="List" class="dropdown-item">Consultar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Produto
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Produto" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Produto" asp-action="List" class="dropdown-item">Consultar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Serviço
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Servico" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Servico" asp-action="List" class="dropdown-item">Consultar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Venda
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Venda" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Venda" asp-action="List" class="dropdown-item">Consulta</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Agendamento
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-horizontal">
-                        <li><a asp-controller="Agendamento" asp-action="Criar" class="dropdown-item">Criar</a></li>
-                        <li><a asp-controller="Agendamento" asp-action="List" class="dropdown-item">Consultar</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Relatório
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
-                                Vendas
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-controller="Relatorio" asp-action="VendasPorPeriodo" class="dropdown-item">Vendas por Período</a></li>
-                                <li><a asp-controller="Relatorio" asp-action="TicketMedio" class="dropdown-item">Ticket Médio</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
-                                Agendamentos
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Opção A</a></li>
-                                <li><a class="dropdown-item" href="#">Opção B</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
-                                Clientes
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Opção A</a></li>
-                                <li><a class="dropdown-item" href="#">Opção B</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown-submenu">
-                            <a class="dropdown-item dropdown-toggle" href="#" role="button">
-                                Produtos
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Opção A</a></li>
-                                <li><a class="dropdown-item" href="#">Opção B</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+
+                @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Usuário
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Usuario" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Usuario" asp-action="List" class="dropdown-item">Consulta</a></li>
+                        </ul>
+                    </li>
+                }
+                
+                @if (User.IsInRole("Administrador") || User.IsInRole("Gerente") || User.IsInRole("Funcionario"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cliente
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Cliente" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Cliente" asp-action="List" class="dropdown-item">Consultar</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Produto
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Produto" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Produto" asp-action="List" class="dropdown-item">Consultar</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Serviço
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Servico" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Servico" asp-action="List" class="dropdown-item">Consultar</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Venda
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Venda" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Venda" asp-action="List" class="dropdown-item">Consulta</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Agendamento
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-horizontal">
+                            <li><a asp-controller="Agendamento" asp-action="Criar" class="dropdown-item">Criar</a></li>
+                            <li><a asp-controller="Agendamento" asp-action="List" class="dropdown-item">Consultar</a></li>
+                        </ul>
+                    </li>
+                }
+
+                @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Relatório
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                    Vendas
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a asp-controller="Relatorio" asp-action="VendasPorPeriodo" class="dropdown-item">Vendas por Período</a></li>
+                                    <li><a asp-controller="Relatorio" asp-action="TicketMedio" class="dropdown-item">Ticket Médio</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                    Agendamentos
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                    <li><a class="dropdown-item" href="#">Opção B</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                    Clientes
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                    <li><a class="dropdown-item" href="#">Opção B</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item dropdown-toggle" href="#" role="button">
+                                    Produtos
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Opção A</a></li>
+                                    <li><a class="dropdown-item" href="#">Opção B</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                }
             </ul>
         </nav>
     </header>
 
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_Validacoes" />
             @RenderBody()
         </main>
     </div>

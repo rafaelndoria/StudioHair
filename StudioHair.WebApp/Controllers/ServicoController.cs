@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize]
     public class ServicoController : Controller
     {
         private readonly IServicoService _servicoService;

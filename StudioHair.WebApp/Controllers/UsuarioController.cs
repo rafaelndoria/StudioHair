@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize(Roles = "Gerente, Administrador")]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService _usuarioService;
@@ -13,11 +15,13 @@ namespace StudioHair.WebApp.Controllers
             _usuarioService = usuarioService;
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(UsuarioLoginInputModel inputModel)
         { 

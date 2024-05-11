@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.Services.Interfaces;
 using StudioHair.WebApp.Models;
 using System.Diagnostics;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize(Roles = "Administrador, Gerente, Funcionario")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

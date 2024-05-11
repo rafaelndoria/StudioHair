@@ -4,7 +4,6 @@
     {
         Administrador = 1,
         Gerente = 2,
-        Funcionario = 3,
-        Cliente = 4
+        Funcionario = 3
     }
 }

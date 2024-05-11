@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using StudioHair.Infrascruture.IoC;
+using StudioHair.WebApp.Middlewares;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,10 +41,14 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession();
+app.UseMiddleware<JwtBeareMiddleware>();
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseSession();
+app.UseMiddleware<RedirectToPreviousPageMiddleware>();
+
 app.UseRouting();
 
 app.UseAuthentication();

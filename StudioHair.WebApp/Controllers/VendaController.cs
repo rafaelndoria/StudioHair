@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
-using StudioHair.Application.ViewModels;
-using System.Globalization;
 
 namespace StudioHair.WebApp.Controllers
 {
+    [Authorize]
     public class VendaController : Controller
     {
         private readonly IVendaService _vendaService;

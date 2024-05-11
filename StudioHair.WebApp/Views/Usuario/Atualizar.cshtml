@@ -3,32 +3,6 @@
     ViewData["Title"] = "Atualizar Usuário";
 }
 
-@if (TempData["Sucesso"] != null)
-{
-    <div id="mensagem-sucesso" class="alert alert-success" role="alert">
-        @TempData["Sucesso"]
-    </div>
-}
-@if (TempData["Erro"] != null)
-{
-    <div id="mensagem-erro" class="alert alert-danger" role="alert">
-        @TempData["Erro"]
-    </div>
-}
-
-@if (ViewData.ModelState.ErrorCount > 0)
-{
-    <div class="alert alert-danger" role="alert">
-        Ocorreram erros ao processar o formulário:
-        <ul>
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <li>@error.ErrorMessage</li>
-            }
-        </ul>
-    </div>
-}
-
 <div class="container mt-5">
     <h2>Atualizar Usuário</h2>
     <form asp-controller="Usuario" asp-action="Atualizar" method="post">
