@@ -21,31 +21,33 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task<FiltrosViewModel> GetFiltros(int clienteId, string periodo, DateTime inicial, DateTime final)
         {
-            var filtros = "Clientes: ";
+            var filtros = "";
             if (clienteId == 0)
             {
+                filtros = "Clientes: ";
                 var clientes = await _clienteService.GetClientes(1, 9999999);
                 foreach (var cliente in clientes)
                 {
                     filtros += cliente.Codigo + ", ";
                 }
+                filtros = filtros.Substring(0, filtros.Length - 2);
             }
             else
             {
-                filtros += "Clientes: " + clienteId;
+                filtros += "Cliente: " + clienteId;
             }
 
             if (periodo == "todos")
             {
-                filtros += "Data: Todos";
+                filtros += " / Data: Todos";
             }
             else if (periodo == "dia")
             {
-                filtros += "Data: " + DateTime.Now;
+                filtros += " / Data: " + DateTime.Now;
             }
             else
             {
-                filtros += "Data: " + inicial.ToString("dd/MM/yyyy") + " - " + final.ToString("dd/MM/yyyy");
+                filtros += " / Data: " + inicial.ToString("dd/MM/yyyy") + " - " + final.ToString("dd/MM/yyyy");
             }
             var filtro = new FiltrosViewModel(filtros);
             return filtro;
