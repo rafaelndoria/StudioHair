@@ -68,7 +68,8 @@ namespace StudioHair.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                await _vendaService.DeletarVenda(inputModel.VendaId);
+                if (inputModel.VendaId != 0)
+                    await _vendaService.DeletarVenda(inputModel.VendaId);
                 TempData["Erro"] = "Erro ao incluir a venda: " + ex.Message;
                 return RedirectToAction("Criar");
             }
