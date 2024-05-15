@@ -98,7 +98,7 @@ namespace StudioHair.Application.Services.Implementations
             var produtos = await _produtoRepository.GetProdutosAsync();
 
             if (clientes.Count() <= 0 || produtos.Count() <= 0)
-                throw new Exception("Antes de vendes realize o cadastro de alguns produtos ou clientes");
+                throw new Exception("Antes de realizar alguma venda realize o cadastro de alguns produtos e clientes");
 
             var clientesViewModel = clientes.Select(x =>
                                                         new ClienteVendaViewModel(x.Id, x.Pessoa.Nome));

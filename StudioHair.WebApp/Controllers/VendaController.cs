@@ -76,13 +76,21 @@ namespace StudioHair.WebApp.Controllers
 
         public async Task<IActionResult> List()
         {
-            var clientes = await _vendaService.PrepararVendas();
-            var inputModel = new FiltroListVendasInputModel()
-            { 
-                Clientes = clientes.Clientes
-            };
+            try
+            {
+                var clientes = await _vendaService.PrepararVendas();
+                var inputModel = new FiltroListVendasInputModel()
+                {
+                    Clientes = clientes.Clientes
+                };
 
-            return View(inputModel);
+                return View(inputModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao abrir a listagem das vendas: "+ ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]

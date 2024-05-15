@@ -62,9 +62,9 @@
 
         valorVendasInput.addEventListener("input", function () {
             var value = this.value.replace(/\D/g, "");
-            value = value.replace(/(\d)(\d{2})$/, "$1.$2");
+            value = value.replace(/(\d)(\d{2})$/, "$1,$2");
             this.value = value;
-        });
+        }); 
 
         var btnUnidade = document.getElementById("btnUnidade");
         var btnSalvar = document.querySelector("button[type='submit'][class='btn btn-success']");
