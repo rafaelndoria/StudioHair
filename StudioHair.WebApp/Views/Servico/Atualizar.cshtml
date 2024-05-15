@@ -48,7 +48,7 @@
 
         valorServicoInput.addEventListener("input", function () {
             var value = this.value.replace(/\D/g, "");
-            value = value.replace(/(\d)(\d{2})$/, "$1.$2");
+            value = value.replace(/(\d)(\d{2})$/, "$1,$2");
             this.value = value;
         });
     });
