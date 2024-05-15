@@ -97,18 +97,26 @@ namespace StudioHair.Application.Services.Implementations
             var clientes = await _clienteRepository.GetClientesAsync(1, 999999999);
             var produtos = await _produtoRepository.GetProdutosAsync();
 
-            if (clientes.Count() <= 0 || produtos.Count() <= 0)
+            List<Produto> list = new List<Produto>();
+            foreach (var produto in produtos)
+            {
+                if (produto.ProdutoParaVenda == true)
+                    list.Add(produto);
+            }
+
+            if (list.Count() <= 0 || list.Count() <= 0)
                 throw new Exception("Antes de realizar alguma venda realize o cadastro de alguns produtos e clientes");
 
             var clientesViewModel = clientes.Select(x =>
                                                         new ClienteVendaViewModel(x.Id, x.Pessoa.Nome));
-            var produtosViewModel = produtos.Select(x =>
+            var produtosViewModel = list.Select(x =>
                                                         new ProdutoVendaViewModel(x.Id, x.Nome, x.ValorPraticado));
             var cadastroVendaInputModel = new CadastroVendaInputModel()
             {
                 Clientes = clientesViewModel,
                 Produtos = produtosViewModel
             };
+
             return cadastroVendaInputModel;
         }
 
