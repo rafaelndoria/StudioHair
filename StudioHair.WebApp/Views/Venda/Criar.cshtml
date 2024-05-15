@@ -108,18 +108,18 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Quantidade</th>
-                                    <th>Valor Unitário</th>
+                                    <th>Valor Unitário</th> 
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var produto in Model.ProdutosVenda)
                                 {
-                                    <tr>
+                                    <tr>    
                                         <td>@produto.Nome</td>
                                         <td>@produto.Quantidade</td>
-                                        <td>@produto.ValorUnitario.ToString("C")</td>
-                                        <td>@produto.ValorTotal.ToString("C")</td> 
+                                        <td>@produto.ValorUnitario</td>
+                                        <td>@produto.ValorTotal</td> 
                                     </tr>
                                 }
                             </tbody>
@@ -177,8 +177,12 @@
             var valor = $('#produto option:selected').data('valor');
             var quantidade = $('#quantidade').val();
             if (/^\d+$/.test(quantidade)) {
-                var total = valor * parseInt(quantidade);
-                $('#valorTotal').val('R$' + total.toFixed(2));
+                    var valorNumerico = parseFloat(valor.replace(',', '.'));
+                    var quantidade = parseInt(quantidade);
+                    var total = valorNumerico * quantidade;
+                    var totalFormatado = total.toFixed(2);
+                    totalFormatado = totalFormatado.replace('.', ',');
+                $('#valorTotal').val('R$' + totalFormatado);
             } else {
                 $('#valorTotal').val('');
             }
@@ -189,7 +193,7 @@
             var valorDesconto = parseFloat($(this).val().replace(',', '.'));
             if (!isNaN(valorDesconto)) {
                 var total = valorTotal - valorDesconto;
-                if (total < 0) {
+                if (total < 0) {    
                     $('#valorTotalVenda').val('R$0,00');
                     alert('O valor total com o desconto é negativo!');
                 } else {

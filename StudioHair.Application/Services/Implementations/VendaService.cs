@@ -24,7 +24,7 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task<decimal> AdicionarProdutoVenda(CadastroVendaInputModel inputModel)
         {
-            var valorUnitario = decimal.Parse(inputModel.ValorUnitario.Replace("R$", "").Trim(), CultureInfo.InvariantCulture);
+            var valorUnitario = decimal.Parse(inputModel.ValorUnitario.Replace("R$", "").Trim());
             var produtoVenda = new ProdutosVenda(valorUnitario, inputModel.Quantidade, inputModel.VendaId, inputModel.ProdutoId);
             await _vendaRepository.CriarProdutoVendaAsync(produtoVenda);
 
