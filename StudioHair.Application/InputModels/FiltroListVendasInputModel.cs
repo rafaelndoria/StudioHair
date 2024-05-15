@@ -10,6 +10,6 @@ namespace StudioHair.Application.InputModels
         public DateTime Inicial { get; set; } = DateTime.Now;
         public DateTime Final { get; set; } = DateTime.Now;
 
-        public IEnumerable<ClienteVendaViewModel> Clientes { get; set; }
+        public IEnumerable<ClienteVendaViewModel> Clientes { get; set; } = new List<ClienteVendaViewModel>();
     }
 }
