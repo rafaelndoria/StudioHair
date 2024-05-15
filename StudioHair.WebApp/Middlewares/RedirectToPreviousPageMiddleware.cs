@@ -19,7 +19,7 @@ namespace StudioHair.WebApp.Middlewares
             await _next(context);
 
             // Verifica se o código de status da resposta é 403 (Forbidden)
-            if (context.Response.StatusCode == 403)
+            if (context.Response.StatusCode == 403 || context.Response.StatusCode == 401)
             {
                 // Armazena a mensagem de aviso na sessão
                 context.Session.SetString("AccessDeniedMessage", "Você não tem permissão para acessar esta página.");

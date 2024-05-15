@@ -11,7 +11,7 @@
 
         public async Task Invoke(HttpContext context)
         {
-            // Verifica se há um token JWT na sessão
+            // Verifica se há um token JWT na sessão    
             var token = context.Session.GetString("Token");
 
             if (!string.IsNullOrEmpty(token))
