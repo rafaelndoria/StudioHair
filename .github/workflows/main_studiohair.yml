@@ -19,7 +19,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.x'
           include-prerelease: true
 
       - name: Build with dotnet
@@ -40,21 +40,12 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: .net-app
-      
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5AA1AFC3C758406488B53E30C1FDA5F0 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B631C6DB4CF04C9087CCD3AA535D58A7 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FD863FBD70A54711AF3DB60225796503 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -62,5 +53,5 @@ jobs:
         with:
           app-name: 'StudioHair'
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_9F1A025F43494F5BA3B3D63686055DAA }}
           package: .
-          
