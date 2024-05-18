@@ -27,7 +27,7 @@ namespace StudioHair.WebApp.Controllers
             try
             {
                 // adicionar servico
-                if (inputModel.AdicionarServico == 2)
+                 if (inputModel.AdicionarServico == 2)
                 {
                     ValidarCadastroServico(inputModel);
                     if (inputModel.AgendamentoId <= 0 || inputModel.AgendamentoId == null)
@@ -55,7 +55,13 @@ namespace StudioHair.WebApp.Controllers
                     if (!ModelState.IsValid)
                     {
                         TempData["Erro"] = "Preencha os campos obrigatorios";
-                        return RedirectToAction("Criar");
+                        var listas = await _agendamentoService.PrepararAgendamento();
+                        var listServicos = await _agendamentoService.ListProdutosAgendamento(inputModel.AgendamentoId);
+
+                        inputModel.Servicos = listas.Servicos;
+                        inputModel.Clientes = listas.Clientes;
+                        inputModel.ServicosAgendamentos = listServicos;
+                        return View("Criar", inputModel);
                     }
                     if (!await _agendamentoService.VerificarDisponibilizadaAgendamento(inputModel))
                     {

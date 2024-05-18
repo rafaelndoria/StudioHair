@@ -3,6 +3,7 @@ using StudioHair.Application.Services.Interfaces;
 using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Interfaces;
+using System.Globalization;
 
 namespace StudioHair.Application.Services.Implementations
 {
@@ -27,7 +28,8 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task CriarServico(CadastroServicoInputModel inputModel)
         {
-            var servico = new Servico(inputModel.Nome, inputModel.DuracaoMinutos, inputModel.ValorServico);
+            var valorServico = decimal.Parse(inputModel.ValorServico, new CultureInfo("pt-BR"));
+            var servico = new Servico(inputModel.Nome, inputModel.DuracaoMinutos, valorServico);
             await _servicoRepository.CriarServicoAsync(servico);
         }
 

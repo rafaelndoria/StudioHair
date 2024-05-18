@@ -4,6 +4,7 @@ using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
+using System.Globalization;
 
 namespace StudioHair.Application.Services.Implementations
 {
@@ -50,10 +51,11 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task<int> CriarProduto(CadastroProdutoInputModel inputModel)
         {
+            var valorVendas = decimal.Parse(inputModel.ValorVendas, new CultureInfo("pt-BR"));
             var produto = new Produto(inputModel.Nome,
                                       inputModel.Marca,
                                       inputModel.CodigoBarras,
-                                      decimal.Parse(inputModel.ValorVendas),
+                                      valorVendas,
                                       inputModel.ProdutoParaVenda,
                                       inputModel.ControlaEstoque);
 

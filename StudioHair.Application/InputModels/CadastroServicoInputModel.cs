@@ -4,6 +4,6 @@
     {
         public string Nome { get; set; }
         public int DuracaoMinutos { get; set; }
-        public decimal ValorServico { get; set; }
+        public string ValorServico { get; set; }
     }
 }

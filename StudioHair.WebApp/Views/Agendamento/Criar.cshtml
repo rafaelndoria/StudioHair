@@ -1,6 +1,8 @@
-﻿@model CadastroAgendamentoInputModel
+﻿@using System.Globalization;
+@model CadastroAgendamentoInputModel
 @{
     ViewData["Title"] = "Criar Agendamento";
+    CultureInfo culture = new CultureInfo("pt-BR"); // Define a cultura brasileira
     decimal valorTotalServicos = 0;
     int duracaoTotalServicos = 0;
     foreach (var servicos in Model.ServicosAgendamentos)
@@ -63,7 +65,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="valorServico" class="form-label">Valor do Serviço</label>
-                                <input type="text" class="form-control" id="valorServico" placeholder="R$0,00" readonly>
+                                <input type="text" class="form-control" id="valorServico" placeholder="R$ 0,00" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -93,19 +95,19 @@
                     <div class="row mb-3">
                         <div class="col-md-3">
                             <label asp-for="ValorProfissional" class="form-label">Valor Profissional</label>
-                            <input asp-for="ValorProfissional" type="text" class="form-control" id="valorProfissional" placeholder="R$0,00">
+                            <input asp-for="ValorProfissional" type="text" class="form-control" id="valorProfissional" placeholder="R$ 0,00">
                         </div>
                         <div class="col-md-3">
                             <label asp-for="ValorServicos" class="form-label">Valor Serviços</label>
-                            <input asp-for="ValorServicos" type="text" class="form-control" id="valorServicos" placeholder="R$0,00" value="@valorTotalServicos" readonly>
+                            <input asp-for="ValorServicos" type="text" class="form-control" id="valorServicos" placeholder="R$ 0,00" value="@valorTotalServicos" readonly>
                         </div>
                         <div class="col-md-3">
                             <label asp-for="ValorDesconto" class="form-label">Valor Desconto</label>
-                            <input asp-for="ValorDesconto" type="text" class="form-control" id="valorDesconto" placeholder="R$0,00">
+                            <input asp-for="ValorDesconto" type="text" class="form-control" id="valorDesconto" placeholder="R$ 0,00" value="0">
                         </div>
                         <div class="col-md-3">
                             <label for="valorTotal" class="form-label">Valor Total</label>
-                            <input type="text" class="form-control" id="valorTotal" placeholder="R$0,00" readonly>
+                            <input type="text" class="form-control" id="valorTotal" placeholder="R$ 0,00" readonly>
                         </div>
                     </div>
                     <div class="col-md-3 mt-3">
@@ -149,11 +151,24 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Função para formatar valores
+        function formatarValor(input) {
+            var value = input.value.replace(/\D/g, "");
+            if (value.length > 2) {
+                value = value.replace(/(\d)(\d{2})$/, "$1,$2");
+            } else {
+                value = value.replace(/(\d)$/, ",$1");
+            }
+            input.value = 'R$ ' + parseFloat(value.replace(',', '.')).toFixed(2).replace('.', ',');
+        }
+
+        // Evento para atualizar código do cliente
         $('#cliente').on('change', function () {
             var codigoCliente = $(this).val();
             $('#codigoCliente').val(codigoCliente);
         });
 
+        // Evento para atualizar valor e duração do serviço selecionado
         $('#servico').on('change', function () {
             var codigoServico = $(this).val();
             $('#codigoServico').val(codigoServico);
@@ -161,16 +176,19 @@
             atualizarDuracaoEmMinutosServico();
         });
 
+        // Função para atualizar valor do serviço
         function atualizarValorServico() {
             var valor = parseFloat($('#servico option:selected').data('valor'));
-            $('#valorServico').val('R$' + valor.toFixed(2));
+            $('#valorServico').val('R$ ' + valor.toFixed(2).replace('.', ','));
         }
 
+        // Função para atualizar duração em minutos do serviço
         function atualizarDuracaoEmMinutosServico() {
             var duracao = parseInt($('#servico option:selected').data('duracao'));
             $('#duracaoServico').val(duracao);
         }
 
+        // Função para calcular valor total
         function calcularValorTotal() {
             var valorServicos = parseFloat($('#valorServicos').val().replace('R$', '').replace(',', '.'));
             var valorDesconto = parseFloat($('#valorDesconto').val().replace('R$', '').replace(',', '.'));
@@ -181,9 +199,10 @@
             if (isNaN(valorProfissional)) valorProfissional = 0;
 
             var valorTotal = valorServicos + valorProfissional - valorDesconto;
-            $('#valorTotal').val('R$' + valorTotal.toFixed(2));
+            $('#valorTotal').val('R$ ' + valorTotal.toFixed(2).replace('.', ','));
         }
 
+        // Evento para atualizar código do cliente quando digitado
         $('#codigoCliente').on('input', function () {
             var codigoCliente = $(this).val();
             $('#cliente option').each(function () {
@@ -193,14 +212,13 @@
             });
         });
 
-        $('#valorProfissional').on('input', function () {
+        // Eventos para calcular valor total
+        $('#valorProfissional, #valorDesconto').on('input', function () {
+            formatarValor(this);
             calcularValorTotal();
         });
 
-        $('#valorDesconto').on('input', function () {
-            calcularValorTotal();
-        });
-
+        // Evento para atualizar serviço selecionado quando código é digitado
         $('#codigoServico').on('input', function () {
             var codigoServico = $(this).val();
             $('#servico option').each(function () {
@@ -212,14 +230,17 @@
             });
         });
 
+        // Evento ao clicar no botão salvar
         $('#btnSalvar').on('click', function () {
             console.log(1)
             $('#adicionarProdutoVenda').val(1);
         });
 
+        // Evento ao clicar no botão adicionar serviço
         $('#btnAdicionarServico').on('click', function () {
             console.log(2)
             $('#adicionarProdutoVenda').val(2);
         });
     });
 </script>
+

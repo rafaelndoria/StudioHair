@@ -29,7 +29,6 @@ namespace StudioHair.Application.InputModels
         public string HoraFinal { get; set; }
 
         [Required(ErrorMessage = "O valor do profissional é obrigatório")]
-        [RegularExpression(@"^\d+(\.\d{1,2})?$", ErrorMessage = "Formato inválido. Use apenas números, separados por ponto para centavos.")]
         public string ValorProfissional { get; set; }
 
         public string? ValorTotal { get; set; }

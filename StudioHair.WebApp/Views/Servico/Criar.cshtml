@@ -42,8 +42,12 @@
         var valorServicoInput = document.querySelector("input[name='ValorServico']");
 
         valorServicoInput.addEventListener("input", function () {
-            var value = this.value.replace(/\D/g, "");
-            value = value.replace(/(\d)(\d{2})$/, "$1,$2");
+            var value = this.value.replace(/\D/g, ""); // Remove tudo que não for dígito
+            if (value.length > 2) {
+                value = value.replace(/(\d)(\d{2})$/, "$1,$2"); // Formata para decimal
+            } else {
+                value = value.replace(/(\d)$/, ",$1"); // Adiciona a vírgula se tiver um ou dois dígitos
+            }
             this.value = value;
         });
     });

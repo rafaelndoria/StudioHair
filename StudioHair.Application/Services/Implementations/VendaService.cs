@@ -24,7 +24,9 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task<decimal> AdicionarProdutoVenda(CadastroVendaInputModel inputModel)
         {
-            var valorUnitario = decimal.Parse(inputModel.ValorUnitario.Replace("R$", "").Trim());
+            var culture = new CultureInfo("pt-BR");
+            var valorUnitario = decimal.Parse(inputModel.ValorUnitario.Replace("R$", "").Trim(), NumberStyles.Currency, culture);
+
             var produtoVenda = new ProdutosVenda(valorUnitario, inputModel.Quantidade, inputModel.VendaId, inputModel.ProdutoId);
             await _vendaRepository.CriarProdutoVendaAsync(produtoVenda);
 
@@ -199,7 +201,9 @@ namespace StudioHair.Application.Services.Implementations
             decimal valorDesconto = 0;
             if (inputModel.ValorDesconto != null)
             {
-                valorDesconto = decimal.Parse(inputModel.ValorDesconto.Replace("R$", "").Trim(), CultureInfo.InvariantCulture);
+                var culture = new CultureInfo("pt-BR");
+                var desconto = decimal.Parse(inputModel.ValorDesconto.Replace("R$", "").Trim(), NumberStyles.Currency, culture);
+                valorDesconto = desconto;
                 venda.AplicarDesconto(valorDesconto);
             }
 

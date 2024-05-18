@@ -108,18 +108,18 @@
                                 <tr>
                                     <th>Nome</th>
                                     <th>Quantidade</th>
-                                    <th>Valor Unitário</th> 
+                                    <th>Valor Unitário</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var produto in Model.ProdutosVenda)
                                 {
-                                    <tr>    
+                                    <tr>
                                         <td>@produto.Nome</td>
                                         <td>@produto.Quantidade</td>
                                         <td>@produto.ValorUnitario</td>
-                                        <td>@produto.ValorTotal</td> 
+                                        <td>@produto.ValorTotal</td>
                                     </tr>
                                 }
                             </tbody>
@@ -130,8 +130,6 @@
         </div>
     </div>
 </form>
-
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -165,7 +163,8 @@
 
         function atualizarValorUnitario() {
             var valor = $('#produto option:selected').data('valor');
-            $('#valorUnitario').val('R$' + valor);
+            var valorFormatado = parseFloat(valor.replace(',', '.')).toFixed(2).replace('.', ',');
+            $('#valorUnitario').val('R$' + valorFormatado);
         }
 
         function atualizarCodigoProduto() {
@@ -177,11 +176,10 @@
             var valor = $('#produto option:selected').data('valor');
             var quantidade = $('#quantidade').val();
             if (/^\d+$/.test(quantidade)) {
-                    var valorNumerico = parseFloat(valor.replace(',', '.'));
-                    var quantidade = parseInt(quantidade);
-                    var total = valorNumerico * quantidade;
-                    var totalFormatado = total.toFixed(2);
-                    totalFormatado = totalFormatado.replace('.', ',');
+                var valorNumerico = parseFloat(valor.replace(',', '.'));
+                var quantidadeInt = parseInt(quantidade);
+                var total = valorNumerico * quantidadeInt;
+                var totalFormatado = total.toFixed(2).replace('.', ',');
                 $('#valorTotal').val('R$' + totalFormatado);
             } else {
                 $('#valorTotal').val('');
@@ -189,26 +187,26 @@
         }
 
         $('#valorDesconto').on('input', function () {
-            var valorTotal = parseFloat($('#valorTotal').val().replace('R$', '').replace(',', '.'));
             var valorDesconto = parseFloat($(this).val().replace(',', '.'));
-            if (!isNaN(valorDesconto)) {
-                var total = valorTotal - valorDesconto;
-                if (total < 0) {    
+            var valorProdutos = parseFloat($('#valorProdutos').val().replace('R$', '').replace(',', '.'));
+            var valorTotalVenda = parseFloat($('#valorTotalVenda').val().replace('R$', '').replace(',', '.'));
+
+            if (!isNaN(valorDesconto) && !isNaN(valorProdutos)) {
+                var novoTotal = valorProdutos - valorDesconto;
+                if (novoTotal < 0) {
                     $('#valorTotalVenda').val('R$0,00');
                     alert('O valor total com o desconto é negativo!');
                 } else {
-                    $('#valorTotalVenda').val('R$' + total.toFixed(2).replace('.', ','));
+                    $('#valorTotalVenda').val('R$' + novoTotal.toFixed(2).replace('.', ','));
                 }
             }
         });
 
         $('#salvar').on('click', function () {
-            console.log(1)
             $('#adicionarProdutoVenda').val(1);
         });
 
         $('#btnAdicionarProduto').on('click', function () {
-            console.log(2)
             $('#adicionarProdutoVenda').val(2);
         });
     });

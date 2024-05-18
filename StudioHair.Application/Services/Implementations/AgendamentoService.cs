@@ -4,6 +4,7 @@ using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
+using System.Globalization;
 
 namespace StudioHair.Application.Services.Implementations
 {
@@ -118,10 +119,6 @@ namespace StudioHair.Application.Services.Implementations
                                                                                           inputModel.Periodo,
                                                                                           inputModel.Inicial,
                                                                                           inputModel.Final);
-            var dataPrimeiroRegistro = agendamentos.First().Dia;
-            var dataUltimoRegistro = agendamentos.Last().Dia;
-            TimeSpan diferenca = dataUltimoRegistro.Subtract(dataPrimeiroRegistro);
-            int quantidadeDias = diferenca.Days;
 
             var list = new List<RFrequenciaSalaoViewModel>();
             // varios clientes
@@ -142,11 +139,10 @@ namespace StudioHair.Application.Services.Implementations
 
                     decimal valorTotal = agendamentosCliente.Sum(x => (decimal)x.ValorAgendamento);
                     var quantidade = agendamentosCliente.Count();
-                    var frenciaMediaPeriodo = quantidadeDias / quantidade;
                     var nomeCliente = agendamentosCliente.First().Cliente.Pessoa.Nome;
                     decimal mediaTotal = valorTotal / quantidade;
 
-                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, frenciaMediaPeriodo, mediaTotal, valorTotal);
+                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, quantidade, mediaTotal, valorTotal);
                     list.Add(viewModel);
 
                     clientesProcessados.Add(id);
@@ -159,11 +155,10 @@ namespace StudioHair.Application.Services.Implementations
                 if (quantidade != 0)
                 {
                     decimal valorTotal = agendamentos.Sum(x => (decimal)x.ValorAgendamento);
-                    var frenciaMediaPeriodo = quantidadeDias / quantidade;
                     var nomeCliente = agendamentos.First().Cliente.Pessoa.Nome;
                     decimal mediaTotal = valorTotal / quantidade;
 
-                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, frenciaMediaPeriodo, mediaTotal, valorTotal);
+                    var viewModel = new RFrequenciaSalaoViewModel(nomeCliente, quantidade, mediaTotal, valorTotal);
                     list.Add(viewModel);
                 }
 
@@ -193,13 +188,25 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task SalvarAgendamento(CadastroAgendamentoInputModel inputModel)
         {
+            var cultureInfo = new CultureInfo("pt-BR");
+
             var agendamento = await _agendamentoRepository.GetAgendamentoPorId(inputModel.AgendamentoId);
             if (agendamento == null)
                 throw new Exception("Agendamento não existe");
 
-            agendamento.Atualizar(inputModel.Nome, inputModel.Dia, inputModel.HoraInicial, inputModel.HoraFinal, Decimal.Parse(inputModel.ValorProfissional), inputModel.ClienteId);
-            agendamento.AdicionarValorAgendamento(Decimal.Parse(inputModel.ValorServicos));
-            agendamento.AdicionarValorDesconto(Decimal.Parse(inputModel.ValorDesconto));
+            // Substitui ',' por '.' nas strings antes de fazer as conversões
+            string valorProfissionalString = inputModel.ValorProfissional.Replace("R$", "").Replace(".", ",").Trim();
+            string valorServicosString = inputModel.ValorServicos.Replace(".", ",");
+            string valorDescontoString = inputModel.ValorDesconto.Replace("R$", "").Replace(".", ",").Trim();
+
+            // Converte as strings para decimal
+            decimal valorProfissional = decimal.Parse(valorProfissionalString, cultureInfo);
+            decimal valorServicos = decimal.Parse(valorServicosString, cultureInfo);
+            decimal valorDesconto = decimal.Parse(valorDescontoString, cultureInfo);
+
+            agendamento.Atualizar(inputModel.Nome, inputModel.Dia, inputModel.HoraInicial, inputModel.HoraFinal, valorProfissional, inputModel.ClienteId);
+            agendamento.AdicionarValorAgendamento(valorServicos);
+            agendamento.AdicionarValorDesconto(valorDesconto);
 
             await _agendamentoRepository.AtualizarAgendamentoAsync(agendamento);
         }
