@@ -17,8 +17,16 @@ namespace StudioHair.WebApp.Controllers
 
         public async Task<IActionResult> Criar()
         {
-            var inputModel = await _agendamentoService.PrepararAgendamento();
-            return View(inputModel);
+            try
+            {
+                var inputModel = await _agendamentoService.PrepararAgendamento();
+                return View(inputModel);
+            }
+            catch(Exception ex)
+            {
+                TempData["Erro"] = "Erro ao abrir o agendamento "+ ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
