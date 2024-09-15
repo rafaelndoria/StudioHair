@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StudioHair.Application.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudioHair.Application.InputModels
 {
@@ -47,5 +48,9 @@ namespace StudioHair.Application.InputModels
         public string ClienteFacebook { get; set; }
 
         public string? ClienteObservacao { get; set; }
+
+        public IEnumerable<UsuariosViewModel> Usuarios { get; set; } = new List<UsuariosViewModel>();
+        public int? UsuarioId { get; set; }
+        public string? NomePessoaVinculado { get; set; }
     }
 }

@@ -35,6 +35,8 @@ namespace StudioHair.Core.Entities
         public bool Ativo { get; private set; }
         public DateTime DataDeCadastro { get; private set; }
 
+        public Pessoa? Pessoa { get; private set; }
+
         public void AtualizarUsuario(string nome, string email, EPapelUsuario papel)
         {
             Nome = nome;

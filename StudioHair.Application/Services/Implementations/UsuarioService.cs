@@ -143,5 +143,12 @@ namespace StudioHair.Application.Services.Implementations
             usuario.AtualizarUsuario(inputModel.Nome, inputModel.Email, nivel);
             await _usuarioRepository.UpdateAsync(usuario);
         }
+
+        public async Task<EPapelUsuario> GetPapelUsuario(UsuarioLoginInputModel inputModel)
+        {
+            var senhaCriptografada = _authService.CriptografarSenha(inputModel.Senha);
+            var usuario = await _usuarioRepository.GetUsuarioPorSenhaENome(inputModel.Nome, senhaCriptografada);
+            return usuario.Papel;
+        }
     }
 }

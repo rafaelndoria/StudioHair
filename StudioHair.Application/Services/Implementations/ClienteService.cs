@@ -9,10 +9,12 @@ namespace StudioHair.Application.Services.Implementations
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, IUsuarioRepository usuarioRepository)
         {
             _clienteRepository = clienteRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         public async Task AtivarCliente(int id)
@@ -42,6 +44,18 @@ namespace StudioHair.Application.Services.Implementations
                                      inputModel.PessoaCidade,
                                      inputModel.PessoaBairro,
                                      inputModel.PessoaNumero);
+
+            if (inputModel.UsuarioId != null)
+            {
+                cliente.Pessoa.VincularUsuario((int)inputModel.UsuarioId);
+                var usuario = await _usuarioRepository.GetUsuarioByIdAsync((int)inputModel.UsuarioId);
+                usuario.AtualizarUsuario(usuario.Nome, usuario.Email, Core.Enums.EPapelUsuario.Cliente);
+                await _usuarioRepository.UpdateAsync(usuario);
+            } else if (cliente.Pessoa.UsuarioId != null && inputModel.UsuarioId == null)
+            {
+                cliente.Pessoa.DesvincularUsuario();
+            }
+                
             await _clienteRepository.AtualizarClienteAsync(cliente);
         }
 
@@ -68,6 +82,17 @@ namespace StudioHair.Application.Services.Implementations
                                     inputModel.Bairro,
                                     inputModel.Numero,
                                     inputModel.Cpf);
+
+            if (inputModel.UsuarioId != null)
+            {
+                var usuario = await _usuarioRepository.GetUsuarioByIdAsync((int)inputModel.UsuarioId);
+                if (usuario == null)
+                    throw new Exception("Usuário não existe");
+                usuario.AtualizarUsuario(usuario.Nome, usuario.Email, Core.Enums.EPapelUsuario.Cliente);
+                await _usuarioRepository.UpdateAsync(usuario);
+
+                pessoa.VincularUsuario((int)inputModel.UsuarioId);
+            }
 
             var id = await _clienteRepository.CriarPessoaAsync(pessoa);
 
@@ -100,7 +125,8 @@ namespace StudioHair.Application.Services.Implementations
                                                         cliente.FrequenciaSalaoPorMes,
                                                         cliente.Observacao,
                                                         cliente.DataCadastro,
-                                                        cliente.Ativo);
+                                                        cliente.Ativo,
+                                                        cliente.Pessoa.Usuario == null ? "" : cliente.Pessoa.Usuario.Nome);
 
             return clienteViewModel;
         }
@@ -139,10 +165,34 @@ namespace StudioHair.Application.Services.Implementations
                 ClienteTelefoneCelular = cliente.TelefoneCelular,
                 ClienteWhatsapp = cliente.Whatsapp,
                 ClienteFacebook = cliente.Facebook,
-                ClienteObservacao = cliente.Observacao
+                ClienteObservacao = cliente.Observacao,
+                UsuarioId = cliente.Pessoa.Usuario == null ? null : (int)cliente.Pessoa.UsuarioId,
+                NomePessoaVinculado = cliente.Pessoa.Usuario == null ? "" : cliente.Pessoa.Usuario.Nome
             };
 
+            var usuarios = await _usuarioRepository.GetUsuariosAsync();
+            var usuariosViewModel = new List<UsuariosViewModel>();
+            foreach (var usuario in usuarios.Where(x => x.Pessoa == null && x.Papel != Core.Enums.EPapelUsuario.Administrador && x.Papel != Core.Enums.EPapelUsuario.Gerente))
+            {
+                var usuarioViewModel = new UsuariosViewModel(usuario.Id, usuario.Nome, "", "", "");
+                usuariosViewModel.Add(usuarioViewModel);
+            }
+
+            updateCliente.Usuarios = usuariosViewModel;
+
             return updateCliente;
+        }
+
+        public async Task<IEnumerable<UsuariosViewModel>> GetUsuarioSemVinculo()
+        {
+            var usuarios = await _usuarioRepository.GetUsuariosAsync();
+            var usuariosViewModel = new List<UsuariosViewModel>();
+            foreach (var usuario in usuarios.Where(x => x.Pessoa == null && x.Papel != Core.Enums.EPapelUsuario.Administrador && x.Papel != Core.Enums.EPapelUsuario.Gerente))
+            {
+                var usuarioViewModel = new UsuariosViewModel(usuario.Id, usuario.Nome, "", "", "");
+                usuariosViewModel.Add(usuarioViewModel);
+            }
+            return usuariosViewModel;
         }
 
         public async Task InativarCliente(int id)

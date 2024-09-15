@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace StudioHair.WebApp.Controllers
 {
-    [Authorize(Roles = "Administrador, Gerente, Funcionario")]
+    [Authorize(Roles = "Administrador, Gerente, Funcionario, Cliente")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -22,6 +22,11 @@ namespace StudioHair.WebApp.Controllers
         {
             var resumoViewModel = await _homeService.PrepararResumo();
             return View(resumoViewModel);
+        }
+
+        public IActionResult IndexCliente()
+        {
+            return View();
         }
 
         public IActionResult Privacy()

@@ -2,7 +2,7 @@
 {
     public class ClienteViewModel
     {
-        public ClienteViewModel(int codigo, string nome, DateTime dataDeNascimento, string rua, string cep, string cidade, string bairro, string numero, string cpf, string email, string telefoneCelular, string whatsapp, string facebook, int frequencia, string observacao, DateTime dataCadastro, bool ativo)
+        public ClienteViewModel(int codigo, string nome, DateTime dataDeNascimento, string rua, string cep, string cidade, string bairro, string numero, string cpf, string email, string telefoneCelular, string whatsapp, string facebook, int frequencia, string observacao, DateTime dataCadastro, bool ativo, string nomeUsuarioVinculado)
         {
             Codigo = codigo;
             Nome = nome;
@@ -21,6 +21,7 @@
             Observacao = observacao;
             DataCadastro = dataCadastro;
             Ativo = ativo;
+            NomeUsuarioVinculado = nomeUsuarioVinculado;
         }
 
         public int Codigo { get; private set; }
@@ -40,5 +41,6 @@
         public string Observacao { get; set; }
         public DateTime DataCadastro { get; private set; }
         public bool Ativo { get; private set; }
+        public string NomeUsuarioVinculado { get; private set; }
     }
 }

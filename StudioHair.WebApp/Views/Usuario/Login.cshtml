@@ -24,7 +24,8 @@
                             <span asp-validation-for="Senha" class="text-danger"></span>
                         </div>
                         <button type="submit" id="btn-login" class="btn btn-success btn-block">Entrar</button>
-                        <button id="btn-validando" class="btn btn-primary btn-block d-none">Validando ...</button>
+                        <button id="btn-validando" class="btn btn-primary btn-block d-none fixed-width">Validando <span id="pontos-loading">...</span></button>
+                        <a asp-controller="Usuario" asp-action="CriarConta" id="btn-criar-conta" class="btn btn-warning btn-block">Criar Conta</a>
                         <div asp-validation-summary="All" class="text-danger"></div>
                     </form>
                 </div>
@@ -33,13 +34,35 @@
     </div>
 </div>
 
+<style>
+    .fixed-width {
+        width: 150px;
+    }
+</style>
+
 <script>
     var btnLogin = document.querySelector("#btn-login");
     var btnValidando = document.querySelector("#btn-validando");
+    var btnCriarConta = document.querySelector("#btn-criar-conta");
 
     function TrocarBotoes() {
         btnLogin.classList.add("d-none");
         btnValidando.classList.remove("d-none");
+        btnCriarConta.classList.add("d-none");
+
+        AnimacaoLoading();
+    }
+
+    async function AnimacaoLoading() {
+        var pontos = document.querySelector("#pontos-loading");
+        while (true) {
+            pontos.innerHTML = "";
+            for (let a = 1; a <= 3; a++) {
+                pontos.innerHTML += ".";
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            await new Promise(resolve => setTimeout(resolve, 300));
+        }
     }
 
     btnLogin.addEventListener("click", TrocarBotoes);

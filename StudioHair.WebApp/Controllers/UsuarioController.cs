@@ -33,13 +33,28 @@ namespace StudioHair.WebApp.Controllers
             {
                 var token = await _usuarioService.Login(inputModel);
                 HttpContext.Session.SetString("Token", token);
-                return RedirectToAction("Index", "Home");
+
+                var papel = await _usuarioService.GetPapelUsuario(inputModel);
+                if (papel != Core.Enums.EPapelUsuario.Cliente)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("IndexCliente", "Home");
+                }
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, "Erro ao autenticar usuário: "+ ex.Message);
                 return View("Login", inputModel);
             }
+        }
+
+        [AllowAnonymous]
+        public IActionResult CriarConta()
+        {
+            return View();
         }
 
         public IActionResult Criar()

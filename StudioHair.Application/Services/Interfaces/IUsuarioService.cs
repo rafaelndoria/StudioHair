@@ -1,5 +1,6 @@
 ﻿using StudioHair.Application.InputModels;
 using StudioHair.Application.ViewModels;
+using StudioHair.Core.Enums;
 
 namespace StudioHair.Application.Services.Interfaces
 {
@@ -16,5 +17,6 @@ namespace StudioHair.Application.Services.Interfaces
         Task RedefinirSenha(RedefinirSenhaInputModel inputModel);
         Task<UpdateUsuarioInputModel> GetUsuarioUpdate(int id);
         Task UpdateUsuario(UpdateUsuarioInputModel inputModel);
+        Task<EPapelUsuario> GetPapelUsuario(UsuarioLoginInputModel inputModel);
     }
 }

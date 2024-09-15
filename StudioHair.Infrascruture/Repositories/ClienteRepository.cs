@@ -53,7 +53,7 @@ namespace StudioHair.Infrascruture.Repositories
 
         public async Task<Cliente> GetClientePorId(int id)
         {
-            return await _context.Cliente.Include(x => x.Pessoa).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Cliente.Include(x => x.Pessoa).ThenInclude(x => x.Usuario).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Cliente>> GetClientesAsync(int page = 1, int pageSize = 5)

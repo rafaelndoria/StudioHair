@@ -63,6 +63,10 @@
             </div>
         </form>
         <div class="form-group">
+            <label>Usuario Vinculado</label>
+            <input type="text" class="form-control" id="usuario-vinculado" value="@(!string.IsNullOrEmpty(Model.NomeUsuarioVinculado) ? Model.NomeUsuarioVinculado : "Sem usuario vinculado")" disabled>
+        </div>
+        <div class="form-group">
             <label>Email</label>
             <input type="email" class="form-control" id="email" value="@Model.Email" disabled>
         </div>

@@ -15,9 +15,20 @@ namespace StudioHair.WebApp.Controllers
             _clienteService = clienteService;
         }
 
-        public IActionResult Criar()
+        public async Task<IActionResult> Criar()
         {
-            return View();
+            try
+            {
+                var usuarios = await _clienteService.GetUsuarioSemVinculo();
+                var inputModel = new CadastroPessoaInputModel();
+                inputModel.Usuarios = usuarios;
+                return View(inputModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao processar formulario: " + ex.Message;
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -35,7 +46,7 @@ namespace StudioHair.WebApp.Controllers
             catch (Exception ex)
             {
                 TempData["Erro"] = "Erro ao processar formulario: " + ex.Message;
-                return View("Criar");
+                return RedirectToAction("Criar");
             }
         }
 
@@ -56,13 +67,13 @@ namespace StudioHair.WebApp.Controllers
             {       
                 await _clienteService.CriarCliente(inputModel);
                 TempData["Sucesso"] = "Cliente cadastrado com sucesso";
-                return View("Criar");
+                return RedirectToAction("Criar");
             }
             catch (Exception ex)
             {
                 TempData["Erro"] = "Ocorreu erro ao salvar cliente: " + ex.Message;
                 await DeletarPessoa(inputModel.PessoaId);
-                return View("Criar");
+                return RedirectToAction("Criar");
             }
         }
 
@@ -154,7 +165,6 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
-        // aplicar mascara no campo de string para ficar no formato de numero 17.99191-0504 talvez devera ter que ajustar o tamanho do campo na validacao
         private async Task DeletarPessoa(int pessoaId)
         {
             await _clienteService.DeletarPessoa(pessoaId);

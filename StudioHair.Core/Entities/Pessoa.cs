@@ -22,8 +22,10 @@
         public string Bairro { get; private set; }
         public string Numero { get; private set; }
         public string Cpf { get; private set; }
+        public int? UsuarioId { get; private set; }
 
         public Cliente? Cliente { get; set; }
+        public Usuario? Usuario { get; private set; }
 
         public void Atualizar(string rua, string cep, string cidade, string bairro, string numero)
         {
@@ -32,6 +34,16 @@
             Cidade = cidade;
             Bairro = bairro;
             Numero = numero;
+        }
+
+        public void VincularUsuario(int id)
+        {
+            UsuarioId = id;
+        }
+
+        public void DesvincularUsuario()
+        {
+            UsuarioId = null;
         }
     }
 }

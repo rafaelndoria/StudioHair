@@ -33,9 +33,17 @@ namespace StudioHair.Infrascruture.Configuration
             builder.Property(x => x.Numero)
                 .IsRequired();
 
+            builder.Property(x => x.UsuarioId)
+                .IsRequired(false);
+
+            builder.HasOne(x => x.Usuario)
+                .WithOne(x => x.Pessoa)
+                .HasForeignKey<Pessoa>(x => x.UsuarioId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+                
             builder.HasIndex(x => x.Cpf)
                 .IsUnique();
-
         }
     }
 }

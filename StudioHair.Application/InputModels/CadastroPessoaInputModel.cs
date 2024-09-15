@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StudioHair.Application.ViewModels;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudioHair.Application.InputModels
 {
@@ -39,5 +40,8 @@ namespace StudioHair.Application.InputModels
         [Required(ErrorMessage = "CPF é obrigatório")]
         [StringLength(11, MinimumLength = 11, ErrorMessage = "CPF deve ter exatamente 11 caracteres")]
         public string Cpf { get; set; }
+
+        public int? UsuarioId { get; set; }
+        public IEnumerable<UsuariosViewModel> Usuarios { get; set; } = new List<UsuariosViewModel>();
     }
 }

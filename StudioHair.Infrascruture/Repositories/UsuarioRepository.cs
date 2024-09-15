@@ -33,7 +33,7 @@ namespace StudioHair.Infrascruture.Repositories
 
         public async Task<IList<Usuario>> GetUsuariosAsync(int page = 0, int pageSize = 0, Expression<Func<Usuario, bool>> predicate = null)
         {
-            IQueryable<Usuario> query = _context.Usuarios;
+            IQueryable<Usuario> query = _context.Usuarios.Include(x => x.Pessoa);
 
             if (predicate != null)
             {

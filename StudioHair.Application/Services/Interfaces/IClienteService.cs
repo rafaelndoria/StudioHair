@@ -14,5 +14,6 @@ namespace StudioHair.Application.Services.Interfaces
         Task AtivarCliente(int id);
         Task<UpdateClienteInputModel> GetClienteUpdate(int id);
         Task AtualizarCliente(UpdateClienteInputModel inputModel);
+        Task<IEnumerable<UsuariosViewModel>> GetUsuarioSemVinculo();
     }
 }
