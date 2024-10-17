@@ -1,13 +1,14 @@
 ﻿@model UsuarioLoginInputModel
 @{
-    Layout = "_LayoutLogin";
+    Layout = "_LayoutLoginCadastro";
     ViewData["Title"] = "Login";
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card mt-5">
+<div class="container-fluid vh-100" style="background-color: #ffc0cb;">
+    <!-- Fundo leve da cor #ffb6c1 -->
+    <div class="row justify-content-center h-100">
+        <div class="col-md-8 col-lg-6 col-12 d-flex align-items-center">
+            <div class="card w-100"> <!-- Mantendo a cor original da div do login -->
                 <div class="card-header">
                     <h3 class="text-center">Acesse Studio Hair</h3>
                 </div>
@@ -25,7 +26,10 @@
                         </div>
                         <button type="submit" id="btn-login" class="btn btn-success btn-block">Entrar</button>
                         <button id="btn-validando" class="btn btn-primary btn-block d-none fixed-width">Validando <span id="pontos-loading">...</span></button>
-                        <a asp-controller="Usuario" asp-action="CriarConta" id="btn-criar-conta" class="btn btn-warning btn-block">Criar Conta</a>
+                        <!-- Link ao invés de botão -->
+                        <p class="text-center mt-3">
+                            Não tem conta? <a asp-controller="Usuario" asp-action="CriarConta" id="link-criar-conta" class="text-warning">Criar</a>
+                        </p>
                         <div asp-validation-summary="All" class="text-danger"></div>
                     </form>
                 </div>
@@ -38,17 +42,26 @@
     .fixed-width {
         width: 150px;
     }
+
+    /* Estilos de responsividade */
+    media (max-width: 768px) {
+        .card {
+            margin: 20px 10px;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+    }
 </style>
 
 <script>
     var btnLogin = document.querySelector("#btn-login");
     var btnValidando = document.querySelector("#btn-validando");
-    var btnCriarConta = document.querySelector("#btn-criar-conta");
 
     function TrocarBotoes() {
         btnLogin.classList.add("d-none");
         btnValidando.classList.remove("d-none");
-        btnCriarConta.classList.add("d-none");
 
         AnimacaoLoading();
     }

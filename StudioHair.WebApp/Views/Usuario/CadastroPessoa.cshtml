@@ -1,0 +1,155 @@
+﻿@model CadastroPessoaInputModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Cadastro de Cliente";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="card shadow" style="width: 100%; max-width: 500px;">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">1 / 2</h5>
+                <form asp-controller="Usuario" asp-action="CadastroPessoa" method="post">
+                    <!-- Nome -->
+                    <div class="mb-3">
+                        <label asp-for="Nome" class="form-label">Nome</label>
+                        <input asp-for="Nome" type="text" class="form-control" id="Nome" name="Nome" required>
+                        <span asp-validation-for="Nome" class="text-danger"></span>
+                    </div>
+
+                    <!-- Data de Nascimento -->
+                    <div class="mb-3">
+                        <label asp-for="DataNascimento" class="form-label">Data de Nascimento</label>
+                        <input asp-for="DataNascimento" type="date" class="form-control" id="DataDeNascimento" name="DataDeNascimento" required>
+                        <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                    </div>
+
+                    <!-- CEP -->
+                    <div class="mb-3">
+                        <label asp-for="Cep" class="form-label">CEP</label>
+                        <input asp-for="Cep" type="text" class="form-control" id="Cep" name="Cep" maxlength="8" required>
+                        <span asp-validation-for="Cep" class="text-danger"></span>
+                    </div>
+
+                    <!-- Cidade -->
+                    <div class="mb-3">
+                        <label asp-for="Cidade" class="form-label">Cidade</label>
+                        <input asp-for="Cidade" type="text" class="form-control" id="Cidade" name="Cidade" required>
+                        <span asp-validation-for="Cidade" class="text-danger"></span>
+                    </div>
+
+                    <!-- Bairro -->
+                    <div class="mb-3">
+                        <label asp-for="Bairro" class="form-label">Bairro</label>
+                        <input asp-for="Bairro" type="text" class="form-control" id="Bairro" name="Bairro" required>
+                        <span asp-validation-for="Bairro" class="text-danger"></span>
+                    </div>
+
+                    <!-- Rua -->
+                    <div class="mb-3">
+                        <label asp-for="Rua" class="form-label">Rua</label>
+                        <input asp-for="Rua" type="text" class="form-control" id="Rua" name="Rua" required>
+                        <span asp-validation-for="Rua" class="text-danger"></span>
+                    </div>
+
+                    <!-- Número -->
+                    <div class="mb-3">
+                        <label asp-for="Numero" class="form-label">Número</label>
+                        <input asp-for="Numero" type="text" class="form-control" id="Numero" name="Numero" required>
+                        <span asp-validation-for="Numero" class="text-danger"></span>
+                    </div>
+
+                    <!-- CPF -->
+                    <div class="mb-3">
+                        <label asp-for="Cpf" class="form-label">CPF</label>
+                        <input asp-for="Cpf" type="text" class="form-control" id="Cpf" name="Cpf" required>
+                        <span asp-validation-for="Cpf" class="text-danger"></span>
+                    </div>
+
+                    <!-- Botão Continuar -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Continuar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estilos adicionais -->
+    <style>
+        /* Definindo cor primária como fundo */
+        body {
+            background-color: #ffc0cb;
+            margin: 0;
+        }
+
+        .card {
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <script>
+        let inputCep = document.querySelector('#Cep');
+
+        inputCep.addEventListener('keydown', function (event) {
+            if (!/^\d$/.test(event.key) && event.key !== "Backspace") {
+                event.preventDefault(); 
+            }
+        });
+
+        inputCep.addEventListener('input', function () {
+            let value = inputCep.value.replace(/\D/g, '');
+
+            if (value.length == 8) {
+                BuscarCep(inputCep.value);
+            }
+        });
+
+        function BuscarCep(cep) {
+            cep = cep.replace('-', '');
+
+            fetch('https://viacep.com.br/ws/' + cep + '/json/')
+                .then(response => {
+                    if (!response.ok) {
+                        alert('Erro na rede: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.erro == 'true') {
+                        alert('CEP não encontrado');
+                    } else {
+                        console.log(data);
+                        PreencherCamposEndereco(data);
+                    }
+                })
+                .catch(error => {
+                    alert('Erro ao consultar CEP: ' + response.statusText);
+                });
+
+        }
+
+        function PreencherCamposEndereco(dados) {
+            var inputCidade = document.querySelector('#Cidade');
+            var inputBairro = document.querySelector('#Bairro');
+            var inputRua = document.querySelector('#Rua');
+
+            inputCidade.value = dados.localidade;
+            inputBairro.value = dados.bairro;
+            inputRua.value = dados.logradouro;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

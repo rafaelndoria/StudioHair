@@ -23,7 +23,7 @@ namespace StudioHair.Infrascruture.Repositories
 
         public async Task<Usuario> GetUsuarioByIdAsync(int id)
         {
-            return await _context.Usuarios.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Usuarios.Include(x => x.Pessoa).ThenInclude(x => x.Cliente).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Usuario> GetUsuarioPorSenhaENome(string nome, string senha)

@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seu Sistema - @ViewData["Title"]</title>
+    <link rel="icon" href="~/images/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        :root {
+            --cor-primaria: #ffc0cb; /* Cor principal */
+            --cor-secundaria: #f8f9fa; /* Cor secundária */
+            --cor-fonte: #212529; /* Cor da fonte */
+            --tamanho-fonte: 16px; /* Tamanho padrão da fonte */
+        }
+
+        body {
+            font-size: var(--tamanho-fonte);
+            color: var(--cor-fonte);
+            background-color: var(--cor-secundaria);
+            min-height: 100vh; /* Ocupa toda a altura da tela */
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--cor-primaria);
+            padding: 0.5rem; /* Diminuindo o padding do header */
+        }
+
+        header .nav-link {
+            color: white; /* Cor do texto no header */
+            text-transform: uppercase; /* Letras maiúsculas */
+        }
+
+        footer {
+            background-color: #000; /* Cor do footer */
+            color: #fff; /* Cor do texto no footer */
+            text-align: center;
+            padding: 0.5rem 0; /* Diminuindo o padding do footer */
+            position: relative;
+        }
+
+        .container {
+            flex-grow: 1; /* Faz o container ocupar o espaço restante */
+            min-height: calc(100vh - 80px); /* Ajusta a altura para não cobrir o footer */
+        }
+
+        .navbar {
+            justify-content: space-between; /* Espaça as opções de nav */
+        }
+
+        .dropdown-menu {
+            left: auto; /* Corrige a posição do dropdown */
+            right: 0; /* Alinha o dropdown à direita */
+        }
+
+        media (max-width: 768px) {
+            .navbar-nav {
+                flex-direction: column; /* Coloca os itens da navbar em coluna em telas pequenas */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Agendamentos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Loja</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> Perfil
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li><a class="dropdown-item" href="#">Configurações</a></li>
+                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody() <!-- Aqui é onde o conteúdo específico da página será renderizado -->
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Seu Sistema. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/6c33e49b8c.js" crossorigin="anonymous"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -32,7 +32,7 @@ namespace StudioHair.Application.Services.Implementations
             }
         }
 
-        public string GerarJwtToken(string email, string nomeUsuario, string papel)
+        public string GerarJwtToken(string email, string nomeUsuario, string papel, int usuarioId)
         {
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var issuer = _configuration["Jwt:Issuer"];
@@ -47,7 +47,8 @@ namespace StudioHair.Application.Services.Implementations
                 {
                     new Claim(type: ClaimTypes.Name, nomeUsuario),
                     new Claim(type: ClaimTypes.Email, email),
-                    new Claim(type: ClaimTypes.Role, papel)
+                    new Claim(type: ClaimTypes.Role, papel),
+                    new Claim("UsuarioId", usuarioId.ToString())
                 },
                 expires: DateTime.Now.AddHours(4),
                 signingCredentials: signinCredentials);

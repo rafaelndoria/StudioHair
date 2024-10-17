@@ -1,6 +1,8 @@
 ﻿using StudioHair.Application.InputModels;
 using StudioHair.Application.ViewModels;
+using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
+using System.Security.Claims;
 
 namespace StudioHair.Application.Services.Interfaces
 {
@@ -18,5 +20,6 @@ namespace StudioHair.Application.Services.Interfaces
         Task<UpdateUsuarioInputModel> GetUsuarioUpdate(int id);
         Task UpdateUsuario(UpdateUsuarioInputModel inputModel);
         Task<EPapelUsuario> GetPapelUsuario(UsuarioLoginInputModel inputModel);
+        Task<Usuario> GetUsuarioLogado(ClaimsPrincipal tokenUsuario);
     }
 }

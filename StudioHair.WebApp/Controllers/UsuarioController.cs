@@ -5,14 +5,15 @@ using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
-    [Authorize(Roles = "Gerente, Administrador")]
     public class UsuarioController : Controller
     {
         private readonly IUsuarioService _usuarioService;
+        private readonly IClienteService _clienteService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, IClienteService clienteService)
         {
             _usuarioService = usuarioService;
+            _clienteService = clienteService;
         }
 
         [AllowAnonymous]
@@ -57,12 +58,14 @@ namespace StudioHair.WebApp.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Gerente, Administrador")]
         public IActionResult Criar()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Criar(CadastroUsuarioInputModel inputModel)
         {
             if (!ModelState.IsValid)
@@ -83,18 +86,44 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> CriarUsuario(CadastroUsuarioInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("CriarConta", inputModel);
+            }
+
+            try
+            {
+                await _usuarioService.CriarUsuario(inputModel);
+                TempData["Sucesso"] = "Usuário adicionado com sucesso!";
+                return View("Login");
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao criar o usuário. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("CriarConta", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> List(int page = 1, int pageSize = 5)
         {
             var usuariosViewModel = await _usuarioService.GetUsuarios(1, 99999999);
             return View(usuariosViewModel);
         }
 
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Config(int id)
         {
             var usuario = await _usuarioService.GetUsuarioById(id);
             return View(usuario);
         }
 
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Inativar(int id)
         {
             try
@@ -110,6 +139,7 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Ativar(int id)
         {
             try
@@ -126,6 +156,7 @@ namespace StudioHair.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> RedefinirSenha(RedefinirSenhaInputModel inputModel)
         {
             if (!ModelState.IsValid)
@@ -148,6 +179,7 @@ namespace StudioHair.WebApp.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Atualizar(int id)
         {
             var usuario = await _usuarioService.GetUsuarioUpdate(id);
@@ -160,6 +192,7 @@ namespace StudioHair.WebApp.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador")]
         public async Task<IActionResult> Atualizar(UpdateUsuarioInputModel inputModel)
         {
             if (!ModelState.IsValid)
@@ -179,11 +212,65 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public IActionResult CadastroPessoa()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> CadastroPessoa(CadastroPessoaInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("CadastroPessoa", inputModel);
+            }
+            try
+            {
+                inputModel.UsuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                await _clienteService.CriarPessoa(inputModel);
+                return RedirectToAction("CadastroCliente");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao criar o usuário. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("CadastroPessoa", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public IActionResult CadastroCliente()
+        {
+            return View("CadastroCliente");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> CadastroCliente(CadastroClienteInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("CadastroCliente", inputModel);
+            }
+            try
+            {
+                var usuario = await _usuarioService.GetUsuarioLogado(User);
+                inputModel.PessoaId = usuario.Pessoa.Id;
+                await _clienteService.CriarCliente(inputModel);
+                return RedirectToAction("TelaCliente", "Home");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao criar o usuário. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("CadastroCliente", inputModel);
+            }
+        }
+
         public IActionResult Logout()
         {
             // implementar logica para logout de usuario
             return RedirectToAction("Login");
         }
-        // enum não esta indo certo na tela de config
     }
 }

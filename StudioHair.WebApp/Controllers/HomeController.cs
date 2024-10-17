@@ -11,11 +11,13 @@ namespace StudioHair.WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeService _homeService;
+        private readonly IUsuarioService _usuarioService;
 
-        public HomeController(ILogger<HomeController> logger, IHomeService homeService)
+        public HomeController(ILogger<HomeController> logger, IHomeService homeService, IUsuarioService usuarioService)
         {
             _logger = logger;
             _homeService = homeService;
+            _usuarioService = usuarioService;
         }
 
         public async Task<IActionResult> Index()
@@ -24,9 +26,22 @@ namespace StudioHair.WebApp.Controllers
             return View(resumoViewModel);
         }
 
-        public IActionResult IndexCliente()
+        public async Task<IActionResult> IndexCliente()
         {
-            return View();
+            var usuario = await _usuarioService.GetUsuarioLogado(User);
+            HttpContext.Session.SetString("ClienteId", usuario.Id.ToString());
+            if (usuario.Pessoa == null)
+                return View("IndexClienteBloqueado");
+            if (usuario.Pessoa.Cliente == null)
+                return RedirectToAction("CadastroCliente", "Usuario");
+
+            return RedirectToAction("TelaCliente");
+        }
+
+        public IActionResult TelaCliente()
+        {
+            // buscar configuracoes de cores do usuario logado e salvar na sessao
+            return View("IndexCliente");
         }
 
         public IActionResult Privacy()

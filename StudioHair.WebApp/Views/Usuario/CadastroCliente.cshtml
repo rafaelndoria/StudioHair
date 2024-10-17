@@ -1,0 +1,81 @@
+﻿@model CadastroClienteInputModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Cadastro de Cliente";
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="container d-flex align-items-center justify-content-center min-vh-100">
+        <div class="card shadow" style="width: 100%; max-width: 500px;">
+            <div class="card-body">
+                <h5 class="card-title text-center mb-4">2 / 2</h5>
+                <form asp-controller="Usuario" asp-action="CadastroCliente" method="post">
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" id="Email" name="Email" required>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <!-- Telefone Celular -->
+                    <div class="mb-3">
+                        <label asp-for="TelefoneCelular" class="form-label">Telefone Celular</label>
+                        <input asp-for="TelefoneCelular" type="tel" class="form-control" id="TelefoneCelular" name="TelefoneCelular" required>
+                        <span asp-validation-for="TelefoneCelular" class="text-danger"></span>
+                    </div>
+
+                    <!-- WhatsApp -->
+                    <div class="mb-3">
+                        <label asp-for="Whatsapp" class="form-label">Whatsapp</label>
+                        <input asp-for="Whatsapp" type="tel" class="form-control" id="Whatsapp" name="Whatsapp" required>
+                        <span asp-validation-for="Whatsapp" class="text-danger"></span>
+                    </div>
+
+                    <!-- Facebook -->
+                    <div class="mb-3">
+                        <label asp-for="Facebook" class="form-label">Facebook</label>
+                        <input asp-for="Facebook" type="text" class="form-control" id="Facebook" name="Facebook">
+                        <span asp-validation-for="Facebook" class="text-danger"></span>
+                    </div>
+
+                    <!-- Observação -->
+                    <div class="mb-3">
+                        <label asp-for="Observacao" class="form-label">Observação</label>
+                        <textarea asp-for="Observacao" class="form-control" id="Observacao" name="Observacao" rows="3"></textarea>
+                        <span asp-validation-for="Observacao" class="text-danger"></span>
+                    </div>
+
+                    <!-- Botão Continuar -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estilos adicionais -->
+    <style>
+        /* Definindo cor primária como fundo */
+        body {
+            background-color: #ffc0cb;
+            margin: 0;
+        }
+
+        .card {
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null; // Sem layout para esta view
+}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Concluir Cadastro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #404040; /* Cor cinza escuro para o fundo */
+            height: 100vh; /* Ocupa toda a altura da tela */
+            display: flex;
+            flex-direction: column; /* Alinha os botões em coluna */
+            justify-content: center; /* Centraliza verticalmente */
+            align-items: center; /* Centraliza horizontalmente */
+        }
+
+        .btn-concluir {
+            background-color: #ffc0cb; /* Cor do botão de concluir */
+            color: white;
+            font-size: 1.2rem; /* Tamanho da fonte do botão */
+            padding: 10px 20px; /* Padding do botão */
+            margin: 5px; /* Espaçamento entre os botões */
+        }
+
+        .btn-concluir:hover {
+            background-color: #ff69b4; /* Cor ao passar o mouse */
+        }
+
+        .btn-voltar {
+            background-color: #ff4d4d; /* Cor do botão voltar */
+            color: white;
+            font-size: 1.2rem; /* Tamanho da fonte do botão */
+            padding: 10px 20px; /* Padding do botão */
+            margin: 5px; /* Espaçamento entre os botões */
+        }
+
+        .btn-voltar:hover {
+            background-color: #ff1a1a; /* Cor ao passar o mouse */
+        }
+    </style>
+</head>
+<body>
+
+    <div>
+        <button class="btn btn-concluir" onclick="location.href='@Url.Action("CadastroPessoa", "Usuario")'">Concluir Cadastro</button>
+    </div>
+    <div>
+        <button class="btn btn-voltar" onclick="location.href='@Url.Action("Logout", "Usuario")'">Voltar</button>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

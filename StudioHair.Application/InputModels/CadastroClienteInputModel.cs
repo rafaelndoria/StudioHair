@@ -4,7 +4,7 @@ namespace StudioHair.Application.InputModels
 {
     public class CadastroClienteInputModel
     {
-        public int PessoaId { get; set; }
+        public int? PessoaId { get; set; }
 
         [Required(ErrorMessage = "Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Email inválido")]

@@ -5,6 +5,7 @@ using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
+using System.Security.Claims;
 
 namespace StudioHair.Application.Services.Implementations
 {
@@ -44,7 +45,7 @@ namespace StudioHair.Application.Services.Implementations
             if (usuario.Ativo == false)
                 throw new Exception("Usuário inativo no sistema");
 
-            var token = _authService.GerarJwtToken(usuario.Email, usuario.Nome, usuario.Papel.ToString());
+            var token = _authService.GerarJwtToken(usuario.Email, usuario.Nome, usuario.Papel.ToString(), usuario.Id);
 
             return token;
         }
@@ -149,6 +150,13 @@ namespace StudioHair.Application.Services.Implementations
             var senhaCriptografada = _authService.CriptografarSenha(inputModel.Senha);
             var usuario = await _usuarioRepository.GetUsuarioPorSenhaENome(inputModel.Nome, senhaCriptografada);
             return usuario.Papel;
+        }
+
+        public async Task<Usuario> GetUsuarioLogado(ClaimsPrincipal tokenUsuario)
+        {
+            var id = tokenUsuario.Claims.FirstOrDefault(c => c.Type == "UsuarioId").Value;
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(int.Parse(id));
+            return usuario;
         }
     }
 }
