@@ -67,7 +67,7 @@ namespace StudioHair.Application.Services.Implementations
                                       inputModel.Facebook,
                                       1,
                                       inputModel.Observacao != null ? inputModel.Observacao : "Adicionado",
-                                      inputModel.PessoaId);
+                                      (int)inputModel.PessoaId);
 
             await _clienteRepository.CriarClienteAsync(cliente);
         }

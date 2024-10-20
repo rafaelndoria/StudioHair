@@ -1,0 +1,117 @@
+﻿@model ConfigSistemaInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Parâmetros";
+}
+
+<div class="container mt-5">
+    <h2>Parâmetros do Sistema</h2>
+    <div class="p-4" style="background-color: var(--cor-primaria); border-radius: 10px;">
+        <form asp-controller="Usuario" asp-action="ConfiguracaoSistema" method="post">
+            <div class="mb-3">
+                <label for="corPrimaria" class="form-label">Cor Primária</label>
+                <div class="input-group">
+                    <input asp-for="CorPrimaria" type="color" class="form-control form-control-color" id="corPrimariaPicker" name="corPrimaria" value="@Model.CorPrimaria">
+                    <input asp-for="CorPrimaria" type="text" class="form-control" id="corPrimariaHex" placeholder="#ffc0cb">
+                </div>
+                <small class="form-text text-muted">Escolha uma cor ou informe o valor hexadecimal.</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="corSecundaria" class="form-label">Cor Secundária</label>
+                <div class="input-group">
+                    <input asp-for="CorSecundaria" type="color" class="form-control form-control-color" id="corSecundariaPicker" name="corSecundaria" value="@Model.CorSecundaria">
+                    <input asp-for="CorSecundaria" type="text" class="form-control" id="corSecundariaHex" placeholder="#f8f9fa">
+                </div>
+                <small class="form-text text-muted">Escolha uma cor ou informe o valor hexadecimal.</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="corTexto" class="form-label">Cor do Texto</label>
+                <div class="input-group">
+                    <input asp-for="CorFonte" type="color" class="form-control form-control-color" id="corTextoPicker" name="corTexto" value="@Model.CorFonte">
+                    <input asp-for="CorFonte" type="text" class="form-control" id="corTextoHex" placeholder="#212529">
+                </div>
+                <small class="form-text text-muted">Escolha uma cor ou informe o valor hexadecimal.</small>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TamanhoFonte" class="form-label">Tamanho da Fonte (px)</label>
+                <input asp-for="TamanhoFonte" type="number" class="form-control" id="tamanhoFonte" name="tamanhoFonte" value="@Model.TamanhoFonte" min="10" max="36">
+                <small class="form-text text-muted">Informe o tamanho da fonte em pixels (10px a 36px).</small>
+            </div>
+
+            <div class="mb-3 form-check">
+                @if (Model.TemaDark)
+                {
+                    <input asp-for="TemaDark" type="checkbox" class="form-check-input" id="temaDark" name="temaDark" checked>
+                }
+                else
+                {
+                    <input asp-for="TemaDark" type="checkbox" class="form-check-input" id="temaDark" name="temaDark">
+                }
+                <label asp-for="TemaDark" class="form-check-label" for="temaDark">Ativar Tema Dark</label>
+            </div>
+            <input asp-for="UsuarioId" type="hidden" id="usuarioId" name="usuarioId" value="@Model.UsuarioId">
+
+            <button type="submit" class="btn btn-success">Salvar Configurações</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Sincronizar campo de cor com o campo de texto (hexadecimal) e vice-versa
+        const corPrimariaPicker = document.getElementById('corPrimariaPicker');
+        const corPrimariaHex = document.getElementById('corPrimariaHex');
+
+        const corSecundariaPicker = document.getElementById('corSecundariaPicker');
+        const corSecundariaHex = document.getElementById('corSecundariaHex');
+
+        const corTextoPicker = document.getElementById('corTextoPicker');
+        const corTextoHex = document.getElementById('corTextoHex');
+
+        function syncColors() {
+            // Sincroniza os campos de hex com os valores dos pickers ao carregar
+            corPrimariaHex.value = corPrimariaPicker.value;
+            corSecundariaHex.value = corSecundariaPicker.value;
+            corTextoHex.value = corTextoPicker.value;
+        }
+
+        // Atualizar os campos de texto com base no valor do color picker
+        corPrimariaPicker.addEventListener('input', function () {
+            corPrimariaHex.value = corPrimariaPicker.value;
+        });
+
+        corPrimariaHex.addEventListener('input', function () {
+            if (/^#[0-9A-F]{6}$/i.test(corPrimariaHex.value)) {
+                corPrimariaPicker.value = corPrimariaHex.value;
+            }
+        });
+
+        corSecundariaPicker.addEventListener('input', function () {
+            corSecundariaHex.value = corSecundariaPicker.value;
+        });
+
+        corSecundariaHex.addEventListener('input', function () {
+            if (/^#[0-9A-F]{6}$/i.test(corSecundariaHex.value)) {
+                corSecundariaPicker.value = corSecundariaHex.value;
+            }
+        });
+
+        corTextoPicker.addEventListener('input', function () {
+            corTextoHex.value = corTextoPicker.value;
+        });
+
+        corTextoHex.addEventListener('input', function () {
+            if (/^#[0-9A-F]{6}$/i.test(corTextoHex.value)) {
+                corTextoPicker.value = corTextoHex.value;
+            }
+        });
+
+        // Sincronizar os valores iniciais ao carregar a página e atualizar caso o hexa seja alterado manualmente
+        document.addEventListener('DOMContentLoaded', syncColors);
+    </script>
+}
+
+

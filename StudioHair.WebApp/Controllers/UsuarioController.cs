@@ -5,7 +5,7 @@ using StudioHair.Application.Services.Interfaces;
 
 namespace StudioHair.WebApp.Controllers
 {
-    public class UsuarioController : Controller
+    public class UsuarioController : BaseController
     {
         private readonly IUsuarioService _usuarioService;
         private readonly IClienteService _clienteService;
@@ -34,7 +34,7 @@ namespace StudioHair.WebApp.Controllers
             {
                 var token = await _usuarioService.Login(inputModel);
                 HttpContext.Session.SetString("Token", token);
-
+ 
                 var papel = await _usuarioService.GetPapelUsuario(inputModel);
                 if (papel != Core.Enums.EPapelUsuario.Cliente)
                 {
@@ -264,6 +264,49 @@ namespace StudioHair.WebApp.Controllers
             {
                 ModelState.AddModelError("", "Ocorreu um erro ao criar o usuário. Por favor, tente novamente. Detalhe: " + ex.Message);
                 return View("CadastroCliente", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> ConfiguracaoSistema()
+        {
+            try
+            {
+                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var configsInputModel = await _usuarioService.GetConfigSistemaAsync(usuarioId);
+                return View(configsInputModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao abrir formulario. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return RedirectToAction("TelaCliente", "Home");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> ConfiguracaoSistema(ConfigSistemaInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ConfiguracaoSistema", inputModel);
+            }
+            try
+            {
+                await _usuarioService.UpdateConfigSistema(inputModel);
+                TempData["Sucesso"] = "Configuraçao salva com suceso";
+                // Salvar as configurações na sessão
+                HttpContext.Session.SetString("CorPrimaria", inputModel.CorPrimaria ?? "#ffc0cb");
+                HttpContext.Session.SetString("CorSecundaria", inputModel.CorSecundaria ?? "#f8f9fa");
+                HttpContext.Session.SetString("CorFonte", inputModel.CorFonte ?? "#212529");
+                HttpContext.Session.SetString("TamanhoFonte", inputModel.TamanhoFonte > 0 ? inputModel.TamanhoFonte.ToString() : "16");
+                HttpContext.Session.SetString("TemaDark", inputModel.TemaDark ? "true" : "false");
+                return RedirectToAction("ConfiguracaoSistema");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao atualizar as configurações. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("ConfiguracaoSistema", inputModel);
             }
         }
 

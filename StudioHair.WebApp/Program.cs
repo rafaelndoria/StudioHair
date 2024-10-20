@@ -59,6 +59,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseMiddleware<RedirectToPreviousPageMiddleware>();
+app.UseMiddleware<ConfiguracaoSistemaMiddleware>();
 
 app.UseRouting();
 

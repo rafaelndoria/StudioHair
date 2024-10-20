@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace StudioHair.WebApp.Controllers
 {
     [Authorize(Roles = "Administrador, Gerente, Funcionario, Cliente")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeService _homeService;
@@ -30,6 +30,15 @@ namespace StudioHair.WebApp.Controllers
         {
             var usuario = await _usuarioService.GetUsuarioLogado(User);
             HttpContext.Session.SetString("ClienteId", usuario.Id.ToString());
+
+            var configs = await _usuarioService.GetConfigSistemaAsync(usuario.Id);
+            // Salvar as configurações na sessão
+            HttpContext.Session.SetString("CorPrimaria", configs.CorPrimaria ?? "#ffc0cb");
+            HttpContext.Session.SetString("CorSecundaria", configs.CorSecundaria ?? "#f8f9fa");
+            HttpContext.Session.SetString("CorFonte", configs.CorFonte ?? "#212529");
+            HttpContext.Session.SetString("TamanhoFonte", configs.TamanhoFonte > 0 ? configs.TamanhoFonte.ToString() : "16");
+            HttpContext.Session.SetString("TemaDark", configs.TemaDark ? "true" : "false");
+
             if (usuario.Pessoa == null)
                 return View("IndexClienteBloqueado");
             if (usuario.Pessoa.Cliente == null)
@@ -40,8 +49,7 @@ namespace StudioHair.WebApp.Controllers
 
         public IActionResult TelaCliente()
         {
-            // buscar configuracoes de cores do usuario logado e salvar na sessao
-            return View("IndexCliente");
+               return View("IndexCliente");   
         }
 
         public IActionResult Privacy()

@@ -15,15 +15,26 @@ namespace StudioHair.Infrascruture.Repositories
             _context = context;
         }
 
+        public async Task CriarConfigSistemaAsync(ConfiguracaoSistema configuracaoSistema)
+        {
+            _context.ConfiguracaoSistemas.Add(configuracaoSistema);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task CriarUsuarioAsync(Usuario usuario)
         {
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
         }
 
+        public async Task<ConfiguracaoSistema> GetConfigSistemaPorUsuarioIdAsync(int id)
+        {
+            return await _context.ConfiguracaoSistemas.FirstOrDefaultAsync(x => x.UsuarioId == id);
+        }
+
         public async Task<Usuario> GetUsuarioByIdAsync(int id)
         {
-            return await _context.Usuarios.Include(x => x.Pessoa).ThenInclude(x => x.Cliente).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Usuarios.Include(x => x.Pessoa).ThenInclude(x => x.Cliente).Include(x => x.ConfiguracaoSistema).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Usuario> GetUsuarioPorSenhaENome(string nome, string senha)
@@ -55,6 +66,12 @@ namespace StudioHair.Infrascruture.Repositories
         public async Task UpdateAsync(Usuario usuario)
         {
             _context.Usuarios.Update(usuario);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateConfigSistemaAsync(ConfiguracaoSistema configuracaoSistema)
+        {
+            _context.ConfiguracaoSistemas.Update(configuracaoSistema);
             await _context.SaveChangesAsync();
         }
     }

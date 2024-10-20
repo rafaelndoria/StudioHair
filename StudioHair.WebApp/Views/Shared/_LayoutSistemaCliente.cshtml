@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seu Sistema - @ViewData["Title"]</title>
+    <title>Studio Hair - @ViewData["Title"]</title>
     <link rel="icon" href="~/images/icon.png" type="image/x-icon">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
         :root {
-            --cor-primaria: #ffc0cb; /* Cor principal */
-            --cor-secundaria: #f8f9fa; /* Cor secundária */
-            --cor-fonte: #212529; /* Cor da fonte */
-            --tamanho-fonte: 16px; /* Tamanho padrão da fonte */
-        }
+            --cor-primaria: @(ViewBag.CorPrimaria ?? "#ffc0cb"); /* Cor principal */
+            --cor-secundaria: @(ViewBag.CorSecundaria ?? "#f8f9fa"); /* Cor secundária */
+            --cor-fonte: @(ViewBag.CorFonte ?? "#212529"); /* Cor da fonte */
+            --tamanho-fonte: @(ViewBag.TamanhoFonte ?? 16)px; /* Tamanho padrão da fonte */
+        }   
 
         body {
             font-size: var(--tamanho-fonte);
@@ -63,11 +63,14 @@
         }
     </style>
 </head>
-<body>
+<body class="@(ViewBag.TemaDark == "true" ? "dark-theme" : "")">
 
     <header>
         <nav class="navbar navbar-expand-lg">
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a asp-controller="Home" asp-action="IndexCliente" class="nav-link">HOME</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Agendamentos</a>
                 </li>
@@ -78,11 +81,12 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user"></i> Perfil
+                        <i class="fas fa-user"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="#">Configurações</a></li>
-                        <li><a class="dropdown-item" href="#">Sair</a></li>
+                        <li><a class="dropdown-item" href="#">Perfil</a></li>
+                        <li><a asp-controller="Usuario" asp-action="ConfiguracaoSistema" class="dropdown-item">Configurações Sistema</a></li>
+                        <li><a asp-controller="Usuario" asp-action="Logout" class="dropdown-item">Sair</a></li>
                     </ul>
                 </li>
             </ul>
@@ -91,17 +95,19 @@
 
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody() <!-- Aqui é onde o conteúdo específico da página será renderizado -->
+            <partial name="_Validacoes" />
+            @RenderBody()
         </main>
     </div>
 
     <footer>
-        <p>&copy; 2024 Seu Sistema. Todos os direitos reservados.</p>
+        <p>&copy; 2024 Studio Hair. Todos os direitos reservados.</p>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/6c33e49b8c.js" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

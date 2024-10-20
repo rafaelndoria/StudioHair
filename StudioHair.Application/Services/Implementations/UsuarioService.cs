@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using StudioHair.Application.InputModels;
+﻿using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
@@ -157,6 +156,56 @@ namespace StudioHair.Application.Services.Implementations
             var id = tokenUsuario.Claims.FirstOrDefault(c => c.Type == "UsuarioId").Value;
             var usuario = await _usuarioRepository.GetUsuarioByIdAsync(int.Parse(id));
             return usuario;
+        }
+
+        public async Task<ConfigSistemaInputModel> GetConfigSistemaAsync(int usuarioId)
+        {
+            var configs = await _usuarioRepository.GetConfigSistemaPorUsuarioIdAsync(usuarioId);
+            var configSistemaInputModel = new ConfigSistemaInputModel();
+            if (configs != null)
+            {
+                configSistemaInputModel.CorPrimaria = configs.CorPrimaria;
+                configSistemaInputModel.CorSecundaria = configs.CorSecundaria;
+                configSistemaInputModel.CorFonte = configs.CorFonte;
+                configSistemaInputModel.TamanhoFonte = configs.TamanhoFonte;
+                configSistemaInputModel.TemaDark = configs.TemaDark;
+                configSistemaInputModel.UsuarioId = usuarioId;
+            }
+            else
+            {
+                configSistemaInputModel.CorPrimaria = "#ffc0cb";
+                configSistemaInputModel.CorSecundaria = "#f8f9fa";
+                configSistemaInputModel.CorFonte = "#212529";
+                configSistemaInputModel.TamanhoFonte = 16;
+                configSistemaInputModel.TemaDark = false;
+                configSistemaInputModel.UsuarioId = usuarioId;
+            }
+
+            return configSistemaInputModel;
+        }
+
+        public async Task UpdateConfigSistema(ConfigSistemaInputModel inputModel)
+        {
+            var configUsuario = await _usuarioRepository.GetConfigSistemaPorUsuarioIdAsync(inputModel.UsuarioId);
+            if (configUsuario == null)
+            { 
+                var newConfig = new ConfiguracaoSistema(inputModel.CorPrimaria,
+                                                        inputModel.CorSecundaria,
+                                                        inputModel.CorFonte,
+                                                        inputModel.TamanhoFonte,
+                                                        inputModel.TemaDark,
+                                                        inputModel.UsuarioId);
+                await _usuarioRepository.CriarConfigSistemaAsync(newConfig);
+            }
+            else
+            {
+                configUsuario.Atualizar(inputModel.CorPrimaria,
+                                        inputModel.CorSecundaria,
+                                        inputModel.CorFonte,
+                                        inputModel.TamanhoFonte,
+                                        inputModel.TemaDark);
+                await _usuarioRepository.UpdateConfigSistemaAsync(configUsuario);
+            }
         }
     }
 }

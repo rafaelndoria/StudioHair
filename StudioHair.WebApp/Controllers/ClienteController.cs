@@ -72,7 +72,7 @@ namespace StudioHair.WebApp.Controllers
             catch (Exception ex)
             {
                 TempData["Erro"] = "Ocorreu erro ao salvar cliente: " + ex.Message;
-                await DeletarPessoa(inputModel.PessoaId);
+                await DeletarPessoa((int)inputModel.PessoaId);
                 return RedirectToAction("Criar");
             }
         }
