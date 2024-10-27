@@ -23,5 +23,10 @@ namespace StudioHair.Application.Services.Interfaces
         Task<Usuario> GetUsuarioLogado(ClaimsPrincipal tokenUsuario);
         Task<ConfigSistemaInputModel> GetConfigSistemaAsync(int usuarioId);
         Task UpdateConfigSistema(ConfigSistemaInputModel inputModel);
+        Task RedefinirSenhaUsuario(RedefinirSenhaUsuarioInputModel inputModel, int usuarioId);
+        Task<UpdatePessoaInputModel> GetInfoPessoaUsuario(int usuarioId);
+        Task UpdatePessoa(UpdatePessoaInputModel inputModel);
+        Task<UpdateClienteUsuarioInputModel> GetClienteUsuario(int usuarioId);
+        Task UpdateCliente(UpdateClienteUsuarioInputModel inputModel);
     }
 }

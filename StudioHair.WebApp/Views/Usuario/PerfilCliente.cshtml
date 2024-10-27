@@ -1,0 +1,52 @@
+﻿@model UpdateClienteUsuarioInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Perfil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="background-color: var(--cor-primaria); padding: 20px; border-radius: 8px;">
+            <h2 class="text-center mb-4" style="color: var(--cor-secundaria);">Perfil</h2>
+
+            <form method="post" asp-controller="Usuario" asp-action="PerfilCliente">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label" style="color: var(--cor-fonte);">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" id="email" name="email" value="@Model.Email"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TelefoneCelular" class="form-label" style="color: var(--cor-fonte);">Telefone</label>
+                    <input asp-for="TelefoneCelular" type="text" class="form-control" id="telefoneCelular" name="telefoneCelular" value="@Model.TelefoneCelular"/>
+                    <span asp-validation-for="TelefoneCelular" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Whatsapp" class="form-label" style="color: var(--cor-fonte);">Whatsapp</label>
+                    <input asp-for="Whatsapp" type="text" class="form-control" id="whatsapp" name="whatsapp" value="@Model.Whatsapp" />
+                    <span asp-validation-for="Whatsapp" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Facebook" class="form-label" style="color: var(--cor-fonte);">Facebook</label>
+                    <input asp-for="Facebook" type="text" class="form-control" id="facebook" name="facebook" value="@Model.Facebook" />
+                    <span asp-validation-for="Facebook" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-center my-4">
+                    <a asp-controller="Usuario" asp-action="PerfilUsuario" class="btn" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); margin: 0 10px;">1</a>
+                    <a asp-controller="Usuario" asp-action="PerfilDetalhes" class="btn" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); margin: 0 10px;">2</a>
+                    <a asp-controller="Usuario" asp-action="PerfilCliente" class="btn btn-primary" style="margin: 0 10px;">3</a>
+                </div>
+
+                <input asp-for="Id" type="text" class="form-control" id="id" name="id" value="@Model.Id" hidden/>
+
+                <div class="d-flex justify-content-center">
+                    <a asp-controller="Usuario" asp-action="PerfilDetalhes" class="btn btn-danger me-2">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

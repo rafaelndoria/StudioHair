@@ -207,5 +207,80 @@ namespace StudioHair.Application.Services.Implementations
                 await _usuarioRepository.UpdateConfigSistemaAsync(configUsuario);
             }
         }
+
+        public async Task RedefinirSenhaUsuario(RedefinirSenhaUsuarioInputModel inputModel, int usuarioId)
+        {
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(usuarioId);
+            var senhaAntigaCriptografada = _authService.CriptografarSenha(inputModel.SenhaAntiga);
+            if (usuario != null)
+            {
+                if (usuario.Senha != senhaAntigaCriptografada)
+                    throw new Exception("Senha antiga incorreta.");
+
+                var senhaNovaCriptografada = _authService.CriptografarSenha(inputModel.SenhaNova);
+                usuario.RedefinirSenha(senhaNovaCriptografada);
+                await _usuarioRepository.UpdateAsync(usuario);
+            }
+            else
+            {
+                throw new Exception("Usuario não encontrado no sistema.");
+            }
+        }
+
+        public async Task<UpdatePessoaInputModel> GetInfoPessoaUsuario(int usuarioId)
+        {
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(usuarioId);
+            if (usuario == null)
+                throw new Exception("Não encontrado informações do usuario.");
+
+            var updatePessoaInputModel = new UpdatePessoaInputModel()
+            {
+                Nome = usuario.Pessoa.Nome,
+                Cpf = usuario.Pessoa.Cpf,
+                DataNascimento = usuario.Pessoa.DataDeNascimento,
+                Cep = usuario.Pessoa.Cep,
+                Cidade = usuario.Pessoa.Cidade,
+                Bairro = usuario.Pessoa.Bairro,
+                Numero = usuario.Pessoa.Numero,
+                Rua = usuario.Pessoa.Rua
+            };
+
+            return updatePessoaInputModel;
+        }
+
+        public async Task UpdatePessoa(UpdatePessoaInputModel inputModel)
+        {
+            var pessoa = await _usuarioRepository.GetUsuarioByIdAsync(inputModel.Id);
+            if (pessoa == null)
+                throw new Exception("Não encontrado informações do usuario.");
+            pessoa.Pessoa.Atualizar(inputModel.Rua, inputModel.Cep, inputModel.Cidade, inputModel.Bairro, inputModel.Numero);
+            await _usuarioRepository.UpdateAsync(pessoa);
+        }
+
+        public async Task<UpdateClienteUsuarioInputModel> GetClienteUsuario(int usuarioId)
+        {
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(usuarioId);
+            if (usuario == null)
+                throw new Exception("Não encontrado informações do usuario.");
+
+            var updateClienteInputModel = new UpdateClienteUsuarioInputModel()
+            {
+                Email = usuario.Pessoa.Cliente.Email,
+                TelefoneCelular = usuario.Pessoa.Cliente.TelefoneCelular,
+                Whatsapp = usuario.Pessoa.Cliente.Whatsapp,
+                Facebook = usuario.Pessoa.Cliente.Facebook
+            };
+
+            return updateClienteInputModel;
+        }
+
+        public async Task UpdateCliente(UpdateClienteUsuarioInputModel inputModel)
+        {
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(inputModel.Id);
+            if (usuario == null)
+                throw new Exception("Não encontrado informações do usuario.");
+            usuario.Pessoa.Cliente.Atualizar(inputModel.Email, inputModel.TelefoneCelular, inputModel.Whatsapp, inputModel.Facebook, 0, "");
+            await _usuarioRepository.UpdateAsync(usuario);
+        }
     }
 }

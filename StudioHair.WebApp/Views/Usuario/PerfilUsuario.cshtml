@@ -1,0 +1,46 @@
+﻿@model UpdateUsuarioInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Perfil";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="background-color: var(--cor-primaria); padding: 20px; border-radius: 8px;">
+            <h2 class="text-center mb-4" style="color: var(--cor-secundaria);">Perfil</h2>
+
+            <form method="post" asp-controller="Usuario" asp-action="PerfilUsuario">
+                <div class="mb-3">
+                    <label asp-for="Nome" class="form-label" style="color: var(--cor-fonte);">Nome do Usuário</label>
+                    <input asp-for="Nome" type="text" class="form-control" id="nomeUsuario" name="nome" value="@Model.Nome"/>
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label" style="color: var(--cor-fonte);">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" id="email" name="email" value="@Model.Email"/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <a asp-controller="Usuario" asp-action="RedefinirSenhaUsuario" style="background-color: var(--cor-secundaria); color: var(--cor-fonte);" class="btn">Alterar Senha</a>
+                </div>
+
+                <input asp-for="Nivel" type="text" class="form-control" id="nivel" name="nivel" value="@Model.Nivel" hidden/>
+                <input asp-for="Id" type="text" class="form-control" id="nivel" name="id" value="@Model.Id" hidden />
+
+                <div class="d-flex justify-content-center my-4">
+                    <a asp-controller="Usuario" asp-action="PerfilUsuario" class="btn btn-primary" style="margin: 0 10px;">1</a>
+                    <a asp-controller="Usuario" asp-action="PerfilDetalhes" class="btn" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); margin: 0 10px;">2</a>
+                    <a asp-controller="Usuario" asp-action="PerfilCliente" class="btn" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); margin: 0 10px;">3</a>
+                </div>
+            
+                <div class="d-flex justify-content-center">
+                    @* <button type="submit" class="btn btn-danger">Voltar</button> *@
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

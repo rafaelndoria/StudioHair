@@ -23,7 +23,7 @@
 
         public string Email { get; private set; }
         public string TelefoneCelular { get; private set;}
-        public string Whatsapp { get; private set; }
+        public string Whatsapp { get; private set; } 
         public string Facebook { get; private set; }
         public int FrequenciaSalaoPorMes { get; private set; }
         public DateTime DataCadastro { get; private set; }

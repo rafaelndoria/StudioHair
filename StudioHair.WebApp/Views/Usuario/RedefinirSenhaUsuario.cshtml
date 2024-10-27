@@ -1,0 +1,32 @@
+﻿@model RedefinirSenhaUsuarioInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Alterar Senha";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="background-color: var(--cor-primaria); padding: 20px; border-radius: 8px;">
+            <h2 class="text-center mb-4" style="color: var(--cor-secundaria);">Alterar Senha</h2>
+
+            <form method="post" asp-controller="Usuario" asp-action="RedefinirSenhaUsuario">
+                <div class="mb-3">
+                    <label asp-for="SenhaAntiga" class="form-label" style="color: var(--cor-fonte);">Senha Antiga</label>
+                    <input asp-for="SenhaAntiga" type="password" class="form-control" id="senhaAntiga" name="senhaAntiga" />
+                    <span asp-validation-for="SenhaAntiga" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SenhaNova" class="form-label" style="color: var(--cor-fonte);">Senha Nova</label>
+                    <input asp-for="SenhaNova" type="password" class="form-control" id="senhaNova" name="senhaNova" />
+                    <span asp-validation-for="SenhaNova" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <a asp-controller="Usuario" asp-action="PerfilUsuario" class="btn btn-danger me-2">Voltar</a>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

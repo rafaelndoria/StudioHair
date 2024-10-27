@@ -310,6 +310,147 @@ namespace StudioHair.WebApp.Controllers
             }
         }
 
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilUsuario()
+        {
+            try
+            {
+                var usuarioInputModel = await _usuarioService.GetUsuarioUpdate(int.Parse(HttpContext.Session.GetString("ClienteId")));
+                return View(usuarioInputModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao carregar o formulario. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return RedirectToAction("TelaCliente", "Home");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilUsuario(UpdateUsuarioInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("PerfilUsuario", inputModel);
+            }
+            try
+            {
+                await _usuarioService.UpdateUsuario(inputModel);
+                TempData["Sucesso"] = "Usuário atualizado com sucesso";
+                return RedirectToAction("PerfilUsuario");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("PerfilUsuario", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public IActionResult RedefinirSenhaUsuario()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> RedefinirSenhaUsuario(RedefinirSenhaUsuarioInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("RedefinirSenhaUsuario", inputModel);
+            }
+            try
+            {
+                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                await _usuarioService.RedefinirSenhaUsuario(inputModel, usuarioId);
+                TempData["Sucesso"] = "Senha alterada com sucesso";
+                return RedirectToAction("RedefinirSenhaUsuario");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("RedefinirSenhaUsuario", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilDetalhes()
+        {
+            try
+            {
+                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var inputModel = await _usuarioService.GetInfoPessoaUsuario(usuarioId);
+                inputModel.Id = usuarioId;
+                return View(inputModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao carregar o formulario. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return RedirectToAction("TelaCliente", "Home");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilDetalhes(UpdatePessoaInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("PerfilDetalhes", inputModel);
+            }
+            try
+            {
+                await _usuarioService.UpdatePessoa(inputModel);
+                TempData["Sucesso"] = "Usuário atualizado com sucesso";
+                return RedirectToAction("PerfilDetalhes");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("PerfilUsuario", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilCliente()
+        {
+            try
+            {
+                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var inputModel = await _usuarioService.GetClienteUsuario(usuarioId);
+                inputModel.Id = usuarioId;
+                return View(inputModel);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao carregar o formulario. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return RedirectToAction("TelaCliente", "Home");
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
+        public async Task<IActionResult> PerfilCliente(UpdateClienteUsuarioInputModel inputModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("PerfilCliente", inputModel);
+            }
+            try
+            {
+                await _usuarioService.UpdateCliente(inputModel);
+                TempData["Sucesso"] = "Usuário atualizado com sucesso";
+                return RedirectToAction("PerfilCliente");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocorreu um erro ao salvar as alterações. Por favor, tente novamente. Detalhe: " + ex.Message);
+                return View("PerfilCliente", inputModel);
+            }
+        }
+
+        [Authorize(Roles = "Gerente, Administrador, Cliente")]
         public IActionResult Logout()
         {
             // implementar logica para logout de usuario
