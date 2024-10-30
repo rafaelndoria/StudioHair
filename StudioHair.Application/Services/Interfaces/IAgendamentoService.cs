@@ -17,5 +17,10 @@ namespace StudioHair.Application.Services.Interfaces
         Task<DetalhesAgendamentoViewModel> GetDetalheAgendamento(int id);
         Task<IEnumerable<RPeriodoAgendamentosViewModel>> RPeriodoAgendamentos(FiltroRelatorioVAInputModel inputModel);
         Task<IEnumerable<RFrequenciaSalaoViewModel>> RFrequenciaSalao(FiltroRelatorioVAInputModel inputModel);
+        Task<AgendamentoClienteInputModel> GetHorariosDisponiveis(DateTime dataAgendamento);
+        IEnumerable<HorariosDisponiveisViewModel> VerificarHorarios(List<Agendamento> agendamentos);
+        Task<int> CriarAgendamentoCliente(CriarAgendamentoClienteInputModel inputModel);
+        Task<ResumoAgendamentoViewModel> GetResumoAgendamento(int agendamentoId);
+        Task ConfirmarAgendamento(int agendamentoId);
     }
 }

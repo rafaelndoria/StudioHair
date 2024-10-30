@@ -4,6 +4,7 @@ using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace StudioHair.Application.Services.Implementations
@@ -13,18 +14,58 @@ namespace StudioHair.Application.Services.Implementations
         private readonly IAgendamentoRepository _agendamentoRepository;
         private readonly IServicoRepository _servicoRepository;
         private readonly IClienteRepository _clienteRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public AgendamentoService(IAgendamentoRepository agendamentoRepository, IServicoRepository servicoRepository, IClienteRepository clienteRepository)
+        public AgendamentoService(IAgendamentoRepository agendamentoRepository, IServicoRepository servicoRepository, IClienteRepository clienteRepository, IUsuarioRepository usuarioRepository)
         {
             _agendamentoRepository = agendamentoRepository;
             _servicoRepository = servicoRepository;
             _clienteRepository = clienteRepository;
+            _usuarioRepository = usuarioRepository;
         }
 
         public async Task AdicionarServicoAgendamento(CadastroAgendamentoInputModel inputModel)
         {
             var servicoAgendamento = new AgendamentoServicos(inputModel.AgendamentoId, inputModel.ServicoId);
             await _agendamentoRepository.AdicionarServicoAgendamento(servicoAgendamento);
+        }
+
+        public async Task ConfirmarAgendamento(int agendamentoId)
+        {
+            var agendamento = await _agendamentoRepository.GetAgendamentoPorId(agendamentoId);
+            if (agendamento == null)
+                throw new Exception("Agendamento não encontrado.");
+
+            agendamento.AlterarStatus(EAgendamento.Confirmado);
+            await _agendamentoRepository.AtualizarAgendamentoAsync(agendamento);
+        }
+
+        public async Task<int> CriarAgendamentoCliente(CriarAgendamentoClienteInputModel inputModel)
+        {
+            var usuario = await _usuarioRepository.GetUsuarioByIdAsync(inputModel.UsuarioId);
+            var agendamento = new Agendamento("Agendamento Criado Pelo Cliente", inputModel.Dia, inputModel.HoraInicial, "", 0, usuario.Pessoa.Cliente.Id);
+            var agendamentoId = await _agendamentoRepository.CriarAgendamento(agendamento);
+
+            var quantidadeMinutos = 0;
+
+            foreach (var servicoId in inputModel.ServicosAdicionados)
+            {
+                var servico = await _servicoRepository.GetServicoPorIdAsync(servicoId);
+                quantidadeMinutos += servico.DuracaoEmMinutos;
+                var agendamentoServico = new AgendamentoServicos(agendamentoId, servicoId);
+                agendamento.AdicionarValorAgendamento((decimal)servico.ValorTotal);
+                await _agendamentoRepository.AdicionarServicoAgendamento(agendamentoServico);
+            }
+
+            TimeSpan horaInicialTimeSpan = TimeSpan.Parse(inputModel.HoraInicial);
+            TimeSpan duracaoTotal = TimeSpan.FromMinutes(quantidadeMinutos);
+            TimeSpan horaFinalTimeSpan = horaInicialTimeSpan.Add(duracaoTotal);
+            string horaFinalString = horaFinalTimeSpan.ToString(@"hh\:mm");
+            agendamento.Atualizar("Agendamento Criado Pelo Cliente", inputModel.Dia, inputModel.HoraInicial, horaFinalString, 0, usuario.Pessoa.Cliente.Id);
+            agendamento.AlterarStatus(EAgendamento.Pendente);
+            await _agendamentoRepository.AtualizarAgendamentoAsync(agendamento);
+
+            return agendamentoId;
         }
 
         public async Task<int> CriarAgendamentoProv(CadastroAgendamentoInputModel inputModel)
@@ -85,6 +126,33 @@ namespace StudioHair.Application.Services.Implementations
                                                                                            new ServicosAgendamentoViewModel(x.Servico.Nome, x.Servico.DuracaoEmMinutos, (decimal)x.Servico.ValorTotal));
             agendamentoViewModel.ServicosAgendamento = servicosAgendamentoViewModel;
             return agendamentoViewModel;
+        }
+
+        public async Task<AgendamentoClienteInputModel> GetHorariosDisponiveis(DateTime dataAgendamento)
+        {
+            var agendamentos = await _agendamentoRepository.GetAgendamentosAsync(x => x.Dia == dataAgendamento.Date);
+            var horariosViewModel = VerificarHorarios(agendamentos);
+            var inputModel = new AgendamentoClienteInputModel()
+            { 
+                Horarios = horariosViewModel,
+                Dia = dataAgendamento.Date
+            };
+
+            return inputModel;
+        }
+
+        public async Task<ResumoAgendamentoViewModel> GetResumoAgendamento(int agendamentoId)
+        {
+            var agendamento = await _agendamentoRepository.GetAgendamentoPorId(agendamentoId);
+            var resumoAgendamento = new ResumoAgendamentoViewModel(agendamento.Dia, agendamento.HoraInicial, agendamento.HoraFinal, (decimal)agendamento.ValorAgendamento, agendamentoId);
+
+            foreach (var item in agendamento.AgendamentoServicos)
+            {
+                var servicoAdicionado = new ServicosAgendamentoViewModel(item.Servico.Nome, item.Servico.DuracaoEmMinutos, item.Servico.ValorServico);
+                resumoAgendamento.Servicos.Add(servicoAdicionado);
+            }
+
+            return resumoAgendamento;
         }
 
         public async Task<IEnumerable<ServicosAgendamentoViewModel>> ListProdutosAgendamento(int id)
@@ -229,6 +297,63 @@ namespace StudioHair.Application.Services.Implementations
             });
 
             return !existeConflito;
+        }
+
+        public IEnumerable<HorariosDisponiveisViewModel> VerificarHorarios(List<Agendamento> agendamentos)
+        {
+            var horarios = new List<HorariosDisponiveisViewModel>();
+
+            if (agendamentos.Count == 0)
+            {
+                horarios.Add(new HorariosDisponiveisViewModel("00:00", "23:59"));
+                return horarios;
+            }
+
+            // Converte os horários para TimeSpan e ordena os agendamentos
+            agendamentos = agendamentos
+                .OrderBy(a => TimeSpan.Parse(a.HoraInicial))
+                .ToList();
+
+            // Primeiro horário livre do dia até o primeiro agendamento
+            var inicioDia = TimeSpan.FromHours(0);
+            var primeiroHorarioInicial = TimeSpan.Parse(agendamentos[0].HoraInicial);
+
+            if (agendamentos.Count > 0 && primeiroHorarioInicial > inicioDia)
+            {
+                horarios.Add(new HorariosDisponiveisViewModel(
+                    "00:00",
+                    primeiroHorarioInicial.Add(-TimeSpan.FromMinutes(1)).ToString(@"hh\:mm")
+                ));
+            }
+
+            // Verifica os intervalos entre os agendamentos
+            for (int i = 0; i < agendamentos.Count - 1; i++)
+            {
+                var terminoAtual = TimeSpan.Parse(agendamentos[i].HoraFinal);
+                var inicioProximo = TimeSpan.Parse(agendamentos[i + 1].HoraInicial);
+
+                if (terminoAtual < inicioProximo)
+                {
+                    horarios.Add(new HorariosDisponiveisViewModel(
+                        terminoAtual.Add(TimeSpan.FromMinutes(1)).ToString(@"hh\:mm"),
+                        inicioProximo.Add(-TimeSpan.FromMinutes(1)).ToString(@"hh\:mm")
+                    ));
+                }
+            }
+
+            // Último horário livre do último agendamento até o final do dia
+            var fimDia = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+            var ultimoTermino = TimeSpan.Parse(agendamentos.Last().HoraFinal);
+
+            if (ultimoTermino < fimDia)
+            {
+                horarios.Add(new HorariosDisponiveisViewModel(
+                    ultimoTermino.Add(TimeSpan.FromMinutes(1)).ToString(@"hh\:mm"),
+                    "23:59"
+                ));
+            }
+
+            return horarios;
         }
     }
 }

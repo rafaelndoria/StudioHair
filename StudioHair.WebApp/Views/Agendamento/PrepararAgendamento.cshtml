@@ -1,0 +1,97 @@
+﻿@model CriarAgendamentoClienteInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Agendamento";
+}
+
+<div class="container my-5">
+    <div class="card" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+        <h5>Agendamento</h5>
+
+        <form method="post" asp-controller="Agendamento" asp-action="CriarAgendamentoCliente" id="agendamentoForm">
+            <div class="mb-3">
+                <label for="dataAgendamento" class="form-label">Dia</label>
+                <input asp-for="Dia" type="date" class="form-control" readonly required />
+            </div>
+
+            <div class="mb-3">
+                <label for="horaInicial" class="form-label">Hora Inicial</label>
+                <input asp-for="HoraInicial" type="time" class="form-control" readonly />
+            </div>
+
+             <input asp-for="UsuarioId" type="text" value="@Model.UsuarioId" hidden/>
+
+            <div class="mb-3 d-flex align-items-center">
+                <select id="servicos" class="form-select flex-grow-1">
+                    <option value="">Selecione um serviço</option>
+                    @foreach (var servico in Model.Servicos)
+                    {
+                        <option value="@servico.Id" data-valor="@servico.Valor">@servico.Nome - R$ @servico.Valor</option>
+                    }
+                </select>
+                <button type="button" class="btn btn-success" style="margin-left:7px;" id="addServicoButton">+</button>
+            </div>
+
+            <div id="produtosAdicionados" class="d-flex flex-column gap-2 mb-3"></div>
+
+            @* Campo oculto para armazenar os IDs dos serviços adicionados *@
+            <input type="hidden" id="servicosAdicionadosInput" name="ServicosAdicionados" />
+
+            <a asp-controller="Agendamento" asp-action="DataDisponivel" class="btn btn-danger">Voltar</a>
+            <button type="submit" class="btn btn-success" id="submitButton" disabled>Inserir Agendamento</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const produtosAdicionados = document.getElementById('produtosAdicionados');
+        const servicosAdicionadosInput = document.getElementById('servicosAdicionadosInput');
+        const submitButton = document.getElementById('submitButton');
+
+        document.getElementById('addServicoButton').addEventListener('click', function () {
+            const servicosSelect = document.getElementById('servicos');
+            const servicoId = servicosSelect.value;
+            const servicoNome = servicosSelect.options[servicosSelect.selectedIndex].text;
+
+            if (servicoId) {
+                // Verifica se o serviço já foi adicionado
+                const servicosAdicionados = Array.from(produtosAdicionados.children).map(div => div.dataset.id);
+
+                if (!servicosAdicionados.includes(servicoId)) {
+                    // Cria um novo elemento para o serviço adicionado
+                    const servicoDiv = document.createElement('div');
+                    servicoDiv.className = 'p-2';
+                    servicoDiv.style.border = '1px solid var(--cor-primaria)';
+                    servicoDiv.style.borderRadius = '5px';
+                    servicoDiv.textContent = `${servicoNome}`; // Exibe o nome do serviço
+                    servicoDiv.dataset.id = servicoId; // Armazena o ID do serviço no dataset
+
+                    // Adiciona o serviço à lista de serviços adicionados
+                    produtosAdicionados.appendChild(servicoDiv);
+
+                    // Atualiza o campo oculto com os IDs dos serviços adicionados
+                    updateHiddenInput();
+
+                    // Habilita o botão de inserção de agendamento
+                    enableSubmitButton();
+
+                    // Limpa a seleção
+                    servicosSelect.selectedIndex = 0;
+                } else {
+                    alert("Este serviço já foi adicionado.");
+                }
+            }
+        });
+
+        function updateHiddenInput() {
+            const servicosAdicionados = Array.from(produtosAdicionados.children).map(div => div.dataset.id);
+            servicosAdicionadosInput.value = servicosAdicionados.join(','); // Converte a lista de IDs para uma string
+        }
+
+        function enableSubmitButton() {
+            // Habilita o botão se houver serviços adicionados
+            submitButton.disabled = produtosAdicionados.children.length === 0;
+        }
+    </script>
+}

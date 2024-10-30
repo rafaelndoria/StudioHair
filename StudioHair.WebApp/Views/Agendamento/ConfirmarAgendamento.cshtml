@@ -1,0 +1,48 @@
+﻿@model ResumoAgendamentoViewModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Confirmar Atendimento";
+}
+
+<div class="container my-5">
+    <div class="card" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+        <h5>Confirmar Atendimento</h5>
+
+        <div class="mb-3">
+            <label for="dataAtendimento" class="form-label">Data</label>
+            <input asp-for="Dia" type="date" class="form-control" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Horário</label>
+            <div class="d-flex align-items-center">
+                <input asp-for="HoraInicial" type="time" class="form-control" readonly style="max-width: 150px; margin-right: 10px;" />
+                <span>a</span>
+                <input asp-for="HoraFinal" type="time" class="form-control" readonly style="max-width: 150px; margin-left: 10px;" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="valorAgendamento" class="form-label">Valor Agendamento</label>
+            <input asp-for="ValorAgendamento" type="text" class="form-control" readonly />
+        </div>
+    </div>
+
+    <div class="card mt-4" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); padding: 1.5rem;">
+        <h6>Serviços</h6>
+        @foreach (var servico in Model.Servicos)
+        {
+            <div class="d-flex justify-content-between align-items-center mb-2" style="border-bottom: 1px solid var(--cor-primaria); padding-bottom: 0.5rem;">
+                <div>@servico.Nome</div>
+                <div>@servico.DuracaoMinutos min</div>
+                <div>R$ @servico.Valor</div>
+            </div>
+        }
+    </div>
+
+    <!-- Botões de ação -->
+    <div class="mt-4 d-flex justify-content-between">
+        <a asp-controller="Agendamento" asp-action="DataDisponivel" class="btn btn-danger">Voltar</a>
+        <a asp-controller="Agendamento" asp-action="ConfirmarAgendamento" asp-route-agendamentoId="@Model.AgendamentoId" type="submit" class="btn btn-success">Confirmar</a>
+    </div>
+</div>

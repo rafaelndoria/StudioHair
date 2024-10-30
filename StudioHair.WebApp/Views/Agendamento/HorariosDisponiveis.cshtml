@@ -1,0 +1,73 @@
+﻿@model AgendamentoClienteInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Agendamento";
+}
+
+<div class="container my-5">
+    <form method="post" asp-controller="Agendamento" asp-action="DataDisponivel">
+        <div class="card text-center" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+            <div class="mb-4">
+                <h5>Horários para o dia @Model.Dia.ToString("dd/MM/yyyy")</h5>
+
+                <div style="width: 100%; max-width: 300px; margin: 0 auto;">
+                    <input asp-for="Dia" type="date" id="datepicker" class="form-control" placeholder="Selecione uma data" required>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); width: auto;">
+                    Consultar Horários
+                </button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Horarios?.Any() == true)
+    {
+        <div class="card mt-4 p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">
+            <h6 class="mb-3">Horários disponíveis</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+                @foreach (var horario in Model.Horarios)
+                {
+                    <button type="button" class="btn btn-outline-secondary" style="border-color: var(--cor-secundaria); color: var(--cor-secundaria);">
+                        @horario.HorarioInicial - @horario.HorarioFinal
+                    </button>
+                }
+            </div>
+
+            <div class="mt-4">
+                <label for="horaInicial" class="form-label">Informe a Hora Inicial</label>
+                <input type="time" id="horaInicial" class="form-control" required>
+            </div>
+
+            <div class="text-center mt-3">
+                <button type="button" onclick="verificarHora()" class="btn btn-primary" style="background-color: var(--cor-secundaria); color: var(--cor-fonte);">
+                    Prosseguir
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    const horariosDisponiveis = @Html.Raw(Json.Serialize(Model.Horarios?.Select(h => new { h.HorarioInicial, h.HorarioFinal })));
+
+    function verificarHora() {
+        const horaInicial = document.getElementById("horaInicial").value;
+        
+        const horarioValido = horariosDisponiveis.some(horario => {
+            const horaInicio = new Date("1970-01-01T" + horario.HoraInicial + ":00");
+            const horaFinal = new Date("1970-01-01T" + horario.HoraFinal + ":00");
+            const horaSelecionada = new Date("1970-01-01T" + horaInicial + ":00");
+            return horaSelecionada >= horaInicio && horaSelecionada <= horaFinal;
+        });
+
+        if (horarioValido) {
+            alert("Horário válido. Prosseguindo com o agendamento.");
+            // Aqui, você pode adicionar a lógica para prosseguir, como redirecionar ou enviar o formulário
+        } else {
+            alert("Horário inválido! Selecione uma hora dentro dos horários disponíveis.");
+        }
+    }
+</script>

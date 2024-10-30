@@ -1,0 +1,80 @@
+﻿@model AgendamentoClienteInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Agendamento";
+}
+
+<div class="container my-5">
+    <form method="post" asp-controller="Agendamento" asp-action="DataDisponivel">
+        <div class="card text-center" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+            <div class="mb-4">
+                <h5>Horários para o dia @Model.Dia.ToString("dd/MM/yyyy")</h5>
+                <div style="width: 100%; max-width: 300px; margin: 0 auto;">
+                    <input asp-for="Dia" name="Dia" type="date" id="datepicker" class="form-control" placeholder="Selecione uma data" required>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-3" style="background-color: var(--cor-secundaria); color: var(--cor-fonte); width: auto;">
+                    Consultar Horários
+                </button>
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Horarios?.Any() == true)
+    {
+            <div class="card mt-4 p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">
+                <h6 class="mb-3">Horários disponíveis</h6>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                @foreach (var horario in Model.Horarios)
+                {
+                            <button type="button" class="btn btn-outline-secondary" style="border-color: var(--cor-secundaria); color: var(--cor-secundaria);">
+                        @horario.HorarioInicial - @horario.HorarioFinal
+                            </button>
+                }
+                </div>
+
+                <form method="post" asp-controller="Agendamento" asp-action="PrepararAgendamento">
+                    <div class="mt-4">
+                        <label asp-for="HoraInicial" class="form-label">Informe a Hora Inicial</label>
+                        <input asp-for="HoraInicial" type="text" id="horaInicial" class="form-control" required maxlength="5" placeholder="HH:mm">
+
+                        <!-- Campo para data escolhida (agora visível para inspeção e para envio correto no form) -->
+                        <input asp-for="DataEscolhida" name="DataEscolhida" type="hidden" id="dataEscolhida" class="form-control" value="@Model.DataEscolhida.ToString("yyyy-MM-dd")">
+                    </div>
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-primary" style="background-color: var(--cor-secundaria); color: var(--cor-fonte);">
+                            Prosseguir
+                        </button>
+                    </div>
+                </form>
+            </div>
+    }
+</div>
+
+<script>
+    const horaInicialInput = document.getElementById("horaInicial");
+
+    horaInicialInput.addEventListener("input", function () {
+        // Remove caracteres não numéricos
+        let valor = this.value.replace(/\D/g, '');
+
+        // Formata o valor para "HH:mm" adicionando o ":" após os dois primeiros dígitos
+        if (valor.length >= 3) {
+            valor = valor.slice(0, 2) + ':' + valor.slice(2, 4);
+        }
+
+        // Limita o comprimento do valor para "HH:mm"
+        this.value = valor.slice(0, 5);
+    });
+
+    // Impede que caracteres inválidos sejam colados
+    horaInicialInput.addEventListener("paste", function (e) {
+        const clipboardData = e.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text').replace(/\D/g, '');
+
+        if (pastedData.length > 4) {
+            e.preventDefault();
+        }
+    });
+</script>

@@ -66,7 +66,7 @@ namespace StudioHair.Application.Services.Interfaces
 
         public async Task<Agendamento> GetAgendamentoPorId(int id)
         {
-            return await _context.Agendamentos.Include(x => x.Cliente).ThenInclude(x => x.Pessoa).Include(x => x.AgendamentoServicos).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Agendamentos.Include(x => x.Cliente).ThenInclude(x => x.Pessoa).Include(x => x.AgendamentoServicos).ThenInclude(x => x.Servico).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List<Agendamento>> GetAgendamentosAsync(Expression<Func<Agendamento, bool>>? filter)
