@@ -26,6 +26,12 @@ namespace StudioHair.Infrascruture.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task CriarArquivoAsync(Arquivo arquivo)
+        {
+            _context.Arquivos.Add(arquivo);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<int> CriarProdutoAsync(Produto produto)
         {
             _context.Produto.Add(produto);
@@ -39,10 +45,26 @@ namespace StudioHair.Infrascruture.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeletarImagem(Arquivo arquivo)
+        {
+            _context.Arquivos.Remove(arquivo);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeletarProdutoUnidadeAsync(ProdutoUnidade produtoUnidade)
         {
             _context.ProdutoUnidades.Remove(produtoUnidade);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<Arquivo> GetArquivoProduto(int produtoId)
+        {
+            return await _context.Arquivos.Include(x => x.Produto).FirstOrDefaultAsync(x => x.ProdutoId == produtoId);
+        }
+
+        public async Task<Arquivo> GetImagemProduto(int imagemId)
+        {
+            return await _context.Arquivos.FirstOrDefaultAsync(x => x.Id == imagemId);
         }
 
         public async Task<Produto> GetProdutoPorIdAsync(int id)

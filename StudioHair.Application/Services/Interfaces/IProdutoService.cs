@@ -1,4 +1,5 @@
-﻿using StudioHair.Application.InputModels;
+﻿using Microsoft.AspNetCore.Http;
+using StudioHair.Application.InputModels;
 using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 
@@ -17,5 +18,8 @@ namespace StudioHair.Application.Services.Interfaces
         Task AtualizarProdutoUnidade(ConfiguracaoUnidadeInputModel inputModel);
         Task AtualizarProduto(AtualizarProdutoInputModel inputModel);
         Task<AtualizarProdutoInputModel> GetProdutoParaAtualizar(int id);
+        Task AdicionarImagemProduto(IFormFile arquivo, int produtoId);
+        Task<ImagemProdutoViewModel> GetImagemProduto(int produtoId);
+        Task DeletarImagemProduto(int imagemId);
     }
 }

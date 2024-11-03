@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
@@ -243,6 +244,57 @@ namespace StudioHair.WebApp.Controllers
             {
                 TempData["Erro"] = "Erro ao alterar o produto: " + ex.Message;
                 return View("Atualizar", inputModel);
+            }
+        }
+
+        public async Task<IActionResult> AtualizarImagem(int id)
+        {
+            try
+            {
+                HttpContext.Session.SetInt32("ProdutoId", id);
+                var imagemViewModel = await _produtoService.GetImagemProduto(id);
+                return View(imagemViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro consultar a imagem do produto: " + ex.Message;
+                return RedirectToAction("Config", new { id = id });
+            }
+        }
+
+        public async Task<IActionResult> DeletarImagem(int id)
+        {
+            int produtoId = (int)HttpContext.Session.GetInt32("ProdutoId");
+            try
+            {
+                await _produtoService.DeletarImagemProduto(id);
+                return RedirectToAction("AtualizarImagem", new { id = produtoId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro deletar a imagem do produto: " + ex.Message;
+                return RedirectToAction("AtualizarImagem", new { id = produtoId });
+            }
+        }
+
+        public IActionResult AdicionarImagem()
+        {
+            var inputModel = new ArquivoProdutoInputModel() { ProdutoId = (int)HttpContext.Session.GetInt32("ProdutoId") };
+            return View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarImagem(ArquivoProdutoInputModel inputModel)
+        {
+            try
+            {
+                await _produtoService.AdicionarImagemProduto(inputModel.Arquivo, inputModel.ProdutoId);
+                return RedirectToAction("AtualizarImagem", new { id = inputModel.ProdutoId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao adicionar imagem: " + ex.Message;
+                return RedirectToAction("AtualizarImagem", new { id = inputModel.ProdutoId });
             }
         }
     }

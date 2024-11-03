@@ -1,9 +1,11 @@
-﻿using StudioHair.Application.InputModels;
+﻿using Microsoft.AspNetCore.Http;
+using StudioHair.Application.InputModels;
 using StudioHair.Application.Services.Interfaces;
 using StudioHair.Application.ViewModels;
 using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
+using System;
 using System.Globalization;
 
 namespace StudioHair.Application.Services.Implementations
@@ -15,6 +17,32 @@ namespace StudioHair.Application.Services.Implementations
         public ProdutoService(IProdutoRepository produtoRepository)
         {
             _produtoRepository = produtoRepository;
+        }
+
+        public async Task AdicionarImagemProduto(IFormFile arquivo, int produtoId)
+        {
+            // Definir o diretório de upload dentro de wwwroot
+            var caminhoPasta = Path.Combine("wwwroot", "uploads");
+            if (!Directory.Exists(caminhoPasta))
+            {
+                Directory.CreateDirectory(caminhoPasta);
+            }
+
+            // Gerar o nome do arquivo
+            string extensao = Path.GetExtension(arquivo.FileName);
+            var nomeArquivoGerado = Guid.NewGuid().ToString() + "_" + produtoId + extensao;
+            var caminhoCompleto = Path.Combine(caminhoPasta, nomeArquivoGerado);
+
+            // Salvar o arquivo no caminho completo
+            using (var stream = new FileStream(caminhoCompleto, FileMode.Create))
+            {
+                await arquivo.CopyToAsync(stream);
+            }
+
+            // Salvar o caminho relativo no banco de dados (começando com "/uploads")
+            var caminhoRelativo = $"/uploads/{nomeArquivoGerado}";
+            var arquivoBanco = new Arquivo(nomeArquivoGerado, caminhoRelativo, produtoId);
+            await _produtoRepository.CriarArquivoAsync(arquivoBanco);
         }
 
         public async Task AtualizarProduto(AtualizarProdutoInputModel inputModel)
@@ -61,6 +89,11 @@ namespace StudioHair.Application.Services.Implementations
 
             var id = await _produtoRepository.CriarProdutoAsync(produto);
 
+            if (inputModel.Arquivo != null && inputModel.Arquivo.Length > 0)
+            {
+                await AdicionarImagemProduto(inputModel.Arquivo, id);
+            }
+
             return id;
         }
 
@@ -70,12 +103,43 @@ namespace StudioHair.Application.Services.Implementations
             await _produtoRepository.CriarProdutoUnidadeAsync(produtoUnidade);
        }
 
+        public async Task DeletarImagemProduto(int imagemId)
+        {
+            var imagem = await _produtoRepository.GetImagemProduto(imagemId);
+            if (imagem == null)
+                throw new Exception("Imagem não encontrada");
+
+            var caminhoPasta = Path.Combine("wwwroot", "uploads");
+            var caminhoCompleto = Path.Combine(caminhoPasta, imagem.NomeArquivo);
+            if (File.Exists(caminhoCompleto))
+            {
+                File.Delete(caminhoCompleto);
+            }
+
+            await _produtoRepository.DeletarImagem(imagem);
+        }
+
         public async Task DeletarUnidade(int id)
         {
             var produtoUnidade = await _produtoRepository.GetProdutoUnidadePorIdAsync(id);
             if (produtoUnidade == null)
                 throw new Exception("Unidade não encontrada");
             await _produtoRepository.DeletarProdutoUnidadeAsync(produtoUnidade);
+        }
+
+        public async Task<ImagemProdutoViewModel> GetImagemProduto(int produtoId)
+        {
+            var imagemProduto = await _produtoRepository.GetArquivoProduto(produtoId);
+            if (imagemProduto == null)
+            {
+                var imagemViewModel = new ImagemProdutoViewModel(0, null, null, produtoId);
+                return imagemViewModel;
+            }
+            else
+            {
+                var imagemViewModel = new ImagemProdutoViewModel(imagemProduto.Id, imagemProduto.Caminho, imagemProduto.Produto.Nome, produtoId);
+                return imagemViewModel;
+            }
         }
 
         public async Task<ProdutoConfigViewModel> GetProdutoConfigPorId(int id)

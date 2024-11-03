@@ -12,5 +12,9 @@ namespace StudioHair.Core.Interfaces
         Task DeletarProdutoUnidadeAsync(ProdutoUnidade produtoUnidade);
         Task<IEnumerable<Produto>> GetProdutosAsync();
         Task AtualizarProdutoUnidadeAsync(ProdutoUnidade produtoUnidade);
+        Task CriarArquivoAsync(Arquivo arquivo);
+        Task<Arquivo> GetArquivoProduto(int produtoId);
+        Task<Arquivo> GetImagemProduto(int imagemId);
+        Task DeletarImagem(Arquivo arquivo);
     }
 }

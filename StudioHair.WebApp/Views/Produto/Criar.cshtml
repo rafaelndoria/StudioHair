@@ -8,7 +8,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form id="formCadastro" asp-controller="Produto" asp-action="Criar" method="post">
+                    <!-- Adicione o enctype="multipart/form-data" aqui -->
+                    <form id="formCadastro" asp-controller="Produto" asp-action="Criar" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <input asp-for="RedirecionarUnidade" type="hidden" class="form-control" id="inputRedUnidade" value="">
                         </div>
@@ -34,6 +35,10 @@
                                 <input asp-for="ValorVendas" type="text" class="form-control" placeholder="Digite o valor de vendas" value="@Model.ValorVendas">
                                 <span asp-validation-for="ValorVendas" class="text-danger"></span>
                             </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label asp-for="Arquivo">Escolha uma imagem:</label>
+                            <input asp-for="Arquivo" type="file" id="arquivo" name="Arquivo" accept=".jpg, .jpeg, .png" />
                         </div>
                         <div class="form-group mt-2">
                             <label asp-for="ProdutoParaVenda" class="form-check-label">Produto para Venda</label>
@@ -85,8 +90,4 @@
         btnUnidade.addEventListener("click", AdicionarValorUnidade);
         btnSalvar.addEventListener("click", AtualizarRedirecionarUnidade);
     });
-
 </script>
-
-
-

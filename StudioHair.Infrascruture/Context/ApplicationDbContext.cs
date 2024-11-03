@@ -22,6 +22,7 @@ namespace StudioHair.Infrascruture.Context
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Venda> Vendas { get; set; }
         public DbSet<ConfiguracaoSistema> ConfiguracaoSistemas { get; set; }
+        public DbSet<Arquivo> Arquivos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

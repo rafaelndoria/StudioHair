@@ -1,0 +1,36 @@
+﻿@model ImagemProdutoViewModel
+@{
+    ViewData["Title"] = "Atualizar Imagem";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <div class="position-relative" style="width: 100%; height: 300px; border: 1px solid #ddd; overflow: hidden;">
+                            @if (string.IsNullOrEmpty(Model.Caminho))
+                            {
+                                <span class="d-flex align-items-center justify-content-center h-100" style="color: #888;">
+                                    Nenhuma imagem carregada
+                                </span>
+                            }
+                            else
+                            {
+                                <img src="@Url.Content("~" + @Model.Caminho)" alt="Imagem do Produto: @Model.NomeProduto" class="img-fluid h-100" style="object-fit: cover;">
+                            }
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center mb-3">
+                        <a asp-controller="Produto" asp-action="DeletarImagem" asp-route-id="@Model.ImagemId" class="btn btn-danger me-2 @(Model.Caminho == null ? "disabled" : "")">Excluir</a>
+                        <a asp-controller="Produto" asp-action="AdicionarImagem" asp-route-id="@Model.ProdutoId" class="btn btn-primary @(Model.Caminho != null ? "disabled" : "")">Adicionar</a>
+                    </div>
+
+                    <a asp-controller="Produto" asp-action="Config" asp-route-id="@Model.ProdutoId" class="btn btn-outline-danger">Voltar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

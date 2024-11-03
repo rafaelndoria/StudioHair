@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudioHair.Application.InputModels
 {
@@ -23,5 +24,6 @@ namespace StudioHair.Application.InputModels
         public bool ControlaEstoque { get; set; }
         public bool RedirecionarUnidade { get; set; } = false;
         public int? Id { get; set; }
+        public IFormFile? Arquivo { get; set; }
     }
 }

@@ -1,0 +1,26 @@
+﻿@model ArquivoProdutoInputModel
+@{
+    ViewData["Title"] = "Adicionar Imagem";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-controller="Produto" asp-action="AdicionarImagem" method="post" enctype="multipart/form-data">
+                        <div class="form-group mt-2">
+                            <label asp-for="Arquivo">Escolha uma imagem:</label>
+                            <input asp-for="Arquivo" type="file" id="arquivo" name="Arquivo" accept=".jpg, .jpeg, .png" required/>
+
+                            <input asp-for="ProdutoId" type="number" id="produtoId" name="ProdutoId" value="@Model.ProdutoId" hidden/>
+                        </div>
+                        <div class="form-group mt-2">
+                            <button type="submit" class="btn btn-success">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

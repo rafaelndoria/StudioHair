@@ -29,6 +29,7 @@
             ProdutoUnidades = new List<ProdutoUnidade>();
             ProdutosVendas = new List<ProdutosVenda>();
             ProdutosServicos = new List<ProdutosServico>();
+            Arquivos = new List<Arquivo>();
         }
 
         public string Nome { get; private set; }
@@ -41,6 +42,7 @@
         public List<ProdutoUnidade> ProdutoUnidades { get; set; }
         public List<ProdutosVenda> ProdutosVendas { get; set; }
         public List<ProdutosServico> ProdutosServicos { get; set; }
+        public List<Arquivo> Arquivos { get; set; }
 
         public void Atualizar(string nome, string marca, string codigoBarras, decimal valorPraticado, bool produtoParaVenda, bool controlaEstoque)
         {
