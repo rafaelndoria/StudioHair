@@ -25,5 +25,6 @@ namespace StudioHair.Application.InputModels
         public bool RedirecionarUnidade { get; set; } = false;
         public int? Id { get; set; }
         public IFormFile? Arquivo { get; set; }
+        public string? Descricao { get; set; }
     }
 }

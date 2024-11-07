@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudioHair.Infrascruture.Context;
 
@@ -11,9 +12,11 @@ using StudioHair.Infrascruture.Context;
 namespace StudioHair.Infrascruture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241103161013_AdicionandoColunaDeDescricaoProduto")]
+    partial class AdicionandoColunaDeDescricaoProduto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,54 +120,6 @@ namespace StudioHair.Infrascruture.Migrations
                     b.HasIndex("ProdutoId");
 
                     b.ToTable("Arquivos");
-                });
-
-            modelBuilder.Entity("StudioHair.Core.Entities.Carrinho", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClienteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
-
-                    b.ToTable("Carrinhos");
-                });
-
-            modelBuilder.Entity("StudioHair.Core.Entities.CarrinhoItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CarrinhoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProdutoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantidade")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarrinhoId");
-
-                    b.HasIndex("ProdutoId");
-
-                    b.ToTable("CarrinhoItems");
                 });
 
             modelBuilder.Entity("StudioHair.Core.Entities.Cliente", b =>
@@ -569,7 +524,7 @@ namespace StudioHair.Infrascruture.Migrations
                         {
                             Id = 1,
                             Ativo = true,
-                            DataDeCadastro = new DateTime(2024, 11, 4, 21, 43, 55, 206, DateTimeKind.Local).AddTicks(6621),
+                            DataDeCadastro = new DateTime(2024, 11, 3, 13, 10, 11, 985, DateTimeKind.Local).AddTicks(3433),
                             Email = "admin@gmail.com",
                             Nome = "admin",
                             Papel = 1,
@@ -642,36 +597,6 @@ namespace StudioHair.Infrascruture.Migrations
                         .HasForeignKey("ProdutoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Produto");
-                });
-
-            modelBuilder.Entity("StudioHair.Core.Entities.Carrinho", b =>
-                {
-                    b.HasOne("StudioHair.Core.Entities.Cliente", "Cliente")
-                        .WithOne("Carrinho")
-                        .HasForeignKey("StudioHair.Core.Entities.Carrinho", "ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
-            modelBuilder.Entity("StudioHair.Core.Entities.CarrinhoItem", b =>
-                {
-                    b.HasOne("StudioHair.Core.Entities.Carrinho", "Carrinho")
-                        .WithMany("CarrinhoItems")
-                        .HasForeignKey("CarrinhoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StudioHair.Core.Entities.Produto", "Produto")
-                        .WithMany("CarrinhoItems")
-                        .HasForeignKey("ProdutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carrinho");
 
                     b.Navigation("Produto");
                 });
@@ -795,16 +720,9 @@ namespace StudioHair.Infrascruture.Migrations
                     b.Navigation("AgendamentoServicos");
                 });
 
-            modelBuilder.Entity("StudioHair.Core.Entities.Carrinho", b =>
-                {
-                    b.Navigation("CarrinhoItems");
-                });
-
             modelBuilder.Entity("StudioHair.Core.Entities.Cliente", b =>
                 {
                     b.Navigation("Agendamentos");
-
-                    b.Navigation("Carrinho");
 
                     b.Navigation("HistoricoClientes");
 
@@ -821,8 +739,6 @@ namespace StudioHair.Infrascruture.Migrations
             modelBuilder.Entity("StudioHair.Core.Entities.Produto", b =>
                 {
                     b.Navigation("Arquivos");
-
-                    b.Navigation("CarrinhoItems");
 
                     b.Navigation("ProdutoUnidades");
 

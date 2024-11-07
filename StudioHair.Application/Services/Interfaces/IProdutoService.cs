@@ -21,5 +21,7 @@ namespace StudioHair.Application.Services.Interfaces
         Task AdicionarImagemProduto(IFormFile arquivo, int produtoId);
         Task<ImagemProdutoViewModel> GetImagemProduto(int produtoId);
         Task DeletarImagemProduto(int imagemId);
+        Task<CatalogoViewModel> GetProdutosCatalogo(int tamanhoPagina, int paginaAtual, string query);
+        Task<ProdutoDetalheCatalogoViewModel> GetDetalhesProduto(int produtoId);
     }
 }

@@ -62,7 +62,7 @@ namespace StudioHair.Application.Services.Implementations
 
         public async Task AtualizarProdutoInclusao(CadastroProdutoInputModel inputModel)
         {
-            var produto = new Produto((int)inputModel.Id, inputModel.Nome, inputModel.Marca, inputModel.CodigoBarras, decimal.Parse(inputModel.ValorVendas), inputModel.ProdutoParaVenda, inputModel.ControlaEstoque);
+            var produto = new Produto((int)inputModel.Id, inputModel.Nome, inputModel.Marca, inputModel.CodigoBarras, decimal.Parse(inputModel.ValorVendas), inputModel.ProdutoParaVenda, inputModel.ControlaEstoque, inputModel.Descricao);
             await _produtoRepository.AtualizarProdutoAsync(produto);
         }
 
@@ -85,7 +85,8 @@ namespace StudioHair.Application.Services.Implementations
                                       inputModel.CodigoBarras,
                                       valorVendas,
                                       inputModel.ProdutoParaVenda,
-                                      inputModel.ControlaEstoque);
+                                      inputModel.ControlaEstoque,
+                                      inputModel.Descricao);
 
             var id = await _produtoRepository.CriarProdutoAsync(produto);
 
@@ -125,6 +126,17 @@ namespace StudioHair.Application.Services.Implementations
             if (produtoUnidade == null)
                 throw new Exception("Unidade não encontrada");
             await _produtoRepository.DeletarProdutoUnidadeAsync(produtoUnidade);
+        }
+
+        public async Task<ProdutoDetalheCatalogoViewModel> GetDetalhesProduto(int produtoId)
+        {
+            var produto = await _produtoRepository.GetProdutoPorIdAsync(produtoId);
+            if (produto == null)
+                throw new Exception("Produto não encontrado");
+
+            var detalhesProduto = new ProdutoDetalheCatalogoViewModel(produto.Nome, produto.Descricao, produto.Marca, produto.ValorPraticado, produtoId, produto.Arquivos[0].Caminho);
+
+            return detalhesProduto;
         }
 
         public async Task<ImagemProdutoViewModel> GetImagemProduto(int produtoId)
@@ -205,6 +217,25 @@ namespace StudioHair.Application.Services.Implementations
                                 new ProdutoViewModel(x.Id, x.Nome, x.Marca, x.ValorPraticado));
 
             return viewModel; 
+        }
+
+        public async Task<CatalogoViewModel> GetProdutosCatalogo(int tamanhoPagina, int paginaAtual, string query)
+        {
+            // Obtenha o total de produtos para calcular o número total de páginas
+            int totalProdutos = await _produtoRepository.CountProdutosAsync();
+            int totalPaginas = (int)Math.Ceiling((double)totalProdutos / tamanhoPagina);
+            var catalogoViewModel = new CatalogoViewModel(paginaAtual, totalPaginas, tamanhoPagina);
+
+            // Busque os produtos da página atual
+            var produtos = await _produtoRepository.GetProdutosCatalogoAsync(tamanhoPagina, paginaAtual, query);
+            var list = produtos.Select(x => new CatalogoProdutoVendaViewModel(
+                x.Id,
+                x.Arquivos?.FirstOrDefault()?.Caminho,
+                x.Nome,
+                x.ValorPraticado)).ToList();
+            catalogoViewModel.Produtos = list;
+
+            return catalogoViewModel;
         }
 
         public async Task<List<ProdutoUnidadeViewModel>> GetUnidadesPorProdutoId(int id)

@@ -12,12 +12,14 @@ namespace StudioHair.WebApp.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHomeService _homeService;
         private readonly IUsuarioService _usuarioService;
+        private readonly IVendaService _vendaService;
 
-        public HomeController(ILogger<HomeController> logger, IHomeService homeService, IUsuarioService usuarioService)
+        public HomeController(ILogger<HomeController> logger, IHomeService homeService, IUsuarioService usuarioService, IVendaService vendaService)
         {
             _logger = logger;
             _homeService = homeService;
             _usuarioService = usuarioService;
+            _vendaService = vendaService;
         }
 
         public async Task<IActionResult> Index()
@@ -29,7 +31,22 @@ namespace StudioHair.WebApp.Controllers
         public async Task<IActionResult> IndexCliente()
         {
             var usuario = await _usuarioService.GetUsuarioLogado(User);
-            HttpContext.Session.SetString("ClienteId", usuario.Id.ToString());
+            HttpContext.Session.SetString("UsuarioId", usuario.Id.ToString());
+            if (usuario.Pessoa != null && usuario.Pessoa.Cliente != null)
+            {
+                HttpContext.Session.SetString("ClienteId", usuario.Pessoa.Cliente.Id.ToString());
+                var carrinho = await _vendaService.GetCarrinhoPorClienteId(usuario.Pessoa.Cliente.Id);
+                if (carrinho == null)
+                {
+                    var id = await _vendaService.CriarCarrinho(usuario.Pessoa.Cliente.Id);
+                    HttpContext.Session.SetString("CarrinhoId", id.ToString());
+                }
+                else
+                {
+                    HttpContext.Session.SetString("CarrinhoId", carrinho.Id.ToString());
+                }
+                HttpContext.Session.SetString("QuantidadeItensCarrinho", carrinho.CarrinhoItems.Count.ToString());
+            }
 
             var configs = await _usuarioService.GetConfigSistemaAsync(usuario.Id);
             // Salvar as configurações na sessão

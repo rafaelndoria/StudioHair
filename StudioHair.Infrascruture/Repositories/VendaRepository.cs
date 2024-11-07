@@ -21,6 +21,19 @@ namespace StudioHair.Infrascruture.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<int> CriarCarrinhoAsync(Carrinho carrinho)
+        {
+            _context.Carrinhos.Add(carrinho);
+            await _context.SaveChangesAsync();
+            return carrinho.Id; 
+        }
+
+        public async Task CriarCarrinhoItemAsync(CarrinhoItem carrinhoItem)
+        {
+            _context.CarrinhoItems.Add(carrinhoItem);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task CriarProdutoVendaAsync(ProdutosVenda produto)
         {
             _context.ProdutosVendas.Add(produto);
@@ -34,6 +47,13 @@ namespace StudioHair.Infrascruture.Repositories
             return venda.Id;
         }
 
+        public async Task DeletarItensCarrinhoAsync(int carrinhoId)
+        {
+            var carrinhoItens = _context.CarrinhoItems.Where(x => x.CarrinhoId == carrinhoId);
+            _context.CarrinhoItems.RemoveRange(carrinhoItens);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeletarProdutoVenda(ProdutosVenda produtoVenda)
         {
             _context.ProdutosVendas.Remove(produtoVenda);
@@ -43,6 +63,13 @@ namespace StudioHair.Infrascruture.Repositories
         public async Task DeletarVenda(Venda venda)
         {
             _context.Vendas.Remove(venda);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteItemCarrinhoPorProdutoIdAsync(int produtoId, int carrinhoId)
+        {
+            var itensCarrinho = await _context.CarrinhoItems.Where(x => x.ProdutoId == produtoId && x.CarrinhoId == carrinhoId).ToListAsync();
+            _context.CarrinhoItems.RemoveRange(itensCarrinho);
             await _context.SaveChangesAsync();
         }
 
@@ -69,6 +96,16 @@ namespace StudioHair.Infrascruture.Repositories
             }
 
             return await query.Include(x => x.Cliente).ThenInclude(x => x.Pessoa).ToListAsync();
+        }
+
+        public async Task<Carrinho> GetCarrinhoPorClienteIdAsync(int clienteId)
+        {
+            return await _context.Carrinhos.Include(x => x.CarrinhoItems).ThenInclude(x => x.Produto).FirstOrDefaultAsync(x => x.ClienteId == clienteId);
+        }
+
+        public async Task<Carrinho> GetCarrinhoPorIdAsync(int carrinhoId)
+        {
+            return await _context.Carrinhos.Include(x => x.CarrinhoItems).ThenInclude(x => x.Produto).FirstOrDefaultAsync(x => x.Id == carrinhoId);
         }
 
         public async Task<List<ProdutosVenda>> GetProdutosVendaAsync(int id)

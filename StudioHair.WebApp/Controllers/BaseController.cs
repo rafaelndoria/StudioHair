@@ -12,6 +12,9 @@ public class BaseController : Controller
         ViewBag.TamanhoFonte = context.HttpContext.Items["TamanhoFonte"] ?? "16";
         ViewBag.TemaDark = context.HttpContext.Items["TemaDark"] ?? "false";
 
+        // Carrinho
+        ViewBag.QuantidadeItensCarrinho = context.HttpContext.Session.GetString("QuantidadeItensCarrinho") ?? "0";
+
         base.OnActionExecuting(context);
     }
 }

@@ -15,5 +15,11 @@ namespace StudioHair.Core.Interfaces
         Task<List<Venda>> FiltrarVendasAsync(int clienteId, string periodo, DateTime inicial, DateTime final);
         Task<List<Venda>> GetVendasAsync();
         Task<List<Venda>> GetVendasRelatorioAsync(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<int> CriarCarrinhoAsync(Carrinho carrinho);
+        Task<Carrinho> GetCarrinhoPorClienteIdAsync(int clienteId);
+        Task CriarCarrinhoItemAsync(CarrinhoItem carrinhoItem);
+        Task<Carrinho> GetCarrinhoPorIdAsync(int carrinhoId);
+        Task DeletarItensCarrinhoAsync(int carrinhoId);
+        Task DeleteItemCarrinhoPorProdutoIdAsync(int produtoId, int carrinhoId);
     }
 }

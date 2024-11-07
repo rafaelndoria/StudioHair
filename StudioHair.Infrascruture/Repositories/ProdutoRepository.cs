@@ -26,6 +26,11 @@ namespace StudioHair.Infrascruture.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<int> CountProdutosAsync()
+        {
+            return await _context.Produto.Where(x => x.ProdutoParaVenda == true).CountAsync();
+        }
+
         public async Task CriarArquivoAsync(Arquivo arquivo)
         {
             _context.Arquivos.Add(arquivo);
@@ -69,12 +74,26 @@ namespace StudioHair.Infrascruture.Repositories
 
         public async Task<Produto> GetProdutoPorIdAsync(int id)
         {
-            return await _context.Produto.Include(x => x.ProdutoUnidades).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Produto.Include(x => x.ProdutoUnidades).Include(x => x.Arquivos).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Produto>> GetProdutosAsync()
         {
             return await _context.Produto.ToListAsync();
+        }
+
+        public async Task<List<Produto>> GetProdutosCatalogoAsync(int tamanhoPagina, int paginaAtual, string query)
+        {
+            int skip = (paginaAtual - 1) * tamanhoPagina;
+
+            return await _context.Produto
+                .Include(x => x.Arquivos)
+                .Where(x => x.ProdutoParaVenda == true &&
+                   (string.IsNullOrEmpty(query) || x.Nome.Contains(query)))
+                .OrderBy(p => p.Nome)
+                .Skip(skip)
+                .Take(tamanhoPagina)
+                .ToListAsync();
         }
 
         public async Task<ProdutoUnidade> GetProdutoUnidadePorIdAsync(int id)

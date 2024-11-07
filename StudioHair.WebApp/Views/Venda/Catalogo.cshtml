@@ -1,0 +1,164 @@
+﻿@model CatalogoViewModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Produtos";
+}
+
+<div class="container my-4">
+    <!-- Campo de Pesquisa -->
+    <div class="d-flex mb-4">
+        <input type="text" id="searchQuery" class="form-control me-2" placeholder="Pesquisar Produto" aria-label="Pesquisar Produto" style="font-size: var(--tamanho-fonte); color: var(--cor-fonte);">
+        <button type="button" class="btn btn-primary" style="background-color: var(--cor-primaria); border-color: var(--cor-primaria);" onclick="searchProduct()">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+
+    <!-- Lista de Produtos -->
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        @foreach (var produto in Model.Produtos)
+        {
+            <div class="col">
+                <div class="card h-100" style="border-color: var(--cor-primaria);">
+                    @if (string.IsNullOrEmpty(produto.CaminhoArquivo))
+                    {
+                        <div class="d-flex align-items-center justify-content-center" style="height: 200px; background-color: #f0f0f0; color: var(--cor-fonte); font-size: var(--tamanho-fonte);">
+                            Sem Foto
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~" + produto.CaminhoArquivo)" class="card-img-top" alt="@produto.NomeProduto" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body text-center d-flex flex-column justify-content-between">
+                        <!-- Limitar o título a duas linhas -->
+                        <h5 class="card-title" style="color: var(--cor-fonte); font-size: var(--tamanho-fonte); max-height: 3em; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                            @produto.NomeProduto
+                        </h5>
+                        <p class="card-text" style="color: var(--cor-fonte); font-size: calc(var(--tamanho-fonte) - 2px);">R$ @produto.ValorProduto</p>
+
+                        <!-- Controle de quantidade e botões de ação -->
+                        <div class="mt-auto">
+                            <div class="d-flex justify-content-center mb-3">
+                                <button class="btn btn-outline-primary me-1" onclick="decrementarQuantidade(this)" style="border-color: var(--cor-primaria); color: var(--cor-primaria);">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" class="form-control text-center mx-2" value="1" min="1" max="10" style="width: 60px; font-size: var(--tamanho-fonte); color: var(--cor-fonte);" onchange="validarQuantidade(this)">
+                                <button class="btn btn-outline-primary ms-1" onclick="incrementarQuantidade(this)" style="border-color: var(--cor-primaria); color: var(--cor-primaria);">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <a asp-controller="Venda" asp-action="DetalhesProduto" asp-route-produtoId="@produto.ProdutoId" class="btn btn-primary me-2" style="background-color: var(--cor-primaria); border-color: var(--cor-primaria);">
+                                    <i class="fas fa-search"></i> Detalhes
+                                </a>
+                                <button class="btn btn-success" style="background-color: #28a745; border-color: #28a745;" onclick="adicionarAoCarrinho(@produto.ProdutoId, @produto.ValorProduto, this)">
+                                    <i class="fas fa-shopping-cart"></i> Adicionar ao Carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Paginação -->
+    <div class="d-flex justify-content-center mt-4">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @if (Model.PaginaAtual > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Catalogo", new { tamanhoPagina = Model.TamanhoPagina, paginaAtual = Model.PaginaAtual - 1 })" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                }
+
+                @for (int i = 1; i <= Model.TotalPaginas; i++)
+                {
+                    if (i == Model.PaginaAtual)
+                    {
+                        <li class="page-item active"><span class="page-link">@i</span></li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("Catalogo", new { tamanhoPagina = Model.TamanhoPagina, paginaAtual = i })">@i</a>
+                        </li>
+                    }
+                }
+
+                @if (Model.PaginaAtual < Model.TotalPaginas)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Catalogo", new { tamanhoPagina = Model.TamanhoPagina, paginaAtual = Model.PaginaAtual + 1 })" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    function incrementarQuantidade(button) {
+        const input = button.previousElementSibling;
+        const currentValue = parseInt(input.value);
+        if (currentValue < 10) {
+            input.value = currentValue + 1;
+        }
+    }
+
+    function decrementarQuantidade(button) {
+        const input = button.nextElementSibling;
+        const currentValue = parseInt(input.value);
+        if (currentValue > 1) {
+            input.value = currentValue - 1;
+        }
+    }
+
+    function validarQuantidade(input) {
+        if (parseInt(input.value) < 1 || isNaN(input.value)) {
+            input.value = 1;
+        } else if (parseInt(input.value) > 10) {
+            input.value = 10;
+        }
+    }
+
+    function searchProduct() {
+        const query = document.getElementById("searchQuery").value;
+        const tamanhoPagina = 10;
+        const paginaAtual = 1;
+
+        window.location.href = `/Venda/Catalogo?tamanhoPagina=${tamanhoPagina}&paginaAtual=${paginaAtual}&query=${encodeURIComponent(query)}`;
+    }
+
+    function adicionarAoCarrinho(produtoId, valorProduto, button) {
+        const quantidadeInput = button.closest('.card-body').querySelector('input[type="number"]');
+        const quantidade = parseInt(quantidadeInput.value);
+
+        fetch('/Venda/AdicionarAoCarrinho', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ produtoId: produtoId, quantidade: quantidade, valorProduto: valorProduto })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.sucesso) {
+                    alert("Produto adicionado ao carrinho!");
+                } else {
+                    alert("Erro ao adicionar produto ao carrinho.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao adicionar ao carrinho:", error);
+                alert("Erro ao adicionar produto ao carrinho.");
+            });
+    }
+
+</script>

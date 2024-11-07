@@ -6,13 +6,15 @@ using StudioHair.Application.Services.Interfaces;
 namespace StudioHair.WebApp.Controllers
 {
     [Authorize]
-    public class VendaController : Controller
+    public class VendaController : BaseController
     {
         private readonly IVendaService _vendaService;
+        private readonly IProdutoService _produtoService;
 
-        public VendaController(IVendaService vendaService)
+        public VendaController(IVendaService vendaService, IProdutoService produtoService)
         {
             _vendaService = vendaService;
+            _produtoService = produtoService;
         }
 
         public async Task<IActionResult> Criar()
@@ -89,7 +91,7 @@ namespace StudioHair.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao abrir a listagem das vendas: "+ ex.Message;
+                TempData["Erro"] = "Erro ao abrir a listagem das vendas: " + ex.Message;
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -104,7 +106,7 @@ namespace StudioHair.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao filtrar as vendas: "+ ex.Message;
+                TempData["Erro"] = "Erro ao filtrar as vendas: " + ex.Message;
                 return View("List", inputModel);
             }
         }
@@ -118,8 +120,104 @@ namespace StudioHair.WebApp.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Erro"] = "Erro ao abrir os detalhes da venda: "+ ex.Message;
+                TempData["Erro"] = "Erro ao abrir os detalhes da venda: " + ex.Message;
                 return View("List");
+            }
+        }
+
+        public async Task<IActionResult> Catalogo(int tamanhoPagina = 10, int paginaAtual = 1, string query = "")
+        {
+            try
+            {
+                var produtosViewModel = await _produtoService.GetProdutosCatalogo(tamanhoPagina, paginaAtual, query);
+                return View(produtosViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao abrir o catálogo de produtos: " + ex.Message;
+                return RedirectToAction("Home", "IndexCliente");
+            }
+        }
+
+        public async Task<IActionResult> DetalhesProduto(int produtoId)
+        {
+            try
+            {
+                var produtoDetalhesViewModel = await _produtoService.GetDetalhesProduto(produtoId);
+                return View(produtoDetalhesViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao abrir os detalhes do produto: " + ex.Message;
+                return RedirectToAction("Catalogo");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AdicionarAoCarrinho([FromBody] AdicionarAoCarrinhoInputModel request)
+        {
+            try
+            {
+                if (request == null || request.ProdutoId <= 0 || request.Quantidade <= 0)
+                {
+                    return Json(new { sucesso = false, mensagem = "Dados inválidos." });
+                }
+
+                var carrinhoClienteId = int.Parse(HttpContext.Session.GetString("CarrinhoId"));
+                var carrinho = await _vendaService.AdicionarItemCarrinho(request, carrinhoClienteId);
+                // Atualize o valor na sessão
+                HttpContext.Session.SetString("QuantidadeItensCarrinho", carrinho.CarrinhoItems.Count.ToString());
+
+                return Json(new { sucesso = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { sucesso = false, mensagem = "Erro ao adicionado o produto no carrinho: " + ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> Carrinho()
+        {
+            try
+            {
+                var carrinhoViewModel = await _vendaService.GetCarrinhoDetalhes(int.Parse(HttpContext.Session.GetString("CarrinhoId")));
+                return View(carrinhoViewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao abrir o carrinho de produtos: " + ex.Message;
+                return RedirectToAction("Catalogo");
+            }
+        }
+
+        public async Task<IActionResult> FinalizarCarrinho()
+        {
+            try
+            {
+                await _vendaService.FinalizarCarrinho(int.Parse(HttpContext.Session.GetString("CarrinhoId")), int.Parse(HttpContext.Session.GetString("ClienteId")));
+
+                TempData["Ok"] = "Compra finalizada com sucesso";
+                return RedirectToAction("Catalogo");
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro finalizar o carrinho, tente novamente mais tarde: " + ex.Message;
+                return RedirectToAction("Carrinho");
+            }
+        }
+
+        public async Task<IActionResult> ExcluirItemCarrinho(int produtoId)
+        {
+            try
+            {
+                var carrinhoId = int.Parse(HttpContext.Session.GetString("CarrinhoId"));
+                await _vendaService.ExcluirProdutoCarrinho(produtoId, carrinhoId);
+                return RedirectToAction("Carrinho");
+            }
+            catch (Exception ex)
+            {
+                TempData["Erro"] = "Erro ao excluir o item do carrinho: " + ex.Message;
+                return RedirectToAction("Carrinho");
             }
         }
     }

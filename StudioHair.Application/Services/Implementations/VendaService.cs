@@ -22,6 +22,14 @@ namespace StudioHair.Application.Services.Implementations
             _produtoRepository = produtoRepository;
         }
 
+        public async Task<Carrinho> AdicionarItemCarrinho(AdicionarAoCarrinhoInputModel inputModel, int carrinhoId)
+        {
+            var carrinhoItem = new CarrinhoItem(inputModel.Quantidade, inputModel.ValorProduto, inputModel.ProdutoId, carrinhoId);
+            await _vendaRepository.CriarCarrinhoItemAsync(carrinhoItem);
+            var carrinho = await _vendaRepository.GetCarrinhoPorIdAsync(carrinhoId);
+            return carrinho;
+        }
+
         public async Task<decimal> AdicionarProdutoVenda(CadastroVendaInputModel inputModel)
         {
             var culture = new CultureInfo("pt-BR");
@@ -36,6 +44,13 @@ namespace StudioHair.Application.Services.Implementations
             await _vendaRepository.AtualizarVendaAsync(venda);
 
             return (decimal)venda.Total;
+        }
+
+        public async Task<int> CriarCarrinho(int clienteId)
+        {
+            var carrinho = new Carrinho(clienteId);
+            var id = await _vendaRepository.CriarCarrinhoAsync(carrinho);
+            return id;
         }
 
         public async Task<int> CriarVenda(CadastroVendaInputModel inputModel)
@@ -56,12 +71,81 @@ namespace StudioHair.Application.Services.Implementations
             await _vendaRepository.DeletarVenda(venda);
         }
 
+        public async Task EsvaziarItensCarrinho(int carrinhoId)
+        {
+            await _vendaRepository.DeletarItensCarrinhoAsync(carrinhoId);
+        }
+
+        public async Task ExcluirProdutoCarrinho(int produtoId, int carrinhoId)
+        {
+            await _vendaRepository.DeleteItemCarrinhoPorProdutoIdAsync(produtoId, carrinhoId);
+        }
+
         public async Task<IEnumerable<VendasViewModel>> FiltrarVendas(FiltroListVendasInputModel inputModel)
         {
             var vendas = await _vendaRepository.FiltrarVendasAsync(inputModel.ClienteId, inputModel.Periodo, inputModel.Inicial, inputModel.Final);
             var vendasViewModel = vendas.Select(x =>
                                                     new VendasViewModel(x.Id, x.Cliente.Pessoa.Nome, x.DataDaVenda, (decimal)x.Total, Enum.GetName(typeof(ETipoPagamento), x.TipoPagamento)));
             return vendasViewModel;
+        }
+
+        public async Task FinalizarCarrinho(int carrinhoId, int clienteId)
+        {
+            var carrinho = await _vendaRepository.GetCarrinhoPorIdAsync(carrinhoId);
+            if (carrinho == null)
+                throw new Exception("Não foi possivel encontrar o carrinho");
+            if (carrinho.CarrinhoItems.Count == 0)
+                throw new Exception("Carrinho não tem itens");
+
+            var venda = new Venda(ETipoPagamento.Dinheiro, clienteId);
+            var vendaId = await _vendaRepository.CriarVendaAsync(venda);
+
+            foreach (var item in carrinho.CarrinhoItems)
+            {
+                var vendaItem = new ProdutosVenda(item.Valor, item.Quantidade, vendaId, item.ProdutoId);
+                venda.AdicionarValor(item.Valor * item.Quantidade);
+                await _vendaRepository.CriarProdutoVendaAsync(vendaItem);
+            }
+
+            await _vendaRepository.AtualizarVendaAsync(venda);
+            await EsvaziarItensCarrinho(carrinhoId);
+        } 
+
+        public async Task<CarrinhoDetalhesViewModel> GetCarrinhoDetalhes(int carrinhoId)
+        {
+            var carrinho = await _vendaRepository.GetCarrinhoPorIdAsync(carrinhoId);
+            if (carrinho == null)
+                throw new Exception("Não foi possivel buscar o carrinho");
+
+            var totalCarrinho = 0m;
+            var itensCarrinhoViewModel = new List<ItemCarrinhoViewModel>();
+
+            var itensAgrupados = carrinho.CarrinhoItems
+                .GroupBy(item => item.ProdutoId)
+                .Select(grupo => new
+                {
+                    ProdutoId = grupo.Key,
+                    Nome = grupo.First().Produto.Nome,
+                    QuantidadeTotal = grupo.Sum(item => item.Quantidade),
+                    ValorUnitario = grupo.First().Valor
+                });
+
+            foreach (var item in itensAgrupados)
+            {
+                var itemCarrinho = new ItemCarrinhoViewModel(item.Nome, item.QuantidadeTotal, (item.QuantidadeTotal * item.ValorUnitario), item.ValorUnitario, item.ProdutoId);
+                itensCarrinhoViewModel.Add(itemCarrinho);
+                totalCarrinho += item.QuantidadeTotal * item.ValorUnitario;
+            }
+
+            var carrinhoViewModel = new CarrinhoDetalhesViewModel(totalCarrinho);
+            carrinhoViewModel.Itens = itensCarrinhoViewModel;
+
+            return carrinhoViewModel;
+        }
+
+        public async Task<Carrinho> GetCarrinhoPorClienteId(int clienteId)
+        {
+            return await _vendaRepository.GetCarrinhoPorClienteIdAsync(clienteId);
         }
 
         public async Task<DetalhesVendaViewModel> GetDetalhesVenda(int id)

@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /StudioHair.WebApp/wwwroot/uploads
+/StudioHair.WebApp/Documents/Modelagem.txt

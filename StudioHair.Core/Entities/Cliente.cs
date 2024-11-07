@@ -32,6 +32,7 @@
         public int PessoaId { get; private set; }
 
         public Pessoa? Pessoa { get; set; }
+        public Carrinho? Carrinho { get; set; }
         public List<Venda>? Vendas { get; set; }
         public List<Agendamento> Agendamentos { get; set; }
         public List<HistoricoCliente> HistoricoClientes { get; set; }

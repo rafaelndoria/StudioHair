@@ -24,6 +24,10 @@
                             <span asp-validation-for="Marca" class="text-danger"></span>
                         </div>
                         <div class="form-group mt-2">
+                            <label asp-for="Descricao" class="form-label">Descrição</label>
+                            <input asp-for="Descricao" type="text" class="form-control" placeholder="Digite a descrição" value="@Model.Descricao">
+                        </div>
+                        <div class="form-group mt-2">
                             <label asp-for="CodigoBarras" class="form-label">Código de Barras</label>
                             <input asp-for="CodigoBarras" type="text" class="form-control" placeholder="Digite o código de barras" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="@Model.CodigoBarras">
                             <span asp-validation-for="CodigoBarras" class="text-danger"></span>
@@ -38,7 +42,7 @@
                         </div>
                         <div class="form-group mt-2">
                             <label asp-for="Arquivo">Escolha uma imagem:</label>
-                            <input asp-for="Arquivo" type="file" id="arquivo" name="Arquivo" accept=".jpg, .jpeg, .png" />
+                            <input asp-for="Arquivo" type="file" id="arquivo" name="Arquivo" accept=".jpg, .jpeg, .png, .jfif" class="form-control" />
                         </div>
                         <div class="form-group mt-2">
                             <label asp-for="ProdutoParaVenda" class="form-check-label">Produto para Venda</label>

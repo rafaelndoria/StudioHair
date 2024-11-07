@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using StudioHair.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudioHair.Infrascruture.Configuration
 {
@@ -36,6 +30,9 @@ namespace StudioHair.Infrascruture.Configuration
 
             builder.Property(x => x.ControlaEstoque)
                .IsRequired();
+
+            builder.Property(x => x.Descricao)
+                .IsRequired(false);
         }
     }
 }

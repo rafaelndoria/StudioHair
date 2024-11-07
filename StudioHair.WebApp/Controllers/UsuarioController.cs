@@ -228,7 +228,7 @@ namespace StudioHair.WebApp.Controllers
             }
             try
             {
-                inputModel.UsuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                inputModel.UsuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
                 await _clienteService.CriarPessoa(inputModel);
                 return RedirectToAction("CadastroCliente");
             }
@@ -258,7 +258,7 @@ namespace StudioHair.WebApp.Controllers
                 var usuario = await _usuarioService.GetUsuarioLogado(User);
                 inputModel.PessoaId = usuario.Pessoa.Id;
                 await _clienteService.CriarCliente(inputModel);
-                return RedirectToAction("TelaCliente", "Home");
+                return RedirectToAction("IndexCliente", "Home");
             }
             catch (Exception ex)
             {
@@ -272,7 +272,7 @@ namespace StudioHair.WebApp.Controllers
         {
             try
             {
-                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
                 var configsInputModel = await _usuarioService.GetConfigSistemaAsync(usuarioId);
                 return View(configsInputModel);
             }
@@ -362,7 +362,7 @@ namespace StudioHair.WebApp.Controllers
             }
             try
             {
-                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
                 await _usuarioService.RedefinirSenhaUsuario(inputModel, usuarioId);
                 TempData["Sucesso"] = "Senha alterada com sucesso";
                 return RedirectToAction("RedefinirSenhaUsuario");
@@ -379,8 +379,8 @@ namespace StudioHair.WebApp.Controllers
         {
             try
             {
-                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
-                var inputModel = await _usuarioService.GetInfoPessoaUsuario(usuarioId);
+                var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
+                var inputModel = await _usuarioService.GetInfoPessoaUsuario(usuarioId); 
                 inputModel.Id = usuarioId;
                 return View(inputModel);
             }
@@ -417,7 +417,7 @@ namespace StudioHair.WebApp.Controllers
         {
             try
             {
-                var usuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"));
+                var usuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"));
                 var inputModel = await _usuarioService.GetClienteUsuario(usuarioId);
                 inputModel.Id = usuarioId;
                 return View(inputModel);

@@ -154,7 +154,7 @@ namespace StudioHair.WebApp.Controllers
                     Dia = inputModel.DataEscolhida,
                     HoraInicial = inputModel.HoraInicial,
                     Servicos = listas.Servicos,
-                    UsuarioId = int.Parse(HttpContext.Session.GetString("ClienteId"))
+                    UsuarioId = int.Parse(HttpContext.Session.GetString("UsuarioId"))
                 };
                 return View(agendamentoInputModel);
             }

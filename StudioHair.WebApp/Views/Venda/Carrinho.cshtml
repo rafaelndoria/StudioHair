@@ -1,0 +1,40 @@
+﻿@model CarrinhoDetalhesViewModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Carrinho";
+}
+
+<div class="container">
+    <h2>Detalhes do Carrinho</h2>
+
+    <table class="table table-striped table-bordered mt-4">
+        <thead style="background-color: var(--cor-primaria); color: var(--cor-fonte); font-size: var(--tamanho-fonte);">
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Unitário</th>
+                <th>Valor Total</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Itens)
+            {
+                <tr>
+                    <td>@item.NomeProduto</td>
+                    <td>@item.Quantidade</td>
+                    <td>@item.ValorUnitario.ToString("C")</td>
+                    <td>@item.ValorTotal.ToString("C")</td>
+                    <td>
+                        <a asp-controller="Venda" asp-action="ExcluirItemCarrinho" asp-route-produtoId="@item.ProdutoId" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <h4>Total: <span>@Model.ValorTotal.ToString("C")</span></h4>
+        <a asp-controller="Venda" asp-action="FinalizarCarrinho" class="btn btn-success">Finalizar Compra</a>
+    </div>
+</div>

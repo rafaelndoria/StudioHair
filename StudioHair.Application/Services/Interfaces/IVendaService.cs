@@ -16,5 +16,12 @@ namespace StudioHair.Application.Services.Interfaces
         Task<DetalhesVendaViewModel> GetDetalhesVenda(int id);
         Task<IEnumerable<RVendasPorPeriodoViewModel>> RVendasPorPeriodo(int clienteId, string periodo, DateTime inicial, DateTime final);
         Task<IEnumerable<RTicketMedioViewModel>> RTicketMedio(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<int> CriarCarrinho(int clienteId);
+        Task<Carrinho> GetCarrinhoPorClienteId(int clienteId);
+        Task<Carrinho> AdicionarItemCarrinho(AdicionarAoCarrinhoInputModel inputModel, int carrinhoId);
+        Task<CarrinhoDetalhesViewModel> GetCarrinhoDetalhes(int carrinhoId);
+        Task FinalizarCarrinho(int carrinhoId, int clienteId);
+        Task EsvaziarItensCarrinho(int carrinhoId);
+        Task ExcluirProdutoCarrinho(int produtoId, int carrinhoId);
     }
 }

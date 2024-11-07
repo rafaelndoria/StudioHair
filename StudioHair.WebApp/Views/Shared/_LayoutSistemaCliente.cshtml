@@ -75,10 +75,21 @@
                     <a asp-controller="Agendamento" asp-action="DataDisponivel" class="nav-link">Agendamentos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Loja</a>
+                    <a asp-controller="Venda" asp-action="Catalogo" class="nav-link">Loja</a>
                 </li>
             </ul>
             <ul class="navbar-nav">
+                <!-- Carrinho com indicador de número de itens -->
+                <li class="nav-item position-relative me-3">
+                    <a asp-controller="Venda" asp-action="Carrinho" class="nav-link">
+                        <i class="fas fa-shopping-cart"></i>
+                        <!-- Indicador de número de itens no carrinho -->
+                       @*  <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle">
+                            @ViewBag.QuantidadeItensCarrinho
+                        </span> *@
+                    </a>
+                </li>
+                <!-- Ícone de perfil do usuário -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user"></i>

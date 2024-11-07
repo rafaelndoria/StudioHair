@@ -1,0 +1,88 @@
+﻿@model ProdutoDetalheCatalogoViewModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Detalhes do produto.";
+}
+
+<div class="container my-5" style="color: var(--cor-fonte); font-size: var(--tamanho-fonte);">
+    <div class="row">
+        <!-- Lado Esquerdo: Informações do Produto -->
+        <div class="col-md-6" style="background-color: var(--cor-primaria); padding: 20px; border-radius: 8px;">
+            <h2 style="color: var(--cor-secundaria);">Detalhes do Produto</h2>
+            <p><strong>Nome:</strong> <span id="nomeProduto">@Model.NomeProduto</span></p>
+            <p><strong>Marca:</strong> <span id="marcaProduto">@Model.Marca</span></p>
+            <p><strong>Descrição:</strong> <span id="descricaoProduto">@Model.Descricao</span></p>
+            <p><strong>Valor:</strong> <span id="valorProduto">R$ @Model.Valor</span></p>
+        </div>
+
+        <!-- Lado Direito: Imagem e Controles de Quantidade -->
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <!-- Imagem do Produto -->
+            @if (string.IsNullOrEmpty(Model.CaminhoImagem))
+            {
+                <div class="d-flex align-items-center justify-content-center" style="height: 200px; background-color: #f0f0f0; color: var(--cor-fonte); font-size: var(--tamanho-fonte);">
+                    Sem Foto
+                </div>
+            }
+            else
+            {
+                <div class="mb-4" style="width: 100%; text-align: center;">
+                    <img src="@Url.Content("~" + Model.CaminhoImagem)" class="card-img-top" alt="@Model.NomeProduto" style="max-width: 100%; height: auto; border-radius: 8px;">
+                </div>
+            }
+
+            <!-- Controles de Quantidade -->
+            <div class="d-flex align-items-center mb-4" style="width: 50%;">
+                <button type="button" class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                <input type="text" id="quantidade" class="form-control text-center mx-2" value="1" style="width: 50px;">
+                <button type="button" class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
+            </div>
+
+            <!-- Botão Adicionar ao Carrinho -->
+            <button type="button" class="btn btn-primary" style="background-color: var(--cor-primaria); border-color: var(--cor-primaria);" onclick="adicionarAoCarrinho(@Model.ProdutoId, @Model.Valor)">
+                Adicionar ao Carrinho
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function decreaseQuantity() {
+        const quantidadeInput = document.getElementById("quantidade");
+        let quantidade = parseInt(quantidadeInput.value);
+        if (quantidade > 1) {
+            quantidadeInput.value = quantidade - 1;
+        }
+    }
+
+    function increaseQuantity() {
+        const quantidadeInput = document.getElementById("quantidade");
+        let quantidade = parseInt(quantidadeInput.value);
+        quantidadeInput.value = quantidade + 1;
+    }
+
+    function adicionarAoCarrinho(produtoId, valorProduto) {
+        const quantidade = parseInt(document.getElementById("quantidade").value);
+
+        fetch('/Venda/AdicionarAoCarrinho', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            body: JSON.stringify({ produtoId: produtoId, quantidade: quantidade, valorProduto: valorProduto })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.sucesso) {
+                alert("Produto adicionado ao carrinho!");
+            } else {
+                alert("Erro ao adicionar produto ao carrinho.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao adicionar ao carrinho:", error);
+            alert("Erro ao adicionar produto ao carrinho.");
+        });
+    }
+</script>

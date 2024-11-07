@@ -16,5 +16,7 @@ namespace StudioHair.Core.Interfaces
         Task<Arquivo> GetArquivoProduto(int produtoId);
         Task<Arquivo> GetImagemProduto(int imagemId);
         Task DeletarImagem(Arquivo arquivo);
+        Task<List<Produto>> GetProdutosCatalogoAsync(int tamanhoPagina, int paginaAtual, string query);
+        Task<int> CountProdutosAsync();
     }
 }
