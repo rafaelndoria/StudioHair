@@ -1,0 +1,47 @@
+﻿@using StudioHair.Core.Enums
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Análises Gerenciais";
+}
+
+<div class="container my-5">
+    <div class="card" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+        <h5 class="text-center">Escolha uma opção</h5>
+    </div>
+    @* Ajustar clique para que seja no botão inteiro e não apenas na descrição do botão *@
+    <div class="mt-4">
+        <h6>Relatórios e Gráficos</h6>
+        <div class="row g-3">
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.FaturamentoMensal">Faturamento Mensal</a>
+                </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.ServicosMaisVendidos">Serviços Mais Procurados</a>
+                </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.ProdutosMaisVendidos">Produtos Mais Vendidos</a>
+                </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.HorarioDePico">Horários de Pico</a>
+                </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.TicketMedioCliente">Ticket Médio por Cliente</a>
+                </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 d-flex">
+                <button class="btn flex-fill p-3" style="background-color: var(--cor-primaria); color: var(--cor-fonte); border: none; border-radius: 5px;">
+                    <a asp-controller="AnaliseGerencial" asp-action="Filtro" asp-route-tipoAnaliseGerencial="@ETipoAnaliseGerencial.ClientesFrequentes">Clientes Mais Frequentes</a>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -77,6 +77,15 @@
                 <li class="nav-item">
                     <a asp-controller="Venda" asp-action="Catalogo" class="nav-link">Loja</a>
                 </li>
+                @if (User.IsInRole("Administrador") || User.IsInRole("Gerente"))
+                {
+                    <li class="nav-item">
+                        <a asp-controller="AnaliseGerencial" asp-action="Index" class="nav-link">Analise Gerencial</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">Admin</a>
+                    </li>
+                }
             </ul>
             <ul class="navbar-nav">
                 <!-- Carrinho com indicador de número de itens -->

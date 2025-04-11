@@ -1,0 +1,136 @@
+﻿@using StudioHair.Application.ViewModels
+@model DadosAnaliseViewModel
+
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Faturamento Mensal";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-cor-primaria">Faturamento Mensal</h4>
+        <a asp-action="Index" asp-controller="AnaliseGerencial" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">Voltar</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">
+                <h5>Totais Gerais</h5>
+                <p><strong>Valor Total:</strong> R$ @Model.FaturamentoMensal.ValorTotal.ToString("N2")</p>
+                <p><strong>Valor em Vendas:</strong> R$ @Model.FaturamentoMensal.ValorTotalVendas.ToString("N2")</p>
+                <p><strong>Valor em Serviços:</strong> R$ @Model.FaturamentoMensal.ValorTotalServicos.ToString("N2")</p>
+                <p><strong>Total de Vendas:</strong> @Model.FaturamentoMensal.QuantidadeTotalVendas</p>
+                <p><strong>Total de Serviços:</strong> @Model.FaturamentoMensal.QuantidadeTotalServicos</p>
+                <p><strong>Total de Itens:</strong> @Model.FaturamentoMensal.QuantidadeTotal</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: white;">
+                <canvas id="graficoPizza"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4" style="background-color: white;">
+        <canvas id="graficoFaturamento"></canvas>
+    </div>
+
+    <!-- Detalhamento por mês -->
+    <div class="card p-4 mt-4" style="background-color: white;">
+        <h5 class="mb-3">Detalhamento por Mês</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Mês</th>
+                        <th>Valor Total</th>
+                        <th>Valor em Vendas</th>
+                        <th>Valor em Serviços</th>
+                        <th>Total de Vendas</th>
+                        <th>Total de Serviços</th>
+                        <th>Total de Itens</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalhe in Model.FaturamentoMensal.FaturamentoMensalDetalhesMes)
+                    {
+                        <tr>
+                            <td>@detalhe.MesAno</td>
+                            <td>R$ @detalhe.ValorTotal.ToString("N2")</td>
+                            <td>R$ @detalhe.ValorTotalVendas.ToString("N2")</td>
+                            <td>R$ @detalhe.ValorTotalServicos.ToString("N2")</td>
+                            <td>@detalhe.QuantidadeTotalVendas</td>
+                            <td>@detalhe.QuantidadeTotalServicos</td>
+                            <td>@detalhe.QuantidadeTotal</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const detalhes = @Html.Raw(Json.Serialize(Model.FaturamentoMensal.FaturamentoMensalDetalhesMes));
+
+        const labels = detalhes.map(d => d.mesAno);
+        const dadosVendas = detalhes.map(d => d.valorTotalVendas);
+        const dadosServicos = detalhes.map(d => d.valorTotalServicos);
+
+        const ctx = document.getElementById('graficoFaturamento').getContext('2d');
+        const grafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Vendas',
+                        backgroundColor: '#FF6384',
+                        data: dadosVendas
+                    },
+                    {
+                        label: 'Serviços',
+                        backgroundColor: '#36A2EB',
+                        data: dadosServicos
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Faturamento por Mês'
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Pizza
+        const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+        const pizza = new Chart(ctxPizza, {
+            type: 'pie',
+            data: {
+                labels: ['Vendas', 'Serviços'],
+                datasets: [{
+                    data: [@Model.FaturamentoMensal.ValorTotalVendas, @Model.FaturamentoMensal.ValorTotalServicos],
+                    backgroundColor: ['#FF6384', '#36A2EB']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribuição Vendas x Serviços'
+                    }
+                }
+            }
+        });
+    </script>
+}

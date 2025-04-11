@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudioHair.Application.Services.Interfaces;
+using StudioHair.Core.Enums;
 using StudioHair.WebApp.Models;
 using System.Diagnostics;
 
@@ -39,6 +40,7 @@ namespace StudioHair.WebApp.Controllers
                 if (carrinho == null)
                 {
                     var id = await _vendaService.CriarCarrinho(usuario.Pessoa.Cliente.Id);
+                    carrinho = await _vendaService.GetCarrinhoPorClienteId(usuario.Pessoa.Cliente.Id);
                     HttpContext.Session.SetString("CarrinhoId", id.ToString());
                 }
                 else
@@ -56,11 +58,13 @@ namespace StudioHair.WebApp.Controllers
             HttpContext.Session.SetString("TamanhoFonte", configs.TamanhoFonte > 0 ? configs.TamanhoFonte.ToString() : "16");
             HttpContext.Session.SetString("TemaDark", configs.TemaDark ? "true" : "false");
 
-            if (usuario.Pessoa == null)
-                return View("IndexClienteBloqueado");
-            if (usuario.Pessoa.Cliente == null)
-                return RedirectToAction("CadastroCliente", "Usuario");
-
+            if (usuario.Papel == EPapelUsuario.Cliente)
+            {
+                if (usuario.Pessoa == null)
+                    return View("IndexClienteBloqueado");
+                if (usuario.Pessoa.Cliente == null)
+                    return RedirectToAction("CadastroCliente", "Usuario");
+            }
             return RedirectToAction("TelaCliente");
         }
 

@@ -1,0 +1,124 @@
+﻿@model DadosAnaliseViewModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Clientes Frequentes";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-cor-primaria">Clientes Frequentes</h4>
+        <a asp-action="Index" asp-controller="AnaliseGerencial" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">Voltar</a>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: #f8f9fa;">
+        <h5 class="text-success">Cliente Mais Frequente</h5>
+        <p><strong>Nome:</strong> @Model.ClientesFrequentes.NomeCliente</p>
+        <p><strong>Quantidade de Vendas:</strong> @Model.ClientesFrequentes.QuantidadeVenda</p>
+        <p><strong>Quantidade de Agendamentos:</strong> @Model.ClientesFrequentes.QuantidadeAgendamentos</p>
+        <p><strong>Total:</strong> @Model.ClientesFrequentes.QuantidadeTotal</p>
+
+        <div>
+            <h6>Datas de Atendimento:</h6>
+            <ul>
+                @foreach (var data in Model.ClientesFrequentes.Dias.OrderBy(d => d))
+                {
+                    <li>@data.ToString("dd/MM/yyyy")</li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: white;">
+        <canvas id="graficoClientesTotais"></canvas>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: white;">
+        <canvas id="graficoTipoAtendimento"></canvas>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: #fff;">
+        <h5>Detalhes dos Clientes Frequentes</h5>
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Vendas</th>
+                    <th>Agendamentos</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ClientesFrequentes.DetalhesClientesFrequentes.OrderByDescending(x => x.QuantidadeTotal))
+                {
+                    <tr>
+                        <td>@item.NomeCliente</td>
+                        <td>@item.QuantidadeVenda</td>
+                        <td>@item.QuantidadeAgendamentos</td>
+                        <td>@item.QuantidadeTotal</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const nomes = @Html.Raw(Json.Serialize(Model.ClientesFrequentes.DetalhesClientesFrequentes.Select(x => x.NomeCliente)));
+        const totais = @Html.Raw(Json.Serialize(Model.ClientesFrequentes.DetalhesClientesFrequentes.Select(x => x.QuantidadeTotal)));
+        const vendas = @Html.Raw(Json.Serialize(Model.ClientesFrequentes.DetalhesClientesFrequentes.Select(x => x.QuantidadeVenda)));
+        const agendamentos = @Html.Raw(Json.Serialize(Model.ClientesFrequentes.DetalhesClientesFrequentes.Select(x => x.QuantidadeAgendamentos)));
+
+        const graficoTotais = new Chart(document.getElementById('graficoClientesTotais'), {
+            type: 'bar',
+            data: {
+                labels: nomes,
+                datasets: [{
+                    label: 'Total de Atendimentos',
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    data: totais
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Total de Atendimentos por Cliente'
+                    },
+                    legend: { display: false }
+                }
+            }
+        });
+
+        const graficoTipos = new Chart(document.getElementById('graficoTipoAtendimento'), {
+            type: 'bar',
+            data: {
+                labels: nomes,
+                datasets: [
+                    {
+                        label: 'Vendas',
+                        backgroundColor: '#36a2eb',
+                        data: vendas
+                    },
+                    {
+                        label: 'Agendamentos',
+                        backgroundColor: '#ff6384',
+                        data: agendamentos
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribuição de Vendas e Agendamentos'
+                    }
+                }
+            }
+        });
+    </script>
+}
+

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.Application", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudioHair.WebApp", "StudioHair.WebApp\StudioHair.WebApp.csproj", "{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudioHair.Test", "StudioHair.Test\StudioHair.Test.csproj", "{E602BE9A-0FF4-49B1-95A7-52216E09DFA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BE8B425-99A7-4DC8-8132-EE1F8FBD88B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E602BE9A-0FF4-49B1-95A7-52216E09DFA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E602BE9A-0FF4-49B1-95A7-52216E09DFA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E602BE9A-0FF4-49B1-95A7-52216E09DFA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E602BE9A-0FF4-49B1-95A7-52216E09DFA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

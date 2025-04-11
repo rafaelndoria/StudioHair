@@ -1,0 +1,34 @@
+﻿@model DadosAnaliseViewModel
+
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Horários de Pico";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-cor-primaria">Horários de Pico</h4>
+        <a asp-action="Index" asp-controller="AnaliseGerencial" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">Voltar</a>
+    </div>
+
+    @foreach (var dia in Model.HorarioPico.DetalhesHorarioPico)
+    {
+        <div class="card p-4 mb-4">
+            <h5 class="mb-3">📅 @dia.Data</h5>
+
+            <div class="row">
+                @foreach (var hora in dia.DetalhesHora.OrderBy(h => h.Hora))
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <h6 class="card-title">@hora.Hora.Substring(0, 2):00 às @hora.Hora.Substring(0, 2):59</h6>
+                                <p class="fs-4 text-cor-primaria">@hora.QuantidadeTotal registros</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

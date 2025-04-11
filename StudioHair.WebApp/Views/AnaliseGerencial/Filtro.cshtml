@@ -1,0 +1,131 @@
+﻿@model FiltroAnaliseInputModel
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Filtros de Relatórios";
+}
+
+<form id="formRelatorio" asp-controller="AnaliseGerencial" asp-action="GerarAnalise" method="post">
+    <div class="container my-5">
+        <div class="card" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1.5rem;">
+            <h5 class="text-center">@Model.DescricaoRelatorio</h5>
+        </div>
+
+        <!-- Campo Oculto para Tipo de Exportação -->
+        <input type="hidden" name="exportType" id="exportType" value="" />
+
+        <input type="hidden" asp-for="TipoAnalise" />
+
+        <div class="mt-4">
+            <h6>Selecione os Filtros</h6>
+            <div class="row g-3">
+                <!-- Novo Combo Tipo de Período -->
+                <div class="col-12 col-md-4">
+                    <label for="TipoPeriodo" class="form-label">Tipo de Período</label>
+                    <select asp-for="TipoPeriodo" class="form-select" id="TipoPeriodo">
+                        <option value="Periodo">Período</option>
+                        <option value="Todos">Todos</option>
+                    </select>
+                </div>
+
+                <!-- Campos de Data Inicial e Final -->
+                <div class="col-12 col-md-4">
+                    <label for="DataInicial" class="form-label">Data Inicial</label>
+                    <input asp-for="DataInicial" type="date" class="form-control" id="DataInicial">
+                </div>
+                <div class="col-12 col-md-4">
+                    <label for="DataFinal" class="form-label">Data Final</label>
+                    <input asp-for="DataFinal" type="date" class="form-control" id="DataFinal">
+                </div>
+            </div>
+
+            <div class="row g-3 mt-3">
+                @if (Model.Clientes != null)
+                {
+                    <div class="col-12 col-md-4">
+                        <label for="ClienteId" class="form-label">Cliente</label>
+                        <select asp-for="ClienteId" class="form-select">
+                            <option value="0">Todos</option>
+                            @foreach (var cliente in Model.Clientes)
+                            {
+                                <option value="@cliente.Codigo">@cliente.Codigo - @cliente.Nome</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                @if (Model.Produtos != null)
+                {
+                    <div class="col-12 col-md-4">
+                        <label for="ProdutoId" class="form-label">Produto</label>
+                        <select asp-for="ProdutoId" class="form-select">
+                            <option value="0">Todos</option>
+                            @foreach (var produto in Model.Produtos)
+                            {
+                                <option value="@produto.Codigo">@produto.Codigo - @produto.Nome</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                @if (Model.Servicos != null)
+                {
+                    <div class="col-12 col-md-4">
+                        <label for="ServicoId" class="form-label">Serviço</label>
+                        <select asp-for="ServicoId" class="form-select">
+                            <option value="0">Todos</option>
+                            @foreach (var servico in Model.Servicos)
+                            {
+                                <option value="@servico.Id">@servico.Id - @servico.Nome</option>
+                            }
+                        </select>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex">
+            <a asp-controller="AnaliseGerencial" asp-action="Index" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte); margin-right: 5px;">Voltar</a>
+
+            <!-- Botões de Exportação -->
+            <button type="button" class="btn" style="background-color: green; color: white; margin-right: 5px;" onclick="exportar('excel')">Exportar Excel</button>
+            <button type="button" class="btn" style="background-color: red; color: white; margin-right: 5px;" onclick="exportar('pdf')">Exportar PDF</button>
+            <button type="button" class="btn" style="background-color: yellow; color: black; margin-right: 5px;" onclick="exportar('powerbi')">Exportar Power BI</button>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte); padding: 1rem 2rem;">Gerar</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function exportar(tipo) {
+        document.getElementById("exportType").value = tipo;
+        document.getElementById("formRelatorio").submit();
+    }
+
+    function toggleDataPeriodo() {
+        let tipoPeriodo = document.getElementById("TipoPeriodo").value;
+        let dataInicial = document.getElementById("DataInicial");
+        let dataFinal = document.getElementById("DataFinal");
+
+        let isTodos = tipoPeriodo === "Todos";
+
+        dataInicial.disabled = isTodos;
+        dataFinal.disabled = isTodos;
+
+        dataInicial.required = !isTodos;
+        dataFinal.required = !isTodos;
+
+        if (isTodos) {
+            dataInicial.value = "";
+            dataFinal.value = "";
+        }
+    }
+
+    // Garantir que o evento funcione ao trocar o select
+    document.getElementById("TipoPeriodo").addEventListener("change", toggleDataPeriodo);
+
+    // Executar ao carregar a página para manter o estado correto
+    document.addEventListener("DOMContentLoaded", toggleDataPeriodo);
+</script>

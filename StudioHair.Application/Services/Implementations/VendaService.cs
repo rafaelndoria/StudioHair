@@ -5,6 +5,7 @@ using StudioHair.Core.Entities;
 using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace StudioHair.Application.Services.Implementations
@@ -14,12 +15,14 @@ namespace StudioHair.Application.Services.Implementations
         private readonly IVendaRepository _vendaRepository;
         private readonly IClienteRepository _clienteRepository;
         private readonly IProdutoRepository _produtoRepository;
+        private readonly IAgendamentoRepository _agendamentoRepository;
 
-        public VendaService(IVendaRepository vendaRepository, IClienteRepository clienteRepository, IProdutoRepository produtoRepository)
+        public VendaService(IVendaRepository vendaRepository, IClienteRepository clienteRepository, IProdutoRepository produtoRepository, IAgendamentoRepository agendamentoRepository)
         {
             _vendaRepository = vendaRepository;
             _clienteRepository = clienteRepository;
             _produtoRepository = produtoRepository;
+            _agendamentoRepository = agendamentoRepository;
         }
 
         public async Task<Carrinho> AdicionarItemCarrinho(AdicionarAoCarrinhoInputModel inputModel, int carrinhoId)
@@ -294,6 +297,18 @@ namespace StudioHair.Application.Services.Implementations
             venda.Update(Enum.Parse<ETipoPagamento>(inputModel.TipoPagamento), inputModel.ClienteId, valorDesconto);
 
             await _vendaRepository.AtualizarVendaAsync(venda);
+        }
+
+        private Expression<Func<T, bool>> AdicionarFiltro<T>(Expression<Func<T, bool>> existente, Expression<Func<T, bool>> novo)
+        {
+            var parametro = Expression.Parameter(typeof(T));
+
+            var corpo = Expression.AndAlso(
+                Expression.Invoke(existente, parametro),
+                Expression.Invoke(novo, parametro)
+            );
+
+            return Expression.Lambda<Func<T, bool>>(corpo, parametro);
         }
     }
 }

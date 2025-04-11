@@ -12,5 +12,6 @@ namespace StudioHair.Core.Interfaces
         Task<Agendamento> GetAgendamentoPorId(int id);
         Task AtualizarAgendamentoAsync(Agendamento agendamento);
         Task<List<Agendamento>> FiltrarAgendamentosRelatorio(int clienteId, string periodo, DateTime inicial, DateTime final);
+        Task<IEnumerable<Agendamento>> GetAgendamentoAnalise(int servicoId, int clienteId, string tipoPeriodo, DateTime dataInicial, DateTime dataFinal);
     }
 }

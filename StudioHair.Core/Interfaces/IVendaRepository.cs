@@ -21,5 +21,6 @@ namespace StudioHair.Core.Interfaces
         Task<Carrinho> GetCarrinhoPorIdAsync(int carrinhoId);
         Task DeletarItensCarrinhoAsync(int carrinhoId);
         Task DeleteItemCarrinhoPorProdutoIdAsync(int produtoId, int carrinhoId);
+        Task<IEnumerable<Venda>> GetVendasAnalise(int produtoId, int clienteId, string tipoPeriodo, DateTime dataInicial, DateTime dataFinal);
     }
 }

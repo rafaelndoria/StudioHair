@@ -1,0 +1,130 @@
+﻿@model DadosAnaliseViewModel
+
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Serviços Mais Vendidos";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-cor-primaria">Serviços Mais Vendidos</h4>
+        <a asp-action="Index" asp-controller="AnaliseGerencial" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">Voltar</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">
+                <h5>Totais Gerais</h5>
+                <p><strong>Serviço Mais Procurado:</strong> @Model.ServicosMaisProcurados.ServicoMaisProcurado</p>
+                <p><strong>Valor Total:</strong> R$ @Model.ServicosMaisProcurados.ValorTotalServico.ToString("N2")</p>
+                <p><strong>Quantidade Total:</strong> @Model.ServicosMaisProcurados.QuantidadeServico</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: white;">
+                <canvas id="graficoPizza"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: white;">
+        <canvas id="graficoServicos"></canvas>
+    </div>
+
+    <div class="card p-4" style="background-color: white;">
+        <h5>Detalhes por Serviço</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Serviço</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ServicosMaisProcurados.DetalhesServicos)
+                {
+                    <tr>
+                        <td>@item.Servico</td>
+                        <td>@item.QuantidadeServico</td>
+                        <td>R$ @item.ValorTotalServico.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card p-4 mt-4" style="background-color: white;">
+        <h5>Datas em que o serviço foi realizado</h5>
+        <ul>
+            @foreach (var data in Model.ServicosMaisProcurados.DatasServico.OrderBy(d => d))
+            {
+                <li>@data.ToString("dd/MM/yyyy")</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const detalhes = @Html.Raw(Json.Serialize(Model.ServicosMaisProcurados.DetalhesServicos));
+
+        const labels = detalhes.map(d => d.servico);
+        const dadosQuantidade = detalhes.map(d => d.quantidadeServico);
+        const dadosValores = detalhes.map(d => d.valorTotalServico);
+
+        const ctx = document.getElementById('graficoServicos').getContext('2d');
+        const grafico = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Quantidade',
+                        backgroundColor: '#FF6384',
+                        data: dadosQuantidade
+                    },
+                    {
+                        label: 'Valor Total',
+                        backgroundColor: '#36A2EB',
+                        data: dadosValores
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Serviços Mais Vendidos'
+                    }
+                }
+            }
+        });
+
+        const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+        const pizza = new Chart(ctxPizza, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dadosValores,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribuição de Valor por Serviço'
+                    }
+                }
+            }
+        });
+    </script>
+}

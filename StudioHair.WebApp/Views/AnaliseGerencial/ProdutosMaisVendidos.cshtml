@@ -1,0 +1,130 @@
+﻿@model DadosAnaliseViewModel
+
+@{
+    Layout = "_LayoutSistemaCliente";
+    ViewData["Title"] = "Produtos Mais Vendidos";
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="text-cor-primaria">Produtos Mais Vendidos</h4>
+        <a asp-action="Index" asp-controller="AnaliseGerencial" class="btn" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">Voltar</a>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: var(--cor-primaria); color: var(--cor-fonte);">
+                <h5>Totais Gerais</h5>
+                <p><strong>Produto Mais Vendido:</strong> @Model.ProdutosMaisVendidos.ProdutoMaisVedido</p>
+                <p><strong>Valor Total:</strong> R$ @Model.ProdutosMaisVendidos.ValorTotalProduto.ToString("N2")</p>
+                <p><strong>Quantidade Total:</strong> @Model.ProdutosMaisVendidos.QuantidadeDeVendasProduto</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4" style="background-color: white;">
+                <canvas id="graficoPizzaProdutos"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card p-4 mb-4" style="background-color: white;">
+        <canvas id="graficoProdutos"></canvas>
+    </div>
+
+    <div class="card p-4" style="background-color: white;">
+        <h5>Detalhes por Produto</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ProdutosMaisVendidos.DetalhesProdutos)
+                {
+                    <tr>
+                        <td>@item.Produto</td>
+                        <td>@item.QuantidadeDeVendasProduto</td>
+                        <td>R$ @item.ValorTotalProduto.ToString("N2")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card p-4 mt-4" style="background-color: white;">
+        <h5>Datas em que o produto foi vendido</h5>
+        <ul>
+            @foreach (var data in Model.ProdutosMaisVendidos.Datas.OrderBy(d => d))
+            {
+                <li>@data.ToString("dd/MM/yyyy")</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const detalhesProdutos = @Html.Raw(Json.Serialize(Model.ProdutosMaisVendidos.DetalhesProdutos));
+
+        const labelsProdutos = detalhesProdutos.map(d => d.produto);
+        const dadosQuantidadeProdutos = detalhesProdutos.map(d => d.quantidadeDeVendasProduto);
+        const dadosValoresProdutos = detalhesProdutos.map(d => d.valorTotalProduto);
+
+        const ctxProdutos = document.getElementById('graficoProdutos').getContext('2d');
+        const graficoProdutos = new Chart(ctxProdutos, {
+            type: 'bar',
+            data: {
+                labels: labelsProdutos,
+                datasets: [
+                    {
+                        label: 'Quantidade',
+                        backgroundColor: '#FF6384',
+                        data: dadosQuantidadeProdutos
+                    },
+                    {
+                        label: 'Valor Total',
+                        backgroundColor: '#36A2EB',
+                        data: dadosValoresProdutos
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Produtos Mais Vendidos'
+                    }
+                }
+            }
+        });
+
+        const ctxPizzaProdutos = document.getElementById('graficoPizzaProdutos').getContext('2d');
+        const pizzaProdutos = new Chart(ctxPizzaProdutos, {
+            type: 'pie',
+            data: {
+                labels: labelsProdutos,
+                datasets: [{
+                    data: dadosValoresProdutos,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Distribuição de Valor por Produto'
+                    }
+                }
+            }
+        });
+    </script>
+}

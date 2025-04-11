@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudioHair.Core.Entities;
+using StudioHair.Core.Enums;
 using StudioHair.Core.Interfaces;
 using StudioHair.Infrascruture.Context;
 using System.Linq.Expressions;
@@ -62,6 +63,30 @@ namespace StudioHair.Application.Services.Interfaces
                             .Where(x => x.Status != Core.Enums.EAgendamento.Pendente)
                             .OrderBy(x => x.Dia)
                             .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Agendamento>> GetAgendamentoAnalise(int servicoId, int clienteId, string tipoPeriodo, DateTime dataInicial, DateTime dataFinal)
+        {
+            IQueryable<Agendamento> query = _context.Agendamentos.Where(x => x.Status == EAgendamento.Confirmado).Include(x => x.AgendamentoServicos).ThenInclude(x => x.Servico).Include(x => x.Cliente).ThenInclude(x => x.Pessoa);
+
+            if (clienteId != 0)
+            {
+                query = query.Where(v => v.ClienteId == clienteId);
+            }
+
+            if (servicoId != 0)
+            {
+                query = query.Where(v => v.AgendamentoServicos.Any(x => x.ServicoId == servicoId));
+            }
+
+            if (tipoPeriodo.ToLower() != "todos")
+            {
+                query = query.Where(v => v.Dia >= dataInicial && v.Dia <= dataFinal);
+            }
+
+            query = query.OrderBy(x => x.Dia);
+
+            return await query.ToListAsync();
         }
 
         public async Task<Agendamento> GetAgendamentoPorId(int id)
